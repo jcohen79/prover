@@ -1,0 +1,2 @@
+#+STARTUP: showall
+* Add a window where user types commands and sees responses.

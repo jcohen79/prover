@@ -1,0 +1,27 @@
+#+STARTUP: showall
+* Larger example theorem:
+** From paramodulation paper
+** http://www.cs.miami.edu/~tptp/
+** Report http://www.cs.miami.edu/~tptp/TPTP/TR/TPTPTR.shtml
+
+* Do experiments with equality axioms, problems
+** Solve logic puzzles
+*** Assert there is no solution: list of negated equalities. Proof will refer to the ones that have been refuted.
+*** Assert there are two solutions
+** Generate proofs of simple equation problems (addition, >, etc)
+*** x=y -> z+x=z+y , associate, commutative
+*** x+0 = x
+*** 1+1=2 , … ,5
+*** Prove: 2+3 = 5
+*** How to say addition is a group? (group f c) <-> axioms(f,c)
+**** That is second order because it defines a function
+**** Or define function called apply 
+***** Insert apply when converting from grammar to lisp
+** Get some with large run times
+** Use not:  (not x=y) -> (not x+z=y+z)
+** Lisp: eval, setq, list, car, cdr, let
+*** Prove value of expression
+*** Query?
+**** Assert (not (= x query))
+**** Show what x invalidates that
+

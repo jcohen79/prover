@@ -1,0 +1,105 @@
+#+STARTUP: showall
+* Connection method
+* http://www.scholarpedia.org/article/Connection_method
+
+* Variable splitting  Antonsen, 2008
+
+** CADE System Competition
+
+
+* Program synthesis
+** Kreitz http://www.cs.uni-potsdam.de/ti/kreitz/research-synthesis.html
+
+* http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.26.230&rep=rep1&type=pdf
+* Z3 http://rise4fun.com/z3/tutorial/guide
+* http://rise4fun.com/
+* http://research.microsoft.com/en-us/projects/z3m/
+* https://github.com/Z3Prover/z3/wiki
+
+
+* Program Synthesis
+* http://research.microsoft.com/en-us/um/people/sumitg/pubs/synthesis.html
+
+* Higher order:
+* http://ijcai.org/Past%20Proceedings/IJCAI-91-VOL1/PDF/023.pdf
+* http://www.ps.uni-saarland.de/~cebrown/satallax/
+
+* HOL
+* https://www.cs.ox.ac.uk/tom.melham/res/hol.html
+* http://hol-theorem-prover.org/
+* http://www.cl.cam.ac.uk/~mjcg/papers/HolHistory.pdf
+
+* Lean
+* http://www.andrew.cmu.edu/user/avigad/Papers/lean_system.pdf
+
+
+* https://coq.inria.fr/documentation
+* Widely used proof assistants include Isabelle, Agda, Twelf, ACL2, PVS, and Coq, among many others.
+
+* Mizar
+
+* Many sorted logic
+* http://www.inferenzsysteme.informatik.tu-darmstadt.de/media/is/publikationen/Schuberts_Steamroller_by_Many-Sorted_Resolution-AIJ-25-2-1985.pdf
+
+* SAT
+** A major component of the Nelson-Oppen solution is the Equivalance DAG (E-DAG). We introduce a node for each variable and for each symbol. Nodes cannot be duplicated. Once we dicover an equality we merge the nodes
+
+
+** DPLL or Local Search
+
+** From <http://cs.stackexchange.com/questions/14946/distinguish-decision-procedure-vs-smt-solver-vs-theorem-prover-vs-constraint-sol> 
+** SMT solver is a SAT solver + decision procedure.
+
+** From <http://cs.stackexchange.com/questions/14946/distinguish-decision-procedure-vs-smt-solver-vs-theorem-prover-vs-constraint-sol> 
+
+
+** UML, CTL, PSL, Spec#, etc.
+
+** http://research.microsoft.com/en-us/projects/specsharp/
+
+
+** https://en.wikipedia.org/wiki/OpenCog
+
+* Functional programming
+** http://book.realworldhaskell.org/read/
+** Monads: http://ericlippert.com/category/monads/page/2/
+** https://www.haskell.org/
+
+* cluster
+** http://cacm.acm.org/blogs/blog-cacm/185198-budget-beowulf-clusters/fulltext
+** http://insidehpc.com/2015/02/video-how-to-build-a-cheap-supercomputer/
+** http://www.i-programmer.info/news/91-hardware/8385-gchq-builds-a-raspberry-pi-cluster.html
+
+* Semantic resolution
+** Model building http://www.ijcai.org/Proceedings/95-1/Papers/043.pdf
+** Semantic trees http://www.doc.ic.ac.uk/~rak/papers/Semantic%20Trees.pdf
+** Semantic clashes http://collaboration.cmc.ec.gc.ca/science/rpn/biblio/ddj/
+*** Clause that evaluates true is a nucleus
+*** 1. Never resolve a nucleus with a nucleus.
+*** 2. Resolve an electron with a nucleus only if the variable to be eliminated has the highest priority among the variables that appear in the electron.
+** http://booksc.org/book/2531344
+*** file:///C:/Users/JonathanCohen/Downloads/0066-4138%252873%252990001-3.pdf
+
+* INFER
+*** http://fbinfer.com/docs/separation-logic-and-bi-abduction.html
+
+* VampirePrime
+** http://riazanov.webs.com/software.htm
+
+* http://wiki.ruleml.org/index.php/RuleML_Home
+
+* [5] G. Sutcliffe, The TPTP Problem Library and Associated Infrastructure. Journal of Automated Reasoning (2009) 43 (4): 337-362 ( Download ) 
+* [6] G. Sutcliffe and C. Benzmüller, Automated Reasoning in Higher-Order Logic using the TPTP THF Infrastructure. Journal of Formalized Reasoning, (2010) 3 
+
+** From <http://page.mi.fu-berlin.de/cbenzmueller/2013-FOL/> 
+
+* Microsoft CodeContract ?
+** https://github.com/Microsoft/CodeContracts
+** https://blogs.msdn.microsoft.com/francesco/2014/11/13/false-myth-abstract-interpretation-can-only-do-easy-properties-as-nonnull/
+
+* https://existentialtype.wordpress.com/
+
+* http://research.microsoft.com/en-us/um/people/lamport/pubs/pubs.html
+** https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr-2005-30.pdf
+
+

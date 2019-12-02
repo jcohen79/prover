@@ -1,0 +1,34 @@
+#+STARTUP: showall
+* UW NetID lib3297
+* FZUA;NXEU;HGEY
+* Barcode 29352020090777
+
+
+* Handbook of automated reasoning
+* J. A. (John Alan) Robinson; Andrei Voronkov, 1959-
+* 2001 ©Amsterdam ; New York : Elsevier ; Cambridge, Mass. : MIT Press
+
+** Location
+** Engineering Library   Stacks-Floors 3&4   Q339.25 .H36 2001   Find this location 
+** Hide Details
+** Holdings:
+** v.1-v.2
+
+
+* International Journal on Software Tools for Technology Transfer
+** http://www.springer.com/computer/swe/journal/10009
+
+* Special Interest Group on Logic and Computation
+
+** http://dl.acm.org/sig.cfm?id=SP5335&CFID=650843170&CFTOKEN=82572580
+
+
+** You might find this paper interesting http://dl.acm.org/citation.cfm?doid=2963119.2936726
+** http://homes.cs.washington.edu/~pedrod/papers/cacm14.pdf
+
+
+* Shapiro, Foundations Without Foundationalism: A Case for Second-Order Logic
+** detail about limitations of first order
+
+
+

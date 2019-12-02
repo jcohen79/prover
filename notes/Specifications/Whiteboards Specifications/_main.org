@@ -1,0 +1,68 @@
+#+STARTUP: showall
+* Purpose:
+** More accurate specs
+*** Commands that affect attributes (e.g. none)
+**** Cross indexing of features, commands, attributes
+*** Identify Exceptions for commands on features to maintain invariant
+*** Show what has to happen in command to preserve invariant
+**** Command starts with basic idea
+***** What conditions need to be met to use existing methods
+***** What invariants could be violated
+*** Sequences of commands that lead to violations of invariant
+**** These can be found by random/systematic running of commands or by backwards search.
+*** Can examine behavior of app when it is just partially specified
+** Speed up development of model based testing
+*** Currently have to implement the model state instead of just describe it
+**** Knowing when commands are enabled should come from spec for buttons being enabled, objects existing. Or the other way: button specs come from command preconditions. E.g. floatie can be attached to different features.
+**** How to get values for Smp?
+***** Spec for gesture/command provides allowed range of values
+***** Values come from the specs for a simulation
+****** Could be to achieve some goal, or just random values in range
+*** Implementation of model means that same logic gets spread around in code
+*** Application incompleteness and bugs get described in the model
+**** They could be arranged separately as separate part of specs
+*** No summary of incompleteness. Sometimes it is just marked as TODO.
+** List the things to manual inspect after each operation
+
+* How to use formal specs
+** Associate with text specs: generate them by topic
+** Report incompleteness, inconsistency
+** Cross-index special cases where one feature interacts with another
+** Show expressions for what values of attributes are
+** Check if proposed data structure can represent the specs
+*** Identify specs affected by change in data
+*** Identify data affected by change in specs
+
+* Express exceptions to rules
+** Base rule stands alone
+*** Source should not be considered by itself
+*** Easiest to just give assertion a name
+** Exceptions refer to base
+*** Refer to by name or by content
+*** add  if stmt and conditions.
+** Is performing operations on graph of specs: adds edges to base case from exceptions
+** Generation of full rule looks for references to base rule and includes the exceptions
+** What is algorithm to combine exceptions?
+*** Find target (name or pattern)
+*** Build list of exceptions attached to target
+*** Form logic expression from exceptions
+
+
+
+
+* Generate model code from specs
+** As a way to get started
+** Better way to implement model in long run
+*** Specs will always be partial
+*** Need a way to check consistency of specs and app
+*** Need a way to manipulate information about the app (checking, query)
+
+* Examples
+** Ako(a,b) and Ako(b,c) -> Ako(a,c)
+** Ako(a,b) and isa(c,a) -> isa(c,b)
+** not Ako(a,b) and isa(c,a) -> not isa(c,b)
+** hasProperty
+*** inheritProperties
+** Value of attributes
+** State, change of state
+

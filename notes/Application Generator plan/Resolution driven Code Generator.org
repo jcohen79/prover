@@ -1,0 +1,96 @@
+#+STARTUP: showall
+* Key problem is to construct a statement that achieves required post-condition with given pre-condition.
+** - Apply graph-matching/unification between post-condition and available statements and sub-expressions, or compound statements.
+*** The "knobs" to adjust statement correspond to specific locations in the post-condition.
+**** Unifying post-condition results in values to insert into statement
+**** Several location is post-condition are the same variable.
+*** Changes at lower levels statements show up in higher level post-conditions
+*** In some case algorithm will find addition effects of statements. It will need to decide  if the extra results can be ignored. 
+*** How to know if current branch is possible solution?
+**** Look for return to previous state, but with extraneous results added.
+**** Prune if nothing available to match a predicate? Not clear.
+*** Problems:
+**** Identify equivalent expressions in required and generated post-conditions.
+** - Need a clear way to form post-condition that modifies pre-condition state.
+*** Condition needs to be built up as conjunction from states of elements, which relationships between elements.
+**** Elements can be memory locations or identifiable objects. Need to be able to know which element from pre-condition is affected by statement.
+*** Operations can identify the part of condition to modify, and if upper level relationships are preserved.
+*** Express after-values as before-values wrapped in conditions with an alternative value for those conditions.
+
+* Meta-decisions: use factors other than logic to select between different valid alternatives.
+** - Examples
+*** Which groups are classes, booleans, enum, defined singletons. 
+*** Basic Datatypes.
+*** Use of design patterns.
+** - Is resolution hard wired in, or specified as a technique? Or simply the default way that logic is handled as needed? Ie. when determining if a given condition is true in a context. Normally a program would just evaluate an expression. Some second order conditions (e.g. all defined functions have a property) might be evaluated/enumerated like that.
+*** Resolution is needed to show that certain conditions entail other conditions regardless of the values of the variables describing program state.
+** - Checking for consistency: look for resolution to empty clause even without negation. Other proofs can use the collection of sequents as a base.
+
+
+* Based on basic code generator. That can be extended in several ways:
+** - Dynamically generate templates
+*** Perform substitution
+** - Label edges with guards that are selected using resolution
+** - Pass in templates as arguments
+** - Template atoms to invoke higher level operations
+
+* Set of templates
+** - Templates take parameters from specs
+*** Unify with specs
+** - Templates have preconditions, template, post-conditions
+** - At each point in app tree, select the template for next statement/class etc.
+*** Identify where classes/methods can be done in parallel (eventually)
+** - Template selection is done by finding an implementation whose post-conditions satisfy conditions imposes by specs
+
+* Where different code constructions come from
+** - IF in spec of command matches IF in precondition of template, is unified into condition of IF statement.
+** - WHILE: 
+*** Templates used when input data is define recursively: list, tree, induction on values
+*** Invariant relates progress on condition to change to environment in body
+*** Patterns, a such as a state machine, that map to operations on the specifications to guide the determination of the states and the behavior in each state.
+** - SEQUENCE:
+*** Compound post-conditions
+*** Statement has preconditions that need to be met
+** - FOREACH: 
+*** Command spec: refers to target X, has statement "Y: Y.parent = X then Command2(Y)
+** - CLASS
+*** Entity defined in specs with operations
+** - METHOD
+*** Shared code
+*** Code that has minimal interaction with surrounding code
+*** Operation defined by specs
+**** Specs can be defined hierarchically, so that a call can be defined that is asserted to achieve some effect, and then the details of the method worked out later.
+** - DATA members
+*** Attributes of entities
+** - PARAMETER
+*** Inputs or outputs of method
+** - VARIABLE
+*** Shared subexpression
+*** Complex code to get value and/or use value
+*** Value(s) set inside IF or WHILE statement
+** - CLASS
+*** From ER model. The ER model specifies facts such as that all members of group A are also in group B, and all A have attribute C. Classes have parallel assertions.  There are other groups, besides what belong as classes. It is a meta-level decision when to use a class for a group and when to use a boolean and other conditions.
+
+
+
+* Templates
+** - Each has:
+*** Preconditions
+*** Postconditions
+*** body
+** - Preconditions use symbols that are unified to be accessed in the template body and in the post-conditions
+** - Consideration of each available template is done in a separate sequent space
+
+* Design Patterns
+** - Used to solve specific problems
+*** Access specific patterns of requirements
+** - Examples
+*** Iterating through list
+*** Db access, exporting/accessing api
+
+* How does a code rule express where the code is to be inserted in the app?
+** - e.g. Top down expansion of function calls/function definition
+** - CodeRule is used as data for a large function that does the connection to context
+*** Converts it to a correspondence with connections added consistently
+** - How are post-conditions used?
+*** Is placed in a specific place in graph, according to how code-rules are used

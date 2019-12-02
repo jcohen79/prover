@@ -1,0 +1,57 @@
+#+STARTUP: showall
+
+* - Overview
+* http://homepage.cs.uiowa.edu/~slonnegr/plf/Book/
+
+* - Axiomatic http://homepage.cs.uiowa.edu/~slonnegr/plf/Book/Chapter11.pdf
+* - http://www.csc.lsu.edu/~gb/csc7101/Slides/Axiomatic.pdf
+
+* - Denotational
+* https://www.scss.tcd.ie/Andrew.Butterfield/Teaching/CS4003/DenSem-full-book.pdf
+** Might be useful to formulate the assertions being made
+
+
+* Semantics of statements
+* - Define semantics of statement types
+* - State is a mapping from variables to expressions
+* - Because of aliasing, each assignment potentially affects all results, unless can be proven otherwise:
+** Data type
+** separate structure
+** Known facts about modified objects
+** Structural Relationship between objects
+* - Higher level templates have additional semantics to help make more inferences
+
+
+* Structure of specs
+** - Object model of data
+*** Entities, relationships, attributes
+*** Additional statements about relationships and attributes
+** - Commands: Input events/gestures
+*** Pre-conditions when command has state effect
+*** Post-condition state expressed as modifications to the pre-condition
+**** Perform substitution/insertion/removal on symbols and tags in pre-condition
+**** Used a meta-statement about the computed post-condition from the code templates.
+***** Insert condition/result that encloses the previous description of the state, so previous state is examined only if that condition does not hold.
+**** Assertions about allowed side-effects
+***** Statements about which objects, properties, relationships where side effects are allowed
+***** Otherwise generated post-conditions must not specify a change to a property, etc.
+**** Use theorem prover to prove or disprove the required meta-conditions about each template
+**** Keep exploring alternative templates until a complete solution is reached
+*** Commands are entities also:
+**** Use ISA,AKO to provide high level descriptions that apply to groups of commands
+**** Allow exceptions to general rules: 
+***** Identify the special case - pre-conditions
+***** Commands affected by special case
+***** Cases
+****** Might indicate that command is no longer allowed
+****** Command  is allowed when general rule is not allowed
+****** Affects only the result of the command
+***** Change to post-condition of affected special case.
+****** In main spec, use a symbol or tag on a sub-expression
+****** Define a substitution on that symbol
+
+*** How to remove statements that are no longer true after command?
+**** How to express that nothing changes except for X? Other parts of system might work on other parts of data. Want to express that there are no unexpected side effects.
+**** Meta-statement about result conditions of template that must be true
+
+

@@ -1,0 +1,35 @@
+#+STARTUP: showall
+* Use browser to Make progress while waiting for Intentional DSL
+** (using ISC will help learn that)
+** Work on examples in text form
+*** Simulate resolution
+*** Math: derivatives, integrals, diff eqs
+*** Resolution theorem prover
+** Examples
+*** Bidirectional didn't work - remove it
+
+
+
+
+
+
+* Convenient conversion of found graph matches to text (HTML)
+** Symbol scope; definition, reference
+
+* Ability to define domain specific language
+** One large grammar - share subparts
+** Make the conversion from parse tree to graph simpler
+** Text input of data and patterns
+
+
+* Output with MathJAX
+
+* Edit, run, display
+* Query with point and click
+
+* Display sections of graph in format similar to input language
+
+* View chains of steps
+
+
+* Make it fun to drive search: input, set focus, create rules

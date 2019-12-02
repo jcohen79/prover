@@ -1,0 +1,67 @@
+#+STARTUP: showall
+* (was part of what is now Conceptual Framework for App Specs)
+* What is semantics to handle when one statement is a special case to override part of another?
+** Problem is when A -> B and C -> D where A and B overlap, B and D conflict.
+** How is the conflict detected?
+*** Two predicates about entity, property, value
+*** How to express whether predicates cause conflict?
+**** P(a,b,c) & P(a,b,d) & Q(c,d) -> error
+** How to modify that to handle meta?
+*** The two predicates will have other conditions anded to them
+*** Identify which statement is more specific
+*** Form new statements
+**** add OR of intersection to the original rule, to make it true
+***** ~A v B  +  ~(A^C)vD becomes ~A v ~C v B 
+*** How to know which part of rule is antecedent and which part is result?
+**** Negated part? The result could be negated also.
+** Include name of case in each rule, to allow exceptions to be added to that rule
+* 
+* Represent state transitions as functions
+** Reason: fix problem with Hoare assignment semantics. Need a way to determine if an object being accessed has been modified by a command. If so, get value from command, if not get from previous state.
+** Function checks argument to see if the data that was affected by the commands are being accessed. If not, call the function representing the previous state.
+** Function has parts:
+*** Condition
+*** Base function
+*** Modifier function
+*** If/then/else framework
+** What is argument of state transition function?
+*** Takes env to env.
+*** Includes output, display state
+*** Vector of input gestures
+** Make assertions about these functions: (if it matters)
+*** Properties of modified (e.g. commutes with other function)
+*** Composition with particular other functions
+**** Left/right identity, associative - monad
+*** Equivalence of functions with code
+** Use ideas for monads for formal description of state transition?
+** Specs give the properties of the state functions using this structure
+** What do command spec look like then?
+*** Call successor state s
+*** Call state transition function Q
+**** Functions like wbContains implicitly refer to Q
+**** Purpose is to specify that values that have not been changed remain the same
+***** Higher order: enumerate over properties
+***** Entity may have been deleted, recursively
+***** \forall P : P(t,e,v) ^ ~commandModifies(t,e,P) -> P(s,e,v)
+***** How to derive commandModifies automatically from other specs?
+****** Use a macro structure that stores that
+****** Also builds the list of P_s to iterate over
+*** Modify
+**** pred(t,input) ->  \forall e,v : wbContains(t,e) ^ hasPropertyValue(t,e,p1,v1) -> setPropertyValue(s,e,p2,g(v1))
+**** How is setPropertyValue defined?
+***** Asserts that there is an event that sets a property that occurs between two states
+***** Specify time by: there exists a time
+****** Then add axioms about how time connects and sequences
+****** This allows changes to occur without specifying when
+****** Assert that changes  occur between two other events
+****** Then express dependencies between changes
+****** Assert that a changes occurs, then make assertions about it
+******* } The property that changes
+******* } The new value
+******* } When it occurs: before and after what else
+******* } How to conclude that property did not change again? Ie., what is the value now? How/when to express that nothing else will happen until some condition? 
+******** If nothing else happened, then the value is (ie. There does not exist another event in between, that changes that property) How will that condition be satisfied? You could only ask that in a specific situation, and that situation has to provide details.
+******* } A command that says that it has a specific outcome needs to assert that no other changes occur after the set and before the end of that command processing.
+**** getProperty: predicate that says there is an event that set the property, and no more recent event (up to the time of the get), and there exists a value.
+*** Create: 
+**** pred(t,input) ->  \exists e : wbContains(s,e) ^ ~wbContains(t,e) ^ properties(s,e)

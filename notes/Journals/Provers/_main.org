@@ -1,0 +1,85 @@
+#+STARTUP: showall
+* Summary
+** http://www.cs.miami.edu/~tptp/Seminars/ATP/Systems/Summary.html
+
+
+* http://nuprl.org/
+** Cornell
+
+* http://www.msr-inria.fr/projects/tools-for-proofs/
+** https://en.wikipedia.org/wiki/TLA%2B
+
+* Hott
+** https://hott.github.io/book/nightly/hott-online-1075-g3c53219.pdf
+
+
+* http://www.cs.unibo.it/~asperti/SLIDES/itp.pdf
+
+* [[file:systems.png]]
+
+* | system            | logic                                                   | impl. language |
+* |-------------------+---------------------------------------------------------+----------------|
+* | HOL               | Higher Order Logic                                      | lisp SML ocaml |
+* | Isabelle          | MetaLogic ObjectLogics                                  | SML            |
+* | Nuprl             | Martin-Lof predicative type theory                      | SML            |
+* | Coq, Lego ,Matita | Calculus of Inductive Constructions                     | ocaml          |
+* | Agda              | Martin-Lof predicative type theory with inductive types | haskell        |
+* | PVS               | HOL with subtyping and dependent types                  | lisp           |
+* | IMPS              | HOLD with partial functions                             | T              |
+
+* Bigger table at
+** https://en.wikipedia.org/wiki/Dependent_type
+
+* Automated provers:
+** https://en.wikipedia.org/wiki/Automated_theorem_proving
+
+* Comparison
+** http://www.cs.kun.nl/~freek/comparison/diffs.pdf
+*** Coq: higher order type, constructive logic
+*** PVS: higher order logic, classical logic. Same as simple type theory?
+
+* HOL-Omega
+** http://trustworthytools.com/id17.html
+** HOL-Omega: allows lambda to bind type variables
+** Not automated?
+
+* http://www.ps.uni-saarland.de/~cebrown/satallax/
+** Some mention of higher-order logic, automated, page 1086–12, 
+
+
+* The Higher-Order Prover LEO-II
+
+* Looks like:
+** Coq is used more in math community  https://coq.inria.fr/
+*** "Coq is a formal proof management system"
+*** Easy to install on windows
+
+** PVS 'development and analysis of formal specifications"
+*** used for verification and test generation
+*** Runs on Linix/Unix only
+*** Lisp/Emacs based
+*** Has incremental proving
+** HOL-Omega
+*** Has type binding
+*** Based on ML
+** TPS - only very small problems (according to LEO-II)
+** Satallax - 
+*** Wins TPTP THF
+** Isabelle
+*** C:\Users\JonathanCohen\Isabelle\Isabelle2016-1
+*** More apparent documentation that Satallax, is also automated (won in TPTP 2012)
+
+* Certified Programming with Dependent Types: A Pragmatic Introduction to the Coq Proof Assistant
+** Works through examples of using coq to prove program correctness
+** http://adam.chlipala.net/cpdt/cpdt.pdf
+
+* Isabelle:
+** Has UI
+** Isabelle/HOL allows to turn executable specifications directly into code in SML, OCaml, Haskell, and Scala.
+
+* https://people.mpi-inf.mpg.de/~jblanche/life.pdf
+** Summary of provers, recommendations to Vampire
+
+* Isabelle vs Coq
+* http://cs.stackexchange.com/questions/820/learning-automated-theorem-proving
+

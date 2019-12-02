@@ -1,0 +1,10 @@
+#+STARTUP: showall
+* [[file:_main.org][_main]]
+* [[file:Logic Forum.org][Logic Forum]]
+* [[file:Articles.org][Articles]]
+* [[file:Theorem proving.org][Theorem proving]]
+* [[file:Editor.org][Editor]]
+* [[file:Second order unification.org][Second order unification]]
+* [[file:What's next.org][What's next]]
+* [[file:Philosophy of Math notes.org][Philosophy of Math notes]]
+* [[file:Provers/_index.org][Provers]]

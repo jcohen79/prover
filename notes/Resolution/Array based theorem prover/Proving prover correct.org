@@ -1,0 +1,89 @@
+#+STARTUP: showall
+* Define predicates for the types of objects:
+** Clause, term, variable, proof
+** Relations between composite object and what is in it.
+** Predicates to relate occurrence of a term in a specific position
+** Clause to establish when a new clause can be inferred from others
+* Objects to refer to elements of program (prover)
+** Functions, variable, statement, expression
+** predicates to relate logical domain with program domain
+* Establish criteria for prover to be complete and consistent
+** Then provide a particular one has those criteria
+
+* Formal description of inference step
+** Write conditions that describe the clauses, literal, terms.
+** Describe resulting inferred clause
+** Then the details of the logic: subproblem (eul,eur,cgs), mapping, vbls, sbst, replacement.
+** Inference rules say there exists the inference result somewhere in the infinite sequence of results
+
+* Show that the inference rules are sound and complete
+
+* How to describe the addition of the inferred clause?
+** Basics rules describe a valid proof, which is a series of steps that follow each other, ie. Simply the inferred step exists.
+** Associate a time sequence relationship between steps.
+
+* Mapping between formal inference and the implementation logic
+** Then map between implementation logic and code.
+
+* Logical description of proof
+** Goal: show that if clauses can be refuted, then the algorithm will produce a proof
+*** If there exists a resolution proof, with paramodulation steps, 
+**** then there is a combined (vbv like) solution
+*** Completeness: Show that if there is a combined solution, algorithm will find it
+**** Steps by which each proof step extends the combined soln?
+***** Start from the null clause, work towards axioms
+***** How to build solution from input steps
+****** Substitute: add vba (may be on nested vbv)
+****** Resolve: add vertex with edges to inputs, initial vbv
+****** Paramodulate: add child vbv to solution
+
+*** Soundness: show that if algorithm finds solution, proof can be generated from it
+**** Use the mapping definitions that are needed for finding proof
+** Structure of combined solution 
+*** DAG, vertices have a Vbv and an ordered pair of edges.
+*** Map from standard proof to the combined proof, and back
+*** How to show that algorithm will find the combined proof? 
+** Write up structure of clauses, vbv, etc.
+** Implications that say if one criteria is met, then a fact about next step structure holds 
+*** (not necessary to say how that happens)
+** Final step says that refutation occurs
+*** Define refutation as fn on resulting clause
+** High level description in terms of logic, then define the components
+** How to verify while in progress?
+*** Short circuit low level definitions, then a global symbol to enable short circuit
+*** Proof of success using short circuit
+
+* Describe relationships between proof steps and solution at each step
+** Start  with axioms + hypothesis vs proof
+** Then between asc, atp and vbv solution
+** How to refer to components of solution
+*** Break down how asc, solution are composed
+*** Conditions of forall and exists between vbls and vba
+
+
+* Define relation between Atp (pair terms) and Vbv (solution)
+** There exists unified terms and sbst map that is instance of both input terms
+** Sbst map: set of pairs (vbl, term)
+** Recursively define application of sbst map to a term
+*** First describe simpler theoretical model
+*** Then compare theoretical to model close to code
+*** Each subterm is function of main term
+*** Axioms that child fn applied to term construction expr is the input child, one for each child fn
+*** Map: axioms for adding to map and doing lookup (can relate to implementation as set of pairs)
+** Combine subterm solns into larger term soln
+*** Define operators on sets of pairs
+*** Properties of applying maps
+*** Define kind of map, properties that kind has, then define specific map as what kind it is
+*** Equate result of problem to functional/recursive expression of inputs
+
+
+* How to extract from given valid proof of non-satisfiability of clauses a soln that algorithm would find
+** Only axioms a sbst steps would matter for building vba, cut needed to build vertices, using combined soln
+** Mine the proof steps for eqs, etc that algorithm would find
+** Build those into combined soln
+** Use validity of proof to use that combined soln would be found
+*** Terms would be cut implies combined soln needs to be found for those terms
+*** Input proof asserts those terms match, could be composed from earlier sbst steps
+*** Each sbst step corresponds to adding a vba to a list. The cut forms a vbv with that list of vba.
+*** Sbst step removes occurrences of the vbl.
+** How to get to level or mvb and mob maps?

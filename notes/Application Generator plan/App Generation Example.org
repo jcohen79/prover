@@ -1,0 +1,18 @@
+#+STARTUP: showall
+* Start with simple constructs and progress
+** Simple
+*** Application spec
+**** One or more values
+**** Event with post condition that a variable has specific value
+*** Generate code
+**** Declaration of values
+**** Function to implement event
+** Progression to more complex
+*** Event triggers series of commands
+*** Attributes on entities
+**** How to express semantivs of entities?
+*** Create entities
+*** Delete entities
+
+
+* spi

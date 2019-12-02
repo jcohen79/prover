@@ -1,0 +1,21 @@
+#+STARTUP: showall
+* http://www.antlr.org/index.html
+* http://www.antlr2.org/doc/csharp-runtime.html
+* https://www.antlr.org/download.html
+
+* http://page.mi.fu-berlin.de/cbenzmueller/2013-FOL/exercises-programming/README
+
+* Visual studio antlr support
+** https://programming-pages.com/2013/12/14/antlr-4-with-c-and-visual-studio-2012/
+** https://visualstudiogallery.msdn.microsoft.com/25b991db-befd-441b-b23b-bb5f8d07ee9f
+
+
+* http://www.cs.miami.edu/~tptp/TPTP/SyntaxBNF.html
+
+* Language description
+** http://www.cs.miami.edu/~tptp/TPTP/TR/TPTPTR.shtml
+
+* http://www.cs.miami.edu/~tptp/TPTP/TR/TPTPTR.shtml#TPTP2X
+** Try different formats to see what they look like
+
+* Output: http://www.cs.miami.edu/~tptp/TPTP/QuickGuide/Derivations.html

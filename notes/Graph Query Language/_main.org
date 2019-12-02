@@ -1,0 +1,45 @@
+#+STARTUP: showall
+* Purpose:
+** Allow user to try out code generation special cases
+
+* parse template from string - what is goal of that language? Query language
+** Want easily create language to display graph state
+** Set conditional breakpoints on a match on pattern rather than id number
+* What is the top level organization of the graph? Key vertices to run queries from.
+** Indexed lists of edges
+* Validator: check for rules of valid edges/descriptors/payloads
+** Generate readable description
+
+
+* Query/update interaction:
+** Run a pattern interactively to list where it matches
+*** Save result for subsequent reference
+** Invoke pattern with parameters
+*** Refer to specific objects, or a list from a previous result
+** What information to display to identify a matched location?
+*** Define codegen patterns to invoke, with pattern as SELECT portion
+**** SELECT template expr
+***** Implicit newline between rows
+***** refer to variables in FROM/WHERE
+***** Can has nested templates, indentation, pretty printing
+**** FROM - set of vertices to apply pattern to. Optional specify name(s) in pattern.
+***** Entire graph
+***** previous result -
+****** maintain list of queries, run as subquery
+**** WHERE pattern match - variable to represent vertices in FROM
+***** name@payload  - optional say which is in FROM list 
+***** From~to^desc
+**** UPDATE - later
+***** Create edges
+***** Create vertices
+***** Set/Change/Remove payload
+***** Remove edges
+***** Remove vertices and edges
+
+* Interactive Command environment
+** Run query
+** Assign name to current or previous result
+** Dictionary of named vertices, edgedefs
+** Load data: 
+*** saved graph. Loaded data refers to saved name.
+*** run method (e.g. parse and convert to graph). Pass named vertex as arg. Method adds edge to loaded vertices

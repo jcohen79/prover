@@ -1,0 +1,114 @@
+#+STARTUP: showall
+* Options
+** Multi-cpu
+** GPU
+** FPGA
+
+* C++
+** Define heap for each clause pair, discard when complete
+** Heap for holding clauses. Free when subsumed.
+
+* Parallelize existing code:
+** Threads to pick up different cells, can be at same sun/min priority
+*** Reduce contention by having input queue to add to cell
+** Need to split out the array of values for the Tde, and have a higher level clause clause that refers to that,
+*** Lower level one is immutable
+** Create queues of tasks
+*** Manager Loop
+**** Pull off queue, wait/pass to thread, signal thread to start
+*** Thread loop - one each
+**** End of thread: append result to output queue, signal that thread is ready
+** Allow switching between L and A version through conversion
+
+* Parallela / Epiphany
+* https://www.parallella.org/
+* http://adapteva.com/docs/epiphany_arch_ref.pdf
+* http://arxiv.org/pdf/1410.8772v1.pdf
+
+
+* FPGA
+** Zynq 
+*** http://www.myirtech.com/list.asp?id=502
+*** http://zedboard.org/buy
+*** From <https://forums.xilinx.com/t5/Xcell-Daily-Blog/Adapteva-s-Zynq-based-parallel-supercomputer-an-update/ba-p/472776> 
+
+*** http://www.xilinx.com/products/silicon-devices/soc/zynq-7000.html#documentation
+*** Artix®-7 FPGA
+
+** Write formula for each output bit
+*** Data, address, read/write
+*** Signal to cpu?
+*** Testing:
+**** Use logic evaluation, call from proof tests
+**** Then move to FPGA tooling for testing
+** Convert code to formula:
+*** Each write adds a clause(DNF more natural?) to the formula for each bit
+** Assume a table (virtual code) of step num x control lines, value 
+*** Value: step num to branch to
+
+* Have a warp do parallel iterations of embed
+** Need a task assignment object
+** Operation to create a subtask
+** Have an array of tasks
+** Task is a prefix and an upper limit at one of the levels
+** Split task: set limit of live thread at some level, give rest (old limit) to new thread
+*** Lowest level that is not at limit or end of B
+** Code to handle end of task: split an existing task
+** Test with CPU multi-threading (improves cache behavior)
+
+
+*** How to have processors load next word even if not needed yet? 
+**** Check flag if any needed, 
+**** or just pull in ahead of time. (doesn't work if they are running continuously)
+
+* Parallelization on GPU
+** Put thread arguments at stride to be read in blocks during setup
+** Make short sequences of if/else that come together
+** Goal is a loop that runs continuously, is feed input trees.
+*** Periodically stop and let warp ingest new input where needed
+** Group them by same lhs or rhs, so the iteration of permutations is the same.
+
+* Stream:
+** Pull input from quue
+** Push to output queue, pass through state info: tells which fun to call based on pass/fail
+
+** C++/C# interface
+*** Will need to construct arrays of integers anyway on c#. 
+*** Develop basic logic in c# for now, using short
+*** Later Create c++ project
+
+
+** http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#axzz42KlpBzNP
+
+
+* VM is just too slow. Go back to fEquate as a single loop.
+** How to get new work items from a shared queue?
+*** Use memory probe. If it has a value work item, to it. Put address of place of next work item there.
+*** How to avoid pounding that location preventing other from adding to it? Doorbell location
+*** Feed a warp an array of pairs of lists of clauses. Put result into another array
+**** Threads sync with each other to pull from array
+**** Null indicates end, warp returns when all are done.
+** Handle the three cases by moving A,B into specific vars, then loop 3 times. 
+*** Indirect: address of A/B structs. 
+**** Some fields are address of the other side's value
+**** Replace use of left/right bit with address of struct to operate on (or index of array)
+*** Cases: Push/pop/subst/nothing.
+*** Exit out of equate when n processors are ready
+**** Or move embed into the loop, which branch to go to outer loop
+**** Num to wait for: how long will it be idle for vs idling other 31 threads
+** Do symmetry check outside of embed, by permuting tree.
+*** Or do as threads in same warp
+
+
+* Write test: compare load/store/compare/add using vm to direct code on CPU
+** If close, then run test on GPU
+** Define meta instruction struct (bytes?)
+** Implement loop
+** Expand inline, unroll loop
+** Write algorithm to do calc based on thread id: branch
+*** Compute size array
+** Test: migrate to c++ to use pointer arithmetic on arrays
+** Parallelize on CPU: queue of tasks
+*** Invoke kernel to handle batch from queue: stream
+*** https://devblogs.nvidia.com/parallelforall/gpu-pro-tip-cuda-7-streams-simplify-concurrency/
+*** http://docs.nvidia.com/cuda/cuda-driver-api/group__CUDA__STREAM.html#group__CUDA__STREAM

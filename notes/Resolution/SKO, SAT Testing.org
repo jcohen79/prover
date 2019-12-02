@@ -1,0 +1,222 @@
+#+STARTUP: showall
+
+* Exhaustive testing
+* Goals
+** Find bugs in SKO
+** Base for testing improvements to theorem prover
+** Base for SAT solver
+** Allow adding manually defined fns and preds
+** Generate examples that satisfy specified requirements
+*** SAT solver for true and false, given constraints
+
+* Status: 
+** Check expr generator, that it is producing good tests
+** Keep running SAT/Eval test generator and fix errors
+
+
+* More reductions: (sko and eval)
+** Sko: delete vacuous quantifiers: pg 161 (29)
+*** Var not used
+** (And exists forall) -> exists is redundant
+
+* Write explicit tests for various quantifier rules
+
+
+* Check about each occurrence: number of args to fn for consistency
+
+
+
+
+*** Get array of sequents for each lock (just to check cost of lock)
+**** Better is to get iterator state
+
+
+
+* Assign a number to each clause for backtracking
+** Second array for pred
+** Set clause number when assigning values: 
+** Reset just clears predicate cells beyond that number. Set to 0. Also clear clause number
+
+* Test
+** SAT tests particular cases: do as series of direct calls instead of sequent, then do as sequent, expr, random
+*** (p x x)
+*** (p a b)[]
+*** (p (G x) (f x))[]
+*** f: 0, 1, 1, 0
+*** (p x y) -> (p y x) == (p x y) [] (p y x)  
+**** Do this instead of (p (G x) (f x))[]
+***** Maybe do a larger test with both
+**** For each increment of P/F_s, see if there is a SAT
+** How to make a more precise test?
+** Mode tests for Mdl.fValueForTerm
+***** (p x (f x))
+
+*** Code coverage https://msdn.microsoft.com/en-us/library/dd537628.aspx
+*** https://www.jetbrains.com/dotcover/
+
+** Sequence of sets and rollbacks. Check expected
+** Check number of increments
+** To find generated exprs that cannot be sat: use reslab
+
+
+* EvalAndCompare to iterate through each clause
+** sko.lsxClausalTransform - pass in which clauses to make positive
+*** Pass in factory object that creates monitor that controls each clause
+*** Clause monitors indicates if that clause should be inverted (or specific terms skipped)
+*** In this case, the factory increments a counter to give value to each monitor
+*** Pass interface to each monitor to let them step through, increment at completion of each cycle
+*** When to call monitor? To get list to iterate over (make it be iterator)
+** Check that removing a clause from sko changes result of sequent
+*** Monitor reverses neg/pass for current clause
+*** Factory needs to provide expected result for test it is running
+** Also add a second positive term, check it does not change value
+
+
+* Improvements to just iterating over functions?
+** Predicates are set as a result of iterating through SAT
+** When to stop adding values?
+** Track the earliest clause to be affected by function
+
+
+
+
+
+* switch sides for child on entails - move to one side or other?
+** This is to see result of axiom uses - examples of true antecedent and consequent
+
+* Now Sat just does pair wise substitutions when checking is a term should be added to assignments
+** It walks the list of assignments, matching terms, with tmsSubsts being local to a pair
+
+* How to have SAT make RHS of => be positive? Do RHS only?
+** How to check if an expression meets axioms? This would be useful. Could check with SAT or resolution
+** Having it report which axiom is violated would be useful
+*** Use SAT or resolution? Use it as a positive term
+**** What happens before resolution is done? If a term is found the sequent is proven false.
+
+
+* Considerations, based on how to use Sat
+** Testing Sko, which is just getting the right answer
+*** only needs terms that have value that match between Sko and expr
+** Use as finding examples that satisfy axioms
+*** Generating actual examples requires correct semantics of all terms, so need globally consistent vars (full subst)
+**** Backtrack to iterate through all possible permutations
+*** The full blown version is to provide exact examples for values for each variable and predicate.
+**** Global substitution is one requirement of that.
+*** Generate solutions where one of the terms is selected to be false. That is the RHS of =>
+*** Quantified solutions are more concise than detailed examples
+*** What is to be checked?
+*** Consistency checks on generated examples
+**** Can't have forall be true if exists is not
+**** Can have a term be true for same expr as exists if that is false, similarly for forall (false/true)
+*** Want to show examples that satisfy RHS of =>, but still meet conditions of axioms on LHS. Really that means run SAT on RHS, and then check of that solution is not contradicted by LHS rules.
+**** What does it mean to check the LHS? In expr form, consider all unifications and reject that solution is a false is found, e.g. a forall is violated or negated exists is contradicted.
+
+
+* How to rigorously answer these questions?
+** Write assertions about expressions
+** Show proof of equivalence of result
+** Induction on size of expression. Assume true for S, prove it is true for (op S S)
+*** Order of operators matter: and/or vs. or/and. Need to consider all combinations 
+** Assertions to prove for Sko
+*** Equivalence of expr and Sko form
+** What is the assertion for using SAT?
+*** All generated solutions are correct
+*** All correct solutions are generated
+
+
+* Configure GL (sequent generator) to not use function calls, just constants (pass in as parameter to Ctor)
+** Or try a small number of cases with them on
+*** Constant functions should have own definition for each value
+** A few cases with commutative check off
+*** Each time the lhs of a commutative operator is incremented, start the rhs at same state
+*** Consider first occurrence of predicate in expression to be commutative
+
+
+
+* Op = getOp
+* Foreach (Lsx lsxTerm in cdr(arg))
+* 
+
+
+* Test Conversion of logic expr to clausal
+** Make Lsm variables, restore at end
+** Need to assign consistent value to exists and to skolem fns
+** Keep track between Qua and the Lpr for the quantifier
+** The value assigned to the variable for the Lpr is the same as the value assigned to the Qua
+** Check both satisfied and unsatisified cases of comparing Infix to Sko
+*** First do simple satisfaction, then modify to add falsification
+*** Generalize: falsify at nth quad
+
+* SAT solver approach to finding values
+** Positive term of variable inside a predicate and/or function: only terms that match have true value
+** Negative assertion: at least one matching term is true
+* Functions to evaluate infix and quad expressions
+** Quantifier: iterate variable binding over terms, get value of each
+
+
+* Sequent model generator is basically a SAT solver
+** Problem for generalization is to know what terms to expand, is likely infinite
+** If case found (no variables): cannot be disproven
+** If case not found: there might be a more complex term
+
+* SAT: How to know when variables can be bound together (equality is proven)?
+** SAT where variables range over terms (via unification) is basically resolution
+** Unify terms, then create new clause using resolution
+** Resolution results in shorter clauses. Each clause means when all negative terms have been set true, then one of the positive terms must be. I.e. restricts the number of clauses that need to be examined. With fewer choices, more likely that run out of choices.
+** Can resolution be made as tight as SAT?
+*** Especially when there are no variables?
+
+* Negate each clause and term, one at time
+** Use this to focus SKO or RES testing on most important cases
+** Make the remaining clauses true. Result is still false.
+** Negation of a clause is a sequence of singleton clauses of opposite sign
+
+* RES or SAT equivalence to Prolog?
+** Clause with one term is a solid constraint, terms will need to unify with that
+** Part of strategy can be to choose lead clause to minimize search time
+** Is there a difference in disjointness between Prolog and RES/SAT?
+*** Nothing prevents a second clause from asserting an alternative to a disjoint set, 
+**** SAT/RES need extra clauses to force conflict with other members of partition
+*** Prolog just expands in tree
+
+* How are complex function calls handled when setting svt values?
+** Is handled now by initializing and incrementing arrays
+** Forms a set of constraints, but is very weak because the function/predicate can have same output for many inputs.
+
+* More test cases 
+** Use latex form
+** Drop terms that are subsumed
+** Tests with (not .) at different levels
+** Where to find dup quantifiers? They wind up as a single line up
+*** They will have different variables - fSame needs to check that
+*** Look what happens to example like 
+**** (or (exists x (f x)) (and a b))
+***** Try more exprs on top until it dups
+
+
+* fSame: in reverse direction, skip ones in B that were matched from A already
+** Why are there any? In case there are duplicates. Report them?
+** SameInSeq picks one, need to be able to backtrack and pick a different one
+
+* Can types be inferred? Assign a type to each constant and function parameter. Allow type inheritance. Type for quantifiers (infer from functions where variable is used).
+** Start with unique type for each function parameter, then merge types when variable is used by multiple functions. 
+** How to infer type subclassing? Different variables used with same function means parameter is base type for those variable types.
+
+
+** Issue with checking proof: some value assignments conflict with an axiom, need to skip those
+
+* \documentclass[12pt]{article}
+* \usepackage{amsmath}
+* \begin{document}
+* \begin{equation}
+* \begin{aligned}
+* \forall x \forall y \forall z \forall u \forall v \forall w P(x, y, u) \land P(y, z, v) \land P(x, v, w) \rightarrow P(u, z, w), \\
+* \forall x \forall y \forall z \forall u \forall v \forall w P(x, y, u) \land P(y, z, v) \land P(u, z, w) \rightarrow P(x, v, w), \\
+* \forall r \forall s \exists g P( g, r, s), \\
+* \forall a \forall b \exists h P( a, h, b) \\
+* \Rightarrow
+* \exists t \forall k P(k, t, k)
+* \end{aligned}
+* \end{equation}
+* \end{document}
+

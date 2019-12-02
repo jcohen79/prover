@@ -1,0 +1,12 @@
+#+STARTUP: showall
+* Purpose: 
+** - Make inferences from facts
+** - Provide rules for when patterns are enabled
+
+* Convert to reslab to use graph
+
+* Todo:
+** - Proof verifier
+** - Testing with examples
+** - Connect to graph
+** - 

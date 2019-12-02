@@ -1,0 +1,16 @@
+#+STARTUP: showall
+* "translating formulas in higher-order logic into first-order logic"
+** Mentioned in http://www.bourbaki.ens.fr/TEXTES/1086.pdf
+** Harrison’s MESON procedure
+
+* http://www.ps.uni-saarland.de/~cebrown/satallax/
+
+
+* Kerber, How to Prove Higher Order Theorems in First Order Logic 
+** ftp://ftp.cs.bham.ac.uk/pub/authors/M.Kerber/91-IJCAI.pdf
+
+* Higher Order Logic Theorem Proving and Its Applications
+* 7th International Workshop, Valletta, Malta, September 19-22, 1994. Proceedings
+** From <http://www.springer.com/us/book/9783540584506?wt_mc=GoogleBooks.GoogleBooks.3.EN&token=gbgen>
+
+

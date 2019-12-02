@@ -1,0 +1,241 @@
+#+STARTUP: showall
+
+*  https://bitbucket.org/genivu/prover.git
+* 
+* Todo:
+** Tests
+*** Andrews (from Isabelle tutorial)
+**** [[file:andrews.png]]
+*** Lewis Carroll (from Isabelle tutorial)
+**** [[file:lewis.png]]
+*** Set theory (need more axioms)
+**** [[file:set.png]]
+** Need to test pti used that have side conditions
+** Load/run TPTP tests
+*** Write ANTLR parser, generate Lpr tree, read problem from file using command line (or browser),
+**** http://www.antlr.org/
+** Port to Linux
+*** http://www.mono-project.com/docs/gui/winforms/porting-winforms-applications/
+*** Net.core https://blogs.msdn.microsoft.com/dotnet/2016/02/10/porting-to-net-core/
+*** Set up linux server
+
+** When one entity writes to another queue that is filling up, reduce the priority until the other queue clears up
+**  Tracing
+*** Add eqs to interface for logging. Control with flag
+*** Display solution when creating new asc (including new pti from Eub)
+*** Tracing Api forms basis of validation
+** Associativity, commutativity
+** Add examples in H. de Nivelle, "Automated Proof Construction in Type Theory using Resolution"
+** Web console (see subpage)
+** Editor https://msdn.microsoft.com/en-us/library/dn919654.aspx
+** Other related optimizations
+*** Equality Reflexivity Rule: remove negative literal t=t
+*** Symmetry
+*** associativity
+*** Axiom schema
+*** (((= e c))  <does not use e and c> ) -> discard?
+*** Are there duplicate pti_s being created?
+**** Log what is fed to an Epr
+*** Don't make pti_s for (= x x)
+*** Vampire: equality resolution, factoring. (equality factoring?)
+**** Congruence closure  , for example, a != b ∨ b != c ∨ a = c
+**** Equality Factoring (described in 
+***** 
+
+***** 
+***** http://www.cs.miami.edu/home/geoff/Courses/CSC648-12S/Content/Superposition.shtml
+***** http://math.stackexchange.com/questions/40609/superposition-calculus-and-equality-factoring
+*** Positive and Negative Equality Swapping (just replacing t1=t2 by t1=t2 in a positive or negative literal resp.)
+*** Improvement in CNF expansion
+*** Use BOOL SAT algorithm to help with problems that are like that
+**** It is choosing the sequence of clauses to resolve and thus create new clauses
+**** It already groups clause pairs that depend on same atp (via eqs), but those still need to be applied to pairs
+**** Choose ordering  of terms so that it is not doing multiple orders when later step has already failed
+** How to  stop eqs that are generating solutions that fail in a later part of etp?
+*** Cancel conflicting constants or assignments to same vbl - unless those terms can be equated
+**** How to track which values cannot be equated? look at axioms
+*** Want to take the later failure and kill the step that create that so it doesn't create more in that context.
+**** Could be some lower level unit that gets cycled through at a higher level, could be something that generates useful results elsewhere
+** Methods that need to be consistent:
+*** Add to filtered/make Pti (other fns need to be able to handle cases not added to Bas)
+*** Equate - save the transformations applied at specific position in input, in some sequence. This assumes operations cannot go back to earlier point in the output stream
+*** Show/SaveAs - both partial and final
+*** Term indexing
+*** Embed: remove clauses that are not needed
+**** Create a new derived class with different methods as needed
+** Open issues
+*** code verification
+
+** Associativity
+*** Add flag on lsm for associative
+*** store numargs byte after each instance (2 initially for testing)
+*** Skip numargs byte (check it is two for now)
+*** Create Asc from Lsx, and mergeTerm should check lsm for fAssociative
+*** Put number of args after associative, if any child is same fn, then merge it in
+*** In equate: if fn is associative and more than 2 args, iterate over split point for left and right.
+**** Have get next input (or Aqs) return position based on that state/posn in list of args
+**** Use a virtual fn for Aqs so associativity class can provide subterms. Has state for posn inside assoc terms
+*** Equate: need same number of args, unless one has vbl, then less or equal
+*** Cases to consider when equating two flattened f terms:
+**** No variables: each pair corresponding subterms matches (ordinary)
+**** Create spr to iterate through the possibilities
+**** Var in one: pair up the non var at beginning and end, everything else matches as if a virtual f term
+**** Multiple vars one side:
+***** Step through from minimum to maximum. For each, then determine the required bounds of the rest. Call the continuation for each one.
+**** Vars on both sides:
+***** Start the pairing with non-vbls
+***** The first match of const to vbl is that vbl includes const.
+***** Then have a stack frame that iterates over possible values of that vbl.
+***** For each value, continue.
+***** Backtrack at end.
+*** Commutative:
+**** Iterate through each term paired to every other term.
+***** Variables can be paired to one or more that are not already paired
+*** Set assoc flag on fn during initial processing of axioms
+** 
+** nPriority
+*** Reflect score given to symbols, mostly the main function
+
+*** no need to re-expand a term that has already matched, except to change vbl bindings
+*** When mismatch occurs, look at sbst stack and also dependency on earlier matches: var -> var
+*** Backtract and pti that affected that
+*** Even if subsequent pti changes that?
+*** Savings is avoiding unneeded cross-products
+
+
+***** if goes lexically up 
+**** How to compare body of Pti to raw value before pti?
+**** Call a method first
+
+****** test: equate with Pti too, nested
+******** AsqTest.AscUnify() - but provide example pti needed to unify
+
+*** Saving at recursive Pti will generate a lot of junk?
+
+** Why aren't equality axioms needed when equals literal is negated? (cannot be used as subst elsewhere, but still has info)
+*** e.g. from f(a) != f(b) infer that a !=b
+** Associative symbol: put number of consecutive args in tree
+*** Equate  to match variables with consecutive terms, up to max length
+** Only do paramodulation on negation hyp.
+*** If paramodulation is done to another axiom, and then to negHyp, 
+**** Then it could have been applied to neg hyp first in reverse
+*** Applies to all resolution strategies?
+**** For p1, do all rights? Any done to left could be done in reverse to right first.
+
+** How to prioritize h(x) = … but not the other garbage? Need to look at global?
+*** Count the number of definitions (alternatives) for this symbol
+** Can do paramodulation into negated literal, is still neg.
+*** Is not finding ?
+** one does not have to paramodulate at all into Skolem terms for completeness
+*** From "Translation of resolution proofs into short first-order proofs without choice axioms" Hans de Nivelle
+*** Proven in "L. Bachmair, H. Ganzinger, C. Lynch, W. Snyder, Basic paramodulation, Information and Computation 121 (2) (1995) 172–192
+
+** Priority of x=f(x) vs f(x)=x: need both. Prioritize shorter Eub, etc. Group them into one queue instead of round robin?
+** Boost priority if from negated hyp.
+** Set of support doesn't work because paramodulation makes new ones
+** Other
+*** Problems with priority
+**** Large term being substituted often gets expanded out elsewhere
+**** Variables in A cause a large->small to really be small->large
+***** Happens when the variable matched to part of alpha appears elsewhere (which it usually will)
+***** How to fix priority?
+*** Depth first search across different strategies (see pluggable strategy)
+**** Multiple gnp
+**** Different priorities for different clauses (set of support has fixed axioms, other could fall into patterns)
+*** Ex9:
+**** Associativity of f: linear list of args
+**** Why are g's and h's piling up?
+*** Puzzle: 
+**** Symmetry, reflection, commutivity, axiom schema
+*** Parse TPTP to see where it stands now
+** Solve mathematical equations
+** Review use of symmetric clause
+*** Is it used?
+*** Is there reflexive?
+*** Asb.Hash/Equals: ignore order of literals
+**** Hash code acc should reset at start of each literal
+**** Need to match other literals (not bad if hash codes are good)
+**** Need properties of literals: pending, is symmetric
+**** Symmetry should also allow different order of args
+** 
+** Prove if identity is needed - skip and go to symmetry first
+** Mix And/Or/Not in clauses instead of always splitting into CNF. Split as needed for resolution.
+** Ordering the terms in clauses in Cnk tree will allow it to share embed state more often
+*** First step towards symmetry
+*** Order the terms
+*** Put the traversal of Cnk in the same loop as embed state, or have then give requests to each other
+**** Embed -> cnk: high water offset
+**** Cnk -> embed: new clause, point of difference from previous prefix, unwind to that first
+** Use array of state objects to avoid recursion when checking subsumes
+*** Reuse array when doing add to help with debugging (where is object) - or just keep using array for that
+** How to pick up where left off in embed?
+*** If state object is not modified, then can restore using stack for search
+**** Copy at start of embed
+
+** Embed simplify?: Could offset ever be wrong because of nested in eval?
+*** Can aqs ever not match? Different arity would be differ symbol
+
+**** Turn off backfilter for now
+***** Gnp.RemoveSubsumed ? Is not called
+*** Speed up embed
+**** Construct partial order (vbl to other not defined)
+**** Embed to skip when A  < B or A > B
+**** Since A and B are ordered, next level in embed can start from location in B after where last term was <
+*** More functions
+**** Remove clause (filtered out)
+**** Validate
+***** All expected clauses are in tree
+***** Prefixes match between siblings at positions up to the stated length, and no further
+***** Next element in path is different in next posn
+**** Abt: how to avoid recomputing sizes for one being checked?
+** Symmetry (before paramodulation so it can do both orders)
+*** Both versions of equate: 
+**** Check res flag
+**** Check if pred lsm is symmetric
+**** Save state
+**** Handle in reverse order
+**** Restore state
+**** Handle in usual order
+** Reflexivity
+*** Sko: convert (p X X) to true, if p is reflexive. X is any. Similarly for anti-reflexive
+*** Write tests
+**** Add flag to Res to 
+***** input
+****** Remove x=x clauses from input
+****** !x=x is unsatisfiable
+*** 
+** Equality
+*** Put reflexivity, symmetry in prover
+**** Control via switches on Res - on Lsm for =
+*** Retest examples without equality axioms
+*** Do examples in TPTP
+** axiom schema (see page) -> simpler set of axioms (less error prone), performance
+** Examples of specs
+** Output to console, clear screen, add more stats:
+** Subsumed new, old, no resolution, num lefts, num rights, 
+*** filter out left/right forward/back
+*** Track locally and report out when acs is added
+*** Ui with status: number of clauses in each size/side (processed/pending).
+*** Switch to .Net Core, 
+**** Use web browser for stats: refresh as needed
+**** https://www.microsoft.com/net/core#windows
+**** https://blogs.msdn.microsoft.com/dotnet/2016/06/27/announcing-net-core-1-0/
+** Types
+*** Check type before doing paramodulation on terms (eub.TransferLeft)
+** Example: https://udel.edu/~os/riddle.html
+** Query
+** Interactive prover
+** Tests
+** Loop in proof can handle induction?
+*** If one term is like another through some sequence that can be repeated.
+** Generalizations
+*** Rhs can be more than just a template where variable values go
+**** rhs can be a function of the variable values
+**** The proof tree can be used to drive some other generation process, with variable used to hide the extra payload until needed
+** Reading proof tree
+*** Look for predicate, plus extra special case expressed as arguments. Where that is resolved becomes the root of a sub-proof. There may also be extra side terms that are introduced at that point that can be traced forward to where they get cancelled out
+** Relation to production system: an axiom set with only (dual) Horn clauses
+** For rules of the form A [] B, it is generating versions of [] B by matching the vars in A. This could be done in a goal oriented way (strategy) based on the desired B. But that is the same thing, but with a different original axiom.
+* 
+
+* Problem:

@@ -1,0 +1,36 @@
+#+STARTUP: showall
+* Language Features
+** Logical terms
+** Set operations: element of, union, 
+** set definition: exhaustive and as formula
+** Isa (element of), ako (subset of)
+** Arbitrary predicates
+** Commands
+*** Pre/post conditions
+*** Assertions to change state
+** ERA
+** Rules for computing 
+*** Values of attributes
+**** Transform lower level to value
+*** Constructed structures
+**** Transform lower level to upper level structure
+*** Map changes at upper level to commands at lower level
+** Macro
+*** Purpose: allow specs to be written in a way that is independent of the particular logic structure used.
+*** Language features
+**** Parameters
+***** Function call, operator, block
+**** Backquote
+***** Insert, splice
+**** Evaluation: construct new expressions
+***** Mapcar/lambda, filter, cond/if/when
+***** Access data from graph via edges, map it to code and insert data into code
+**** Derive grammar for new infix
+**** Query and Set edges in graph
+*** Store information in a graph
+**** to allow information to be exchanged between macro usages.
+**** Add edges to list for later usage
+**** Use back-references
+**** Process declarations in multiple modes
+
+

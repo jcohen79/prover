@@ -1,0 +1,6 @@
+#+STARTUP: showall
+* [[file:_main.org][_main]]
+* [[file:Specification detail.org][Specification detail]]
+* [[file:What to prove or execute.org][What to prove or execute]]
+* [[file:Demo test generator using Curry Howard.org][Demo test generator using Curry Howard]]
+* [[file:Languages.org][Languages]]

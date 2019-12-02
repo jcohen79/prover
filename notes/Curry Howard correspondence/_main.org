@@ -1,0 +1,195 @@
+#+STARTUP: showall
+
+* Correspondences: Rules are the same for each row.
+
+* |------------------------------------------------------------+-------------------------------------------------------+--------------------------------|
+* | intuitionistic propositional logic                         | 	simply typed lambda calculus                        | 	cartesian closed categories  |
+* |------------------------------------------------------------+-------------------------------------------------------+--------------------------------|
+* | Propositions	                                             | Types	                                               | Objects                        |
+* |------------------------------------------------------------+-------------------------------------------------------+--------------------------------|
+* | Proofs of entailments between propositions                 | 	terms describing functions between types            | 	 morphisms between objects   |
+* |------------------------------------------------------------+-------------------------------------------------------+--------------------------------|
+* | Equivalences between proofs (in the sense of proof theory) | 	beta-eta equivalences between lambda calculus terms | 	equalities between morphisms |
+* |------------------------------------------------------------+-------------------------------------------------------+--------------------------------|
+* | implication connective                                     | 	function type constructor                           | 	exponential bifunctor        |
+* |------------------------------------------------------------+-------------------------------------------------------+--------------------------------|
+
+
+
+* Formula ~= type, proof ~= lambda term, proof normalization ~= reduction
+
+* (aka functional interpretation)
+
+* https://plato.stanford.edu/entries/logic-intuitionistic/
+
+* Issues
+** How to convert resolution proof to intuitionistic
+*** Alternate approach: look at proof for why resolution proving is complete for how to convert a natural deduction to resolution, then do that in reverse. See semantic tableaux
+*** Introduce a predicate that says that an inference rule applies to a set of arguments
+**** Construct proof objects from terms built out of rule terms and argument terms
+**** Assert that there is no proof object built in that system
+***  intercalation calculus From <https://en.wikipedia.org/wiki/Natural_deduction> 
+
+
+** How to represent looping/recursion
+*** https://en.wikipedia.org/wiki/Fixed-point_combinator  (Y combinator)
+**** Another parameter is needed to argument funtion, which allows for termination
+*** https://en.wikipedia.org/wiki/Curry%27s_paradox - see how it is resolved by checking the validity of the naming the expression
+*** Why are recursive types not enough? Need self-referential terms
+**** Functional programming would create a virtual tree, one that at each node you need to search for real reference using some tagging (ie. Refer to name).
+**** Or fixpoint operator will make term bigger each time result is evaluated
+** Applications
+*** Writing and Checking specifications
+*** Prove correctness
+*** Generate tests
+*** Generate programs
+
+
+* The Curry-Howard isomorphism as originally defined maps proofs to the simply-typed lambda calculus. The simply-typed lambda calculus is incapable of defining non-terminating computations. 
+
+* The intuitive reason for this is that the typed lambda calculus will deem all self-application to be untyped. This means it becomes impossible to define the Y combinator, or any equivalent recursive combinator in it.
+
+
+* https://en.wikipedia.org/wiki/Separation_logic extension of Hoare Logic: with frame rule 
+** Non-intersecting free vbls
+** How does this handle aliasing? Is difficult
+*** http://www.doc.ic.ac.uk/~jvillar1/pub/ramification-HVpopl13.pdf
+** Infer: Used by facebook
+
+* Type theories
+** https://en.wikipedia.org/wiki/Type_theory
+** https://en.wikipedia.org/wiki/Intuitionistic_type_theory
+*** also constructive type theory or Martin-Löf type theory
+** https://plato.stanford.edu/entries/type-theory-intuitionistic/
+** http://www.scholarpedia.org/article/Computational_type_theory
+*** https://coq.inria.fr/
+*** http://www.cis.upenn.edu/~bcpierce/sf/current/index.html textbook
+**** Downloaded to file:///C:/Users/JonathanCohen/Downloads/sf/toc.html
+
+* https://en.wikipedia.org/wiki/Brouwer%E2%80%93Heyting%E2%80%93Kolmogorov_interpretation
+** BHK describes the correspondence between natural deduction and functions.
+
+* Girard, Taylor, Lafont, PROOFS AND TYPES
+** http://www.paultaylor.eu/stable/prot.pdf
+
+* Use in industry
+** https://news.ycombinator.com/item?id=10649128  compares coq and tla+
+*** https://www.commoncriteriaportal.org/iccc/9iccc/pdf/B2404.pdf  proof of an embedded app
+** Facebook - Infer 
+** Airbus (fly-by-wire)
+*** Csmith generate tests : http://www.cs.utah.edu/~regehr/papers/pldi11-preprint.pdf fuzz tester
+**** Could not find bugs in verified part of CompCert  C compiler http://compcert.inria.fr/
+** Boeing drone (research)
+** http://wp.doc.ic.ac.uk/riapav/wp-content/uploads/sites/28/2014/05/HACMS-Fisher.pdf
+** Microsoft: https://www.quantamagazine.org/20160920-formal-verification-creates-hacker-proof-code/
+*** Device drivers
+**** Static driver verifier uses Z3
+**** https://msdn.microsoft.com/en-us/windows/hardware/drivers/devtest/static-driver-verifier
+*** Others http://research.microsoft.com/en-us/um/redmond/projects/z3/Z3_System.pdf
+*** Metamodeling - constraint logic programming
+**** https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/models2011.pdf
+***** Uses Z3, find solutions to constraint problems
+***** Can be used to create solutions to specs or show unsatisfiability using numeric contraints 
+***** https://github.com/Z3Prover/z3/wiki#background
+***** http://rise4fun.com/z3/tutorial/guide
+
+* Not yet
+* https://en.wikibooks.org/wiki/Haskell/The_Curry%E2%80%93Howard_isomorphism
+* http://www.springer.com/us/book/9789400717350
+
+* Examination of the properties of the equality type, or rather, extending it to a notion of equivalence, lead to homotopy type theory.
+
+
+* Homotopy type theory
+** https://hott.github.io/book/nightly/hott-online-1075-g3c53219.pdf
+
+
+
+
+
+
+* only applies to programs that always halt
+** Example in https://www.quora.com/Why-is-the-Curry-Howard-isomorphism-interesting
+
+* [[file:running.png]]
+
+
+* Cut-elimination
+** https://en.wikipedia.org/wiki/Cut-elimination_theorem
+*** cut elimination algorithms correspond to the strong normalization property (every proof term reduces in a finite number of steps into a normal form).
+*** Can convert to non-cut form by replacing term on lhs with its proof (ending with the rule where it appears on the right)
+
+
+** http://www.site.uottawa.ca/~afelty/dist/welp91.pdf
+*** A logic program for transforming sequent proofs to natural deduction proofs
+**** Didn't see the key point. Just cut-elimination?
+
+* Skolem Elimination
+** "Translation of resolution proofs into short first-order proofs without choice axioms"
+*** Hans de Nivelle
+
+* Logics
+** https://en.wikipedia.org/wiki/Sequent_calculus
+*** Has inference rules for converting a formula to sequent. 
+**** Each of those sequents is called clause by Robinson?
+** https://en.wikipedia.org/wiki/Simply_typed_lambda_calculus
+*** Cannot have a polymorphic fixed-point combinator
+** https://en.wikipedia.org/wiki/Impredicativity
+** https://en.wikipedia.org/wiki/System_F  (polymorphic lambda calculus,  second-order lambda calculus)
+*** Can have a polymorphic fixed-point combinator
+** https://en.wikipedia.org/wiki/Lambda_cube
+** https://en.wikipedia.org/wiki/Cirquent_calculus - allows shared subcomponents
+*** https://arxiv.org/pdf/1401.1849.pdf "THE COMPUTATIONAL COMPLEXITY OF PROPOSITIONAL CIRQUENT CALCULUS"  MATTHEW S. BAUER
+** https://en.wikipedia.org/wiki/Computability_logic  (one guy?)
+** https://plato.stanford.edu/entries/logic-games/
+** SMT https://en.wikipedia.org/wiki/Satisfiability_modulo_theories
+*** Used for condition verification, test case generation
+** https://en.wikipedia.org/wiki/Lambda-mu_calculus
+*** operators correspond to continuations
+*** provides a well-behaved formulation of classical natural deduction
+*** with these new operators one is able to write terms that have the type of, for example, Peirce's law.
+*** https://www.cs.ru.nl/~freek/courses/tt-2011/papers/parigot.pdf
+**** λμ-Calculus: An algorithmic interpretation of classical natural deduction
+*** https://metatheorem.wordpress.com/2011/11/23/notes-on-parigots-paper-introducing-the-lambda-mu-calculus/
+**** corresponds to a logic called the Free Deduction
+*** https://pdfs.semanticscholar.org/20a7/f034d75f0a372ed62f61a5212daeef92904c.pdf
+**** Type Theory 2011 – Parigot’s λµ-calculus
+**** µ distinguishes λ-variables from continuation variables. Also, the terms are of a more restricted shape because the system distinguishes between terms and commands.
+
+
+
+
+
+
+
+
+
+* Types
+** https://en.wikipedia.org/wiki/Type_theory
+** https://en.wikipedia.org/wiki/Recursive_data_type
+** https://en.wikipedia.org/wiki/Type_system (programming use of types)
+** https://en.wikipedia.org/wiki/Intuitionistic_type_theory differs from Homotopy type theory in equality
+** https://en.wikipedia.org/wiki/Calculus_of_constructions  basis of Coq
+*** Extension of Curry Howard, to  full intuitionistic predicate calculus and  includes proofs of quantified statements 
+* Proof interpretation (what is a proof)
+** https://en.wikipedia.org/wiki/Brouwer%E2%80%93Heyting%E2%80%93Kolmogorov_interpretation
+
+* Type based systems
+** Coq, Agda, and Twelf
+
+* Coq
+** Better documentation
+*** <https://www.cis.upenn.edu/~bcpierce/sf/current/index.html>. Another is <http://adam.chlipala.net/cpdt/>
+
+* TLA
+** http://lamport.azurewebsites.net/tla/book-02-08-08.pdf  Lamport, Specifying Systems
+
+
+* Other issues
+** Call by name vs call by value
+*** http://arcfn.com/2009/03/y-combinator-in-arc-and-java.html
+
+* Conversion of classical logic to intuitionstic logic
+** https://en.wikipedia.org/wiki/Friedman_translation
+** https://en.wikipedia.org/wiki/Double-negation_translation (lists several others)
+** http://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/resolution.pdf extraction?

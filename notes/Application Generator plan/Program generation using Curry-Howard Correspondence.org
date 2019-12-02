@@ -1,0 +1,30 @@
+#+STARTUP: showall
+
+* Aka "formulae-as-types correspondence"
+
+
+
+* See https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence
+
+
+** Outline
+*** Goal is to find program that means required description
+*** CHI says that type of program is equiv to an assertion, and  a program (function) of that type is equivalent to a proof of that assertion
+*** Describe type of function very precisely using first order logic
+*** Convert to combinators
+*** Use prover to create the proof
+*** Convert resolution proof to proof using rules required by CHI
+*** That is the required program
+
+
+* https://en.wikipedia.org/wiki/Homotopy_type_theory
+** "allows mathematical proofs to be translated into a computer programming language for computer proof assistants much more easily than before."
+
+* https://homotopytypetheory.org/
+
+* Issue: how to convert resolution proof to natural deductive proof?
+** 1971: http://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/resolution.pdf
+*** Extracting Information from Resolution Proof Trees'
+*** Is more general than the answer predicate
+
+** Can the cuts be rearranged to follow needed inference rules, and have final clause be the desired formula?

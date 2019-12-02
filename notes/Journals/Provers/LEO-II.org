@@ -1,0 +1,8 @@
+#+STARTUP: showall
+* J Autom Reasoning (2015) 55:389–404 DOI 10.1007/s10817-015-9348-y
+* Christoph Benzmüller1 · Nik Sultana2 · Lawrence C. Paulson2 · Frank Theiß3
+* http://page.mi.fu-berlin.de/cbenzmueller/leo/
+* http://www.cl.cam.ac.uk/~lp15/Grants/LEO-II/
+* http://page.mi.fu-berlin.de/cbenzmueller/leo/
+* http://page.mi.fu-berlin.de/cbenzmueller/papers/J30.pdf  main
+* https://page.mi.fu-berlin.de/cbenzmueller/papers/C26.pdf

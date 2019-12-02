@@ -1,0 +1,66 @@
+#+STARTUP: showall
+
+* Purpose: allow logic to be used in rules
+** Convert graph to lsx
+*** Build up set of tests in latex format
+
+** Reslab to use graph
+*** Upper levels can stay C# to make it easier to optimize
+*** The data is graph (from parse graph, sometime skolemized)
+** What is bottom level?
+*** Atoms - have name,value, isVar
+**** Name can mean a vertex
+**** Or vertex value can be value/isVar
+*** Calls: code uses car/cdr to traverse - those could be edges
+*** Move rest into resolution specific C# classes
+** Skolemize logic graph
+
+* How will graph form of reslab be invoked and results used?
+** Infix form of proofs/specs
+** Conditions on patterns: extra conditions in addition to basic match
+*** Start with rule in infix
+*** Skolemize as graph
+*** Run many proofs as tasks in parallel: report proof to originator
+
+
+* Define equivalence between predicate form an graph form
+** How to convert one to the other, for each type of predicate
+
+* Convert to graph
+** Test with math examples
+
+* Drive resolution over a type of edge starting from a sequent vertex
+** Another vertex for results, proof
+** Function to run reslab, then show results when done
+** Run from unit tests
+** Similarly for graph matcher: have a data vertex with edges to nodes to be matched
+
+* Both reslab and matching are iterator driven
+** Adding an edge to a set wakes up iterators waiting on input there
+
+* Use vertices, edges instead of Lisp?
+** Use edge colors instead of position
+** Define car,cdr to access position, to keep it like in book
+*** Cons to make new vertex with car, cdr
+
+** Reslab fns that use car/cdr should iterate over a set of edges defined by pattern
+*** Pattern provides factory for iterator
+*** Order of edges? One vertex to the next in sequence
+
+* Relationship between graph and resolution
+** Resolution/ATP is a specific pattern of replacement
+*** Hyperresolution is a search strategy
+** Regular match has set of patterns, each patterns specifies replacement
+*** Replacement could be algorithmic
+** Resolution: pattern looks for pair of clauses (e.g. lefts, rights).
+*** Result is a new clause, formed by doing delete & merge,
+**** Tautology, filtering are other patterns that tag (or remove) the results
+
+
+* Conversion to graph:
+** Sequence of steps:
+*** Control which patterns are enabled
+** Axioms
+** Unification:
+*** Pattern that adds result of match to active
+

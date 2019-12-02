@@ -1,0 +1,11 @@
+#+STARTUP: showall
+* does not appear to be having this problem yet with semantic resolution'
+** May occur again when adding structure that involves someone independent subparts
+
+** Idea is to factorize the process where two terms of clause each create chain reaction.
+** Would like to find path of resolutions that cancel out the terms added when resolving against the remaining terms of  a clause.
+*** That would result in dynamic programming approach, leading to null clause.,
+*** Problem: terms that would lead to empty have not been created yet. Seems like backward search is same as forward.
+** Would work well for subsumption
+** Create a static graph of initial terms, then add on for factors?
+** Is related to axiom schema? At clause level, axiom schema is term level

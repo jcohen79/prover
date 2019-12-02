@@ -1,0 +1,106 @@
+#+STARTUP: showall
+* Develop proof outlines
+** Work backwards from hypothesis. Proof will be a construction of an instance of the non-negated form - each term in the disjunction. 
+*** Look for all resolutions that leave that as their residue
+*** That determines a filter/iterator that goes over all clauses that contain that.
+*** Then subgoals to resolve away the undesired terms from those clauses
+** Resolution at schema/Ckn level
+*** Ckn for resolvant
+*** Clauses that subsume each member of tree - lefts, rights
+*** Then proof outline does lookup for the desired side (left/right) for the term it wants to get rid of.
+*** Put unfiltered clauses into the trees for each term in contains, based on which side
+*** Then expand iterators that generate more terms in the desired proof goal
+** Make Acs have a set of term id
+*** Term id is pointer in entry in hash table? Maybe expand it when doing resolution
+**** Unfiltered list is ids
+*** Term tree
+**** Use to find clauses to resolve a way a specific term, to leave the desired term
+**** That expands into search to remove other terms
+*** Node in term tree
+**** Content or nodes for subterms? No use for lookup of subterms (maybe later a strategy to have goal to get at some unique value)
+**** 2 sets of clauses that have that term: right, left
+***** Each has mapping of term vbl numbers to clause vbl nums
+**** Subnodes for expanding each vbl position into instances
+***** Clause need to check if that is consistent with vbl ids
+***** Can be multiple paths to same node.
+*** Change ckn to use term tree
+**** Ckn is to speed up subsumes check, not guide search, so not essential yet
+**** Benefit would be to make subsumes check faster
+**** Coordinates of class are its terms, but want to find using an generalization of terms
+**** The list of lefts and rights for each term include all clauses, do a search over all those, and stop traversing down term tree where instance of term conflicts
+**** Which term tree to use? One with fewest clauses.
+**** Traverse up term tree from term new clause to find terms that generalize the given one, instead of searching down? Then look for compatible clauses from that term.
+** Proof search
+*** Tree of iterators to remove clauses from each node, starting from negated hypothesis
+*** Do breadth first search of resolutions that lead to goal.
+*** Each resolution adds a new target of terms to remove. Look up in term tree to collapse search tree into graph
+*** Do this as a new prover class, or plugin
+**** Gbp - goal based prover (share interface with Gnp or Res?)
+**** Trm - top level term that appears in a clause
+***** Left, right list of clauses that contain the Trm
+***** More specialized Trm - one for each position that has vbl
+****** Etl - link base to derived Trm
+******* Many to many
+******* Posn in parent?
+****** How to handle multiple subst's?
+***** Content: extend Asb, has map from id to lsm
+**** Tcs - term based clause
+***** Each term in clause:
+****** Term id (pointer for now)
+****** Array indexed by term vbl to clause vbl
+***** Total number clause vbls
+**** Psn - search step towards proof goal
+***** Clause: Tcs
+***** kStatus (done/reason)
+***** Set of Tni - one for each term
+**** Tni - Iterator to find negation of term (can be shared between Psn)
+***** Trm
+***** fPos (pos/neg)
+***** List of clauses that can negate this Trm
+****** For each clause
+******* Subst needed to match trm - doesn't need to be applied
+******* Psn it leads to
+******* Clauses come from the clauses on the Trm
+*** Other
+***** Iterate over
+****** Psn - nodes in proof search
+****** Terms in clause
+****** Nodes in Trm tree
+******* More specific (can refute narrow instance)
+******** } Need new Psm
+******* Same or more general (can subsume proof step)
+******** } Use existing Psm
+****** Clauses on opposite side of Trm
+******* Check if each clause is subsumed, if not already checked
+******** } If subsumed: it does not need to be proved
+****** Unification/resolution with that clause
+***** Prioritize direction in iteration
+****** number of terms, total number of variables, symbols, depth of proof
+***** Each step
+****** Step iterator to select psn, clause for term
+****** Resolve clause selected by iteration with clause from Psn -> new clauses
+****** For each new clause
+******* Add new clause to Trm tree for each of its terms
+******* Find/create Psn for that clause
+***** Completion
+****** Proof is done when initial Psn is done
+****** Psn is done when all terms in clause have been resolved, or the clause is subsumed by an axiom (or another resolved Psn)
+****** Term in Psn is resolved: has a link to a resolved Psn - a sub proof that generates the negation of that term
+******* Actual proof is most-general unifier of all the sub-proofs
+***** Why will this use less memory to find proof?
+****** How to know which is best path to expand?
+***** Development
+****** Define classes
+****** How to drive iteration?
+******* Options
+******** } Add record to queue
+******** } Traverse tree looking for indicator
+******** } State machine: active object, more/next.
+********* Stack of active objects
+********* Push/pop active object
+** Speed up existing with positive resolution:
+*** Use Ckn to find right clauses. Instead of using Pqi
+*** Use Bas to find small left clauses, 
+**** For each term, use Ckn to find clauses whose first term can be unified
+*** Would it be better to use negative resolution? Try them both.
+

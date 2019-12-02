@@ -1,0 +1,33 @@
+#+STARTUP: showall
+
+* Manipulate expressions. E.g. distribute, pass down negation
+** Put functions, methods into dictionary
+*** Allow reference to graph transformations
+** Allow reference to sub-expression
+*** Path based on position or text match
+*** Find object using graph match expression
+** Operation to replace node in tree with result of function
+
+* Interact with graphs: replace edges
+** Define current vertex, navigate
+** Commands to add, remove edges
+** Set payload
+** Apply pattern
+* 
+* Evaluate
+* Commands
+** Expression
+*** Call: static, method
+** Let
+** Quote
+** Backquote. Vars: $term
+** Load
+** foreach
+* Each command
+** Define syntax
+
+* Register output methods to current context
+** Add to symbol table
+** Define  (edgepath, condition, language)
+** "using method { … }"
+

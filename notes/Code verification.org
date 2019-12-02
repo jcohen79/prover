@@ -1,0 +1,37 @@
+#+STARTUP: showall
+* Combine symbolic execution with reasoning
+** Check post-conditions, invariants, are pre-conditions met at call site
+* Start with simple examples
+* Create statements that relate values of variables
+** Apply function call post-condition to call site conditions
+* Simplify: combine e.g. A->B ^ ~A-B => B (that is resolution)
+* How to have prover build up lemmas to speed up proof?
+** A clause that is refuted can be negated (ꓯ -> ꓱ~) and saved
+*** How to work back through proof tree determine which clauses to negate?
+**** Clauses that descend from hypothesis, 
+**** at each step one or the other antecedent must be false
+**** Steps that descend only from axioms must be true, so proceed to negate up other branch
+** Which can clauses from one step be discarded for other steps? How to generalize?
+*** Name the appearance of each vbl location - corresponds to a function of the program inputs/start state
+*** Make assertions about those vbl functions - relate output of function to its inputs
+*** Assignment to place vs. assignment to variable: make assertions about that location
+**** Define entity: what is returned by new. 
+***** An array of values has a list of entities for entries in array. 
+***** Object has list of entities for fields
+**** Assignment to dereference asserts statements about the entity at that location.
+*** Value of expression:
+**** Symbol: get variable function for preceding location (assuming is not volatile), 
+**** Function call: get values of argument expressions, subst into conditions for function
+**** Dereference: function of lhs value, with check for side effects that the lhs object has been modified by another statement. 
+
+* Interactive code checking.
+** Focus on specific locations in code
+*** don't process clauses about other parts of code. 
+*** Remove them from memory when moving around code tree
+** Allow user to check solutions, interrupt search if no refutation is found
+** Define atoms for code positions
+** Meta-language allows referencing atoms by dot notation. Display atoms using dot notation.
+** Collect assertions as clauses describing symbols and locations.
+*** Type means that forall conditions, value is in set
+*** Can also qualify by location, and other special conditions: A -> P(X)
+

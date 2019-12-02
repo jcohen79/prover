@@ -1,0 +1,141 @@
+#+STARTUP: showall
+* Options
+** Subterm ids
+** Hash table to check for dup (one perBas)
+** Types, 
+** Equality: identity, symmetry, substitution
+** axiom schema, 
+** strategy, 
+** multi-threading
+** Match terms: table of (termId/termId) - if they can be unified
+*** Add to cache for each unique term pattern
+** How to make it easier to watch what is going on
+*** Metrics
+*** Clauses that are: subsumed, queued, filtered resolved upon
+*** Display counts by axiom, to see which ones are generating clauses that are generating noise.
+* Strategies - see file:///C:/Users/JonathanCohen/Downloads/0066-4138%252873%252990001-3.pdf
+** Selective enabling of axioms
+*** e.g. x=y -> f(x) = f(x)
+*** Provide function to execute to see if axiom should be applied (savings is in avoiding unneeded clause)
+*** e.g. Check if function occurs in the current goal set with the arguments that occur in the current clause 
+**** Need to track
+***** Where are occurrences of symbol:
+****** Which clause?
+****** Which parent symbol and argument number
+*** Write functions to seek to eliminate symbols that appear in the goal set
+*** How to detect when subgoal is available that does not use a symbol? 
+**** Remove all clauses that have that symbol (unless needed to trace proof at end)
+**** Function to skip them - i.e. selector that applies to all from then on
+** Ordering of literals
+*** Do this either by sorting the literals in clause, or by using a function other than simply first literal
+*** Biggest first
+*** Symbol being eliminated
+** Set of support (pg 229)
+*** Need to add in generated to both sides
+** Unit preference
+** Resolution with merging pg 230
+** Linear format
+** Loveland subsumption
+** Combinations pg 232
+** Semantic 234
+** P1
+** hyperresolution
+* Use definitional CNF (pg 75) to reduce size of skolemized
+* Don't always start at the smallest Bas/Pqi, note the smallest Bas/Pqi that is active
+*  stop adding the pqi when length matches, to avoid lots of pqi_s that never get to
+** what special cases for out of order?
+* Clear acsNext? Want to remove references to garbage, held in proof history
+** Problem is acsMarkPrev/Latest might be removed, need to get back on track
+** Check those values and update them also
+* Put offsets onto clause; it will be in same cache line
+
+* The fOccur check:
+** Problem is it requires traversing expr
+** Reason for fOccur check: will result in loop when doing fEquate later for that var
+*** Could involve another var in loop
+** Alternative: 
+*** let loop happen, but check for it in equate
+**** Where else could loop happen?
+*** Record that one var depends on another
+*** Precompute what vars are in subtree
+**** Build matrix of var X offset: is var in that subtree?
+***** Extend matrix when doing bind (but need to undo)
+*** Just do simple for now
+* Set of support strategy
+** Add flag to Asc for descended from goal
+** Pass through SKO
+** Set flag when doing resolve
+** Count how many get added
+** When getting next from queue, skip to stay at least 50% backwards vs forwards
+** If run out of derived from goal, proof has failed
+* Compare to Linear resolution?
+** http://www.cs.miami.edu/home/geoff/Courses/CSC648-12S/Content/LinearResolution.shtml
+** How does linear compare to P1 resolution? They are not compatible.
+** How to allow changing strategy? Different top level loops?
+* Index the rights by leading lsm
+** At gnp level: separate lists of Bas
+** Do unification of lefts first, then iterate on first term of union
+* Move number of vars from Acs to Aic, just get the max id when measuring term size
+* Replace Dictionary in asy.nIdForVbl with one or two arrays, num vbls is known
+* Use just one global array for lsm
+* Use profiler - unexpected hotspots
+* Replace stack for expanding bound var with fields on Tde
+** Do symmetric unify first
+** Replace fOccur check with check if var is being expanded
+* Strategy:
+* Factor out common branchs of search
+** Group the clauses on each side according to possible resolvants
+** Other clauses are chained to those (can be on multiple lists)
+** When a pair from each side is resolvable, all in the list can be formed trivially
+** How to select from that list of clauses to make progress?
+** Adding a clause to a resolvant chain means it is added to an iterator
+** How is progress made?
+*** Need fewer terms added in merge than cancelled 
+*** Multiple terms in powerset
+*** Other terms that cancel K
+* Replace x=f(y) -> p(x) with p(f(y)). 
+**** Even if x appears multiple times in p. This gets rid of a left.
+**** How does this change the proof sequence? Try this out in simple test to see what happens. Reaching empty clause requires matching a lhs of p(f(y)) either way. Original form creates rhs with p(f(x)) directly from any term with p(x) on rhs. What if there is none?
+* Search strategy
+** Do more experiments
+** Add support field to Acs: axiom, negation of conclusion, derived from neg conclusion
+** Semantic
+*** Is there an equivalent of p1 for semantic? Check proof in Robinson
+*** More tests - SymmetricResolveClauses
+*** Add check during LHS of entails that there are no falsifiable axioms
+**** Flag can be used for set of support also
+** Total order of terms within each clause
+*** Only matters for p1 resolution
+*** Choose order so that literal with fewest alternatives is done first
+
+
+* Subterm ids
+** Have Bas be keyed by Ckn, not size
+*** Goal is to avoid resolving Asc with repetitively larger subterms
+**** Get a better metric than size
+**** Don't construct complex combinations of constants unless they match
+***** Will that always happen? How to make it happen only depth first?
+** Generalize negative ids to lookup in table for terms built from constants
+*** Hash table of trees of constant terms
+**** Another hash for 4 byte id for index (instead of 8 byte lsm)
+*** Extend Lsm (or common base/interface) to include subtrees - Unique id for each tree
+*** Equate: allow matching of constant tree with regular subtree that has vars
+*** Convert to this form when building Asc
+** Put unfiltered Asc into Ckn tree
+*** Separate tree or set flag?
+*** Bas was originally a grouping of Asc by likelihood of being in proof (by size)
+**** Now make it grouping by shared search path through Ckn tree
+**** Each Ckn has iterator for all other Ckns that it could potentially resolve with
+***** They share a pair of equatable terms
+***** Each top level term goes to a family (like Bas?), 
+***** Resolution checks each family (term lookup)
+***** Term net is like Ckn but for terms
+****** Subtree has all possible replacements for variable in that position
+****** Constant trees are the leaves
+***** Each entry is an Asb for term, with id for subtree or variable.
+***** Each new subterm that is discovered in an Asc gets added to all the parent terms that it subsume it (i.e. have a variable and the rest equates)
+**** Each Asc is like a Bas?
+*** Need to iterate where a variable appears in each Asc being matched
+*** Pqi cross-link between positions in Ckn tree where variables occur
+*** Iterate over new entries in Ckn tree
+

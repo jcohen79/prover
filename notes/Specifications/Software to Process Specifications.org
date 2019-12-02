@@ -1,0 +1,4 @@
+#+STARTUP: showall
+* [[file:_main.org][_main]
+* [[file:.org][]
+* [[file:.org][]

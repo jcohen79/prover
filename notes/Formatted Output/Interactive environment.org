@@ -1,0 +1,7 @@
+#+STARTUP: showall
+* REPL
+** Parse, evaluate, print result
+** If last character is \, then read another line
+* Easy Function to lauch REPL or single like from debugger command
+
+* Simple commands: show, eval,

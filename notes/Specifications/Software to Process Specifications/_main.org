@@ -1,0 +1,127 @@
+#+STARTUP: showall
+* What software to use to process declarations?
+** Macro expansion to allow concise expression and flexibility in changing representation
+** Specs form a mathematical description of possible execution states
+** Do Consistency and completeness analysis
+*** Determine if the state after each command is correctly described
+*** Specify meta-rules to check
+** Query to see commands and specs related to some condition
+*** Check situations that could cause some condition
+** SAT can generate validate command/response sequences. Filter the important predicates to display.
+** Running the rules can simulate commands (pattern match, replacement)
+*** See symbolically the results of each command
+** Generate test model and/or app code
+** Read/Store Rules
+*** Conditions when rules apply
+**** Separate the pre/post conditions from the basic transformation rule, because processing the logic is a much more complex task
+*** Special case modifications
+** List the changes to state that should happen when an event occurs in a state
+*** What is definitely in (and out, maybe by specific query)
+*** What is possible but unknown
+*** How to find out the reason why something does or doesn't happen?
+**** The error could be anywhere along the path/
+**** Need to debug somehow
+***** Typical techniques: Single stepping, visualization, assertions
+***** New: make assertion and see proof why it is rejected
+
+
+* Rough checking of specs
+** Names of predicates functions
+*** Declare types of arguments
+** Forall/exists var type
+** Check types for each expression
+*** Argument types
+*** Boolean for logical operators
+*** Type inference of expression result type from argument type
+**** Simplify function result type or parameter when it depends on argument types
+**** Use context: short-circuit operation of AND
+***** Adds to information know in that context
+***** What does this look like in clausal form?
+*** When is the type checking done?
+**** Can do a run through of an expression anytime
+**** For unification, use a very simple type equality
+***** Each variable links to type
+***** Predicate/function has list of arg types
+***** Link together the clauses that have a predicate, to skip the rest
+****** That's faster because the clause predicates are there, so no searching
+**** SAT: as other terms are chosen, more info for type may be available (out of order)
+
+* What software to use to do type inferences?
+
+
+* Declare function/predicate
+** Pred/fn name ( type name, … ) result;
+** Type name is definition;
+** Add to grammar
+
+* Type system
+** Union/intersection - convert to and/or  of X \element T
+*** Occurs when a previous clause gives those two possibilities
+** Inheritance - subtype of T such that op(x) is S
+** Partition (name)
+** Cond ? then : else
+*** A is name of a parameter to a function: can be used as parameter type or result type
+*** How to get knowledge of cond inside then?
+**** When more info is needed, look at the alternatives in the OR. If those can be matched up with another clause, then the remaining item in that clause is ANDed with this term.
+***** C v (A ^ B) = CvA ^ CvB  => maybe assume that A is true inside B (can AND A into B without changing the result)
+** 
+
+
+
+* How to check for constraint satisfaction:
+** Input: 
+*** Set of axioms
+*** Constraint condition
+*** Candidate condition
+** Output:
+*** Does candidate condition satisfy the constraint?
+**** If not, provide a counterexample
+
+* Produce reports from within language?
+** Map clauses using meta-predicates to input to routines that generate word/excel/html/latex
+** Use SAT to generate output
+
+* Specify completeness as a predicate
+** Use meta-predicates on the clauses that have been created
+** How to keep that live until falsehood has been established?
+*** How to specify that all attempts of resolutions of a given form have been made?
+
+
+* https://en.wikipedia.org/wiki/Constraint_satisfaction
+* http://www.zuser.org/zbook
+* http://staff.itee.uq.edu.au/smith/objectz/objectz.html
+* http://www.springer.com/us/book/9781447153542   Refinement in Z and Object-Z
+
+
+* Approach
+** Posit negation and resolve until contradiction
+** Try out on example with predicates that will be used in specs:
+*** Element of
+*** Subset of
+*** Set equals
+*** And, or
+*** Set builder notation   https://en.wikipedia.org/wiki/Set-builder_notation
+** Start with lisp format, try some examples
+*** Type hierarchy
+*** And/or
+*** Exhaustive coverage (elements in set)
+*** Conditions described on property
+
+* Check invariants of model
+** Instead of executable code (e.g. asserts), the pre and post conditions are logical expressions. Other axioms are used to describe the function values, and not executable code. The program state at that point can be check against the axioms according to the function definitions. This avoids having to write executable code for assertion checking,.
+
+* Process Command change to state:
+** Create new expression of state from old and command assertion
+** Remove parts of state expression that cannot be assured
+*** Inadequate treatment will show up as violation of post-condition
+*** Key to invariant is to express what does not change
+** Form new deductions afterwards - enough to check invariant
+** What is formal description of this operation?
+*** Updates are made to ERA 
+**** Allowed operations
+***** Set
+***** Insert (add to relationship)
+***** Remove (remove relationship)
+***** Create
+***** Delete
+***** Copy

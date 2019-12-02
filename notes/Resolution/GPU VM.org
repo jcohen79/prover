@@ -1,0 +1,69 @@
+#+STARTUP: showall
+
+* Make common instruction sequence: use VM
+** Break down into cycle of load,  compare, store, branch/jump operations
+*** Move instead of load/store
+** Branch is jump into location in table of instructions
+** Load/store address: array, index, (multiple index?)
+** Register number - really local variables. These might be auto-increment
+** Advance PC each time (part of load instruction step)
+** Is there a GPU instruction to test bit and control next instruction?
+** How to compile algorithm to sequence of instructions?
+*** Build standard loop
+*** Each instruction is collection of flags, indices.
+**** use graph based code gen
+*** define macro language
+*** Extend parser language to read the existing c#
+*** Use Iron c# grammar
+**** Allows mix and match with new language
+**** Use c# elsewhere in graph matching
+*** expand into c# initially, to check logic
+*** c++, assembly
+*** then to vm
+
+* List the VM primitives needed to execute the code that is loaded
+** Convert to primitive instructions
+*** Declare list of locations 
+**** registers
+**** Constant values - do these need different instructions to access?
+*** Instruction
+**** [On condition]
+**** Move/add/compare
+***** Compare is = or <
+**** Addr1/2: register or constant
+**** Pc is a register, is auto increment
+*** Address
+**** Constant value (address like a register)
+**** Variable: register in instruction
+**** Indexed: add variable
+**** Field: add constant
+** Loop to execute: 
+*** Each steps performs a meta instruction each iteration
+**** actual instructions load parts of the current meta instruction
+*** Steps to execute meta instruction
+**** Increment pc
+**** Move/Load: meta give register posn: source, destination
+***** Switch: byte/short?
+**** Add: meta gives constant (could be 0) and register posn
+**** Compare: fixed address: 0,1. byte.
+***** Switch: < or =
+**** Move/store: meta give offsets: source, destination
+***** Switch: Conditional (switch on which pred?)
+*** Is a divergent branch faster than series of tests?
+*** http://docs.nvidia.com/cuda/index.html
+*** http://docs.nvidia.com/cuda/parallel-thread-execution/#axzz43x9bz32I
+*** http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+*** A series of compare equals, use to set instruction predicate
+** Termination: 
+*** Unroll N times, then add step to sync if needed
+** How to map basic instructions into the meta instructions?
+*** Create Collection of pending steps
+*** Cycle through steps of meta instruction:
+**** Check each pending step to see if it matches next stage of meta:
+***** Match: each meta stage has predicate for instructions
+****** Then function to fill in fields of meta
+**** If match, store in meta instruction
+***** Add enabled pending steps
+**** If no instruction can be added to meta, skip that
+**** Report number and location of slots that need to be nooped
+*** At end of meta, output, start next meta

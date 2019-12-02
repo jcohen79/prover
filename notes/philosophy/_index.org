@@ -1,0 +1,2 @@
+[[file:_main.org][main]]
+[[file:idealism.org][idealism]]

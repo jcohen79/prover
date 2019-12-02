@@ -1,0 +1,21 @@
+#+STARTUP: showall
+* Purpose: watch remote prover, manage large batches
+* Use existing web server code,  run as main
+* Command line arg to run a particular test
+* URL for each example (unit test) to run by hitting refresh
+* https://www.websocket.org/echo.html
+* http://openui5.blogspot.com/2014/01/simple-chat-server-example-using-ui5.html
+* Browser connects to server via URL
+* Server activates hook to capture console output
+* sets flag to tell server to enter code to construct output
+* Send json objects to set flags
+* Use different threads for doing proof vs. REPL
+* Different output windows for logging and REPL output
+* Server: reads input, parses, evaluates
+* Client: keep history, buttons to go up, down. Enter just allows multi line input?
+* Handle enter as send text
+* Echo locally by appending element that sets color in div
+* Button to load a file
+* Button to save output
+* Cmd to display proof
+* Add plugin to LyX to talk to web client: send axioms, get back proof.

@@ -1,0 +1,38 @@
+#+STARTUP: showall
+* Goal: make it easy to read and write rules
+** - Graph reads and writes stackedit/mathjax documents
+** - Write a stackedit extension to have markdown that talks to graph
+
+* Look at source for StackEdit
+** - How to add markup codes, how to put html into the result side
+
+* What is a good dev environment for JS app?
+** http://www.infoq.com/articles/modern-javascript-toolbox
+** Sublime - could that be the environment?
+** Webstorm
+*** How to edit code that lives/runs on remote server?
+**** Check out from repo
+** ES6: http://exploringjs.com/es6/
+
+* Allow easy editing on text, send events to displayed objects
+
+
+* How to add markdown extension
+** Define formula, use name to replace existing value
+** Use names to identify each result
+
+* How to interact with results?
+** Explore
+** Run operations, queries
+** Generated html should include buttons
+
+* Run stackedit.io/mathjax server on linux (see installation notes page)
+
+* Send requests to server running graph to do matching, queries
+* Embed buttons/menus in UI
+** Invoke graph operations
+
+* How to make output reference the graph objects?
+** Graph generates stackedit/MathJax markup
+
+

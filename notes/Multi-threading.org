@@ -1,0 +1,21 @@
+#+STARTUP: showall
+
+
+
+
+* Show current counts of types of results, amount of time, memory usage
+
+* Setting garbage collection to Server mode
+*** https://msdn.microsoft.com/en-us/library/cc165011%28v=office.11%29.aspx?f=255&MSPPError=-2147217396
+** Output to string buffer, copy text to console on each event completion
+
+
+** https://developer.nvidia.com/accelerated-computing-resources
+** https://developer.nvidia.com/accelerated-computing
+** http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#axzz40GAM3Dqd
+
+
+
+** CUDA
+*** Emulator: https://code.google.com/archive/p/cuda-waste/
+*** https://code.google.com/archive/p/gpuocelot/

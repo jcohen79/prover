@@ -1,0 +1,82 @@
+#+STARTUP: showall
+
+
+* Types of statements in specs:
+** Assertions about properties when a condition holds, can depend on related objects
+** Some assertion about the result of a command in a specific condition
+
+* Answer questions
+** Has the value of each property been specified (i.e. constrained)? (completeness)
+** Are there contradictory specifications (consistency) - no value possible for a property
+** When can a condition hold? (query)
+*** What commands needed to make something happen, 
+*** what other conditions needed for some something to be true
+
+
+* Write small example
+** Show that commands can be generated and assertions made
+** Modify reslab to build all inferences that can be made after each command
+** Show invariants being broken
+** Show what modifications to commands are needed to maintain invariants
+*** What effect would be of removing each condition - invariants broken
+
+
+
+
+* Show how command post-conditions can be used for validation and enabling
+** Current validation is done by matching sdi tree
+*** Is there another way?
+**** Infer that an sdi exists just from specs
+*** Why will that be easier to write and debug?
+**** just get state from app and then check that conditions are met:
+***** Keyboard: just keep adding assertions
+
+
+** Express invariants as code to execute after each command. They can be mapped into logic later. Then they can be used to check for consistency and completeness.
+
+* What benefits will logic form have?
+** Check for violations of invariants by running commands and checking.
+*** That can be done as code also, but specs can be incomplete and changed more easiy
+** Report/query rules that affect a feature (or sub-part)
+** Find Incompleteness of specs
+*** What end-user visible behavior has not been specified?
+** Map to characteristic of platform features
+*** Pre-conditions/command/post-conditions does not really describe transformation.
+*** Actual user visible behavior is a combination of all the layers and settings. 
+*** Those are implemented in code, so the description cannot be inverted to see all the possible causes.
+*** Want relationship between input settings and output appearance. How to represent relationship so it can be analyzed? A set of primitives, each of which can be inverted. 
+**** We can then take a given output state and find what input states result in that.
+**** If there no input state can be found, then specs are incomplete or wrong.
+
+* Resolution can be used to reduce the space that SAT needs to generate examples.
+** It can run into inconsistency, which is the empty clause. Want to continue analysis anyway.
+
+* Higher order
+** First order Requires repetitive statements
+** Statements could be generated, but that means the rules in the rule generator are not part of knowledge.
+** How to represent Higher order rules so they can be acted on?
+*** What inferences can be done with Higher order rules?
+*** What expressions are allowed in a Higher order rule?
+*** Is it just new axioms that are created, or is it new inference rules?
+**** What does quantification over predicates and functions achieve?
+**** https://en.wikipedia.org/wiki/Generalized_quantifier - use lambda expression to represent predicates and functions. This allows them to be combined, etc.
+***** Such a rule is implicitly applied to all assertions that it matches
+*** Supply ad hoc axioms during resolution
+
+* Differences from production system
+** Determinism comes from non-overlapping rules. Prod system determinism comes from forcing an order.
+** Does not need to run on its own: 
+*** just limits what the app acceptable results are. 
+*** Emphasis is on expressing desired behavior, not providing all the details.
+*** What runs is checks for completeness and consistency
+** Can have undefined terms, as long as they have been identified and their impact can be understood to be localized.
+** Focus is on:
+*** Clearly expressing desired behavior
+*** Finding interactions between features that affect the implementation
+*** Finding conflicting rules (inconsistency)
+*** Finding incompleteness
+*** Potentially generating code: app and test model
+
+* Reason why specs are predicate but not propositional
+** New objects can be created
+** There are non-local effects of selection. Need to create complex expressions in refutation to refer to deep nested objects.

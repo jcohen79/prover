@@ -1,0 +1,7 @@
+#+STARTUP: showall
+* Goals
+** Show how to use logic to express specifications
+** Find inconsistencies, in completeness
+** Generate tests
+** Describe algorithms
+** Analyze algorithms - prove theorems about them, as in tutorial

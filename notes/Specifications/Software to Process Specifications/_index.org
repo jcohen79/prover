@@ -1,0 +1,4 @@
+#+STARTUP: showall
+* [[file:_main.org][_main]]
+* [[file:Syntax.org][Syntax]]
+* [[file:Representing state change.org][Representing state change]]

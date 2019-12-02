@@ -1,0 +1,3045 @@
+#+STARTUP: showall
+* Why isn't paramodulation finding solution? Too much noise from equations like  f(e,x) = x
+
+* \forall x f(e,x) = x,
+* \forall x f(x,e) = x,
+* \forall x \forall y \forall z f(x,f(y,z)) = f(f(x,y),z),
+* \forall x f(x,x) = e,
+* f(a,b) = c
+* \Rightarrow
+* c = f(b,a)
+
+* \forall x x=x,
+* \forall x \forall y (x=y \rightarrow y=x),
+* \forall x \forall y \forall z (x=y \land y=z \rightarrow x=z),
+
+* -----------------------------------------------------------
+* proof using paramodulation (replace term with other side of a different equality)
+
+* ba = c
+** x = x
+** ca = ca
+** baa = ca
+** be = ca
+** b = ca
+
+** cb = cb
+** cca = cb
+** ea = cb
+** a = cb
+
+** ab = ab
+** ab = cbb
+** ab = ce
+** ab = c
+
+
+* ------------------------
+
+* Proof using equality axioms
+
+** ab = c
+
+** abb = cb
+** ae = cb
+** a = cb
+
+** ca = ccb
+** ca = eb
+** ca = b
+
+** caa = ba
+** ce = ba
+** c = ba
+
+** (= (f a b) c)
+** (= (f b (f a b))  (f b c))
+** (= (f (f b (f a b)) b) (f (f b c) b))
+** (= (f (f (f b a) b) b) (f (f b c) b))
+** (= (f (f b a) (f b b)) (f (f b c) b))
+** (= (f (f b a) e) (f (f b c) b))
+** (= (f b a) (f (f b c) b))
+** (= (f b a) (f b (f c b)))
+** (= (f b (f b a)) (f b (f b (f c b))))
+** (= (f (f b b) a) (f b (f b (f c b))))
+** (= (f e a) (f b (f b (f c b))))
+** (= a (f b (f b (f c b))))
+** (= a (f (f b b) (f c b)))
+** (= a (f e (f c b)))
+** (= a (f c b))                          didn't get this
+** (= (f c a) (f c (f c b)))
+** (= (f c a) (f (f c c) b))
+** (= (f c a) (f e b))
+** (= (f c a) b)                  didn't get this. Going backwards
+
+** (= (f (f c a) a) (f b a))
+** (= (f c (f a a)) (f b a))
+** (= (f c e) (f b a))
+** (= c (f b a ))
+
+
+* -------------------
+
+* Problem:
+** Make on-demand creation of expansion of terms
+** Is the problem just putting constants into 
+
+
+* f(ex)=x
+* f(xe)=x
+* f(xf(yz))=f(f(xy)z)
+* f(xx)=e
+* f(ab)=c
+* c≠f(ba)
+* f(xe)=f(f(xy)y)
+* x=f(f(xy)y)
+* a=f(cb)
+* f(yf(yz))=f(ez)
+* f(yf(yz))=z
+* f(ca)=b
+* c=f(ba)
+
+* 6 is wrong: should be c != f(ba)
+
+* Have 8 (7), 
+* Got  11(10)
+* Why not 9 (8)?
+
+* Replace WatchEqs with watch for the specific steps needed for proof.
+** Work out the steps needed: eqs, etp, epr, cpg, eul, eur
+*** What has to occur: eqs, rtp
+*** What is needed to create the left/right transfers
+** Write the steps as watches for the tdc
+** See which ones are found/missing
+
+* +		atpToEquate	{(((F  Q_30.0 Q_30.0)) ((F  E E)))}	reslab.Atp
+* 3419
+* Is getting multiple solutions for refuting, only need 1.
+* How to stop the solutions coming, or stop producing clauses?
+
+
+
+
+
+* Request for c,f
+** Request for pti with vbl on one side (8)
+*** Where to request notification of these?
+**** Same as existing in Eqs? yes
+** 2 and 7 would be end to end
+** So each rule with a vbl on one side should be matched against all other pti_s
+*** Vbl can match any term
+**** Growing the set of vbl one side pti_s is needed because they can match any term
+**** 8 should have been generated. Was it?
+*** Add this
+**** New Gnp.
+***** Left is all pti with vbl on one side
+***** Right is all pti
+***** Res.SavePti adds to both sides
+**** Processing:
+***** Res.cpgObtain, but for a null (means vbl)
+***** Cmr.CreateNextStep now does res.SaveForFilter
+*** Look for 2 and 3 being unified, will pull in 4, in order to match 2
+**** Result is 8
+** When a new pti with vbl on side is created, how the eqs processed?
+
+* Need key for what each even represents
+** Add singleton parameter to each log event
+** Wrap Tcd (e.g. Tcd.tcdTransferLeft with on with more description) in hierarchy
+** Avoid long lists of tcd in e.g. WatchEqs
+** Be specific in what to look for
+
+
+*** 14   6
+***** 13               matches prl created for resolution eqs
+******* 8
+******** 7
+********** 3
+********** 4
+******** 2
+******* 12
+********* 11
+********** 10
+************ 3
+************ 4
+********** 1
+********* 9
+********** 8
+********** 5
+
+
+* Failing on step 9
+
+******** (( (=  A (F C B)) )) 
+* What is that in more basic steps?
+* (F A B) is unified with (F X Y), then other side of = is inserted
+
+* What is the general rule for why this paramodulation is needed?
+** Nothing yet is driving it
+** Look at why paramodulation is complete
+*** http://ac.els-cdn.com/S0747717108801307/1-s2.0-S0747717108801307-main.pdf?_tid=4e5f96b8-5a2e-11e7-8e4d-00000aacb362&acdnat=1498454238_1e8db0dcf62fb73bb028ce2d843d6042
+*** Using Forcing to Prove Completeness of Resolution and Paramodulation 
+*** And others
+*** Look for contradiction of minimal clause
+* Why isn't a pti being used to unified where needed?
+** Where is the position modulated in step 8 used in a unification (e.g. resolution)
+** 3,6 are resolved, others are modulation
+**  6 vs. (8(3 <- 4, 2)<- 12(3 <- 4, 1, 9(3 <- 4, 2, 5)))
+
+**  (= c (f a b))  vs
+**   (= (f x (f y z)) (f (f x y) z))            : 3
+**                  Replace (f y z) <- e = (f w w) where w = y, w = z
+**   (= (f x e) (f (f x y) y))                   : 7 is (3 <- 4)
+**                 replace (f x e) <-x
+**   (= x (f (f x y) y))                          : 8 is (7 <- 2)
+**                 replace (f x y) <- c = (f a b) where x = a, y = b
+**  (= a (f c b)                                  : 9 is (8 <- 5)
+
+** 12 supplies the c because 9(a = (f c b)) is unified into 11(10<-1)
+*** Which then goes through 8
+** Want this to be demand driven,  so how to determine what requests to issue?
+*** Goal is to unify first term after = in 6( c) vs 3 (f x (f y z))
+**** Result of soln is a c
+*** What is final step of rhs (the first request, final step in soln)?
+**** 12 into 8
+
+* Eqs already does
+********** Prl prl = new Prl(lsmLeft, lsmRight);
+********** Epr epr = res.eprObtain(prl);
+********** epr.TransferLeft(this);
+******** Feed Pti_s
+*** And eprObtainForVbl for left and right
+** That waits for a matching pti to be created, then processes for the solution
+** What dries the creation of the needed pti?
+
+** Instead of Prl/Epr,
+*** Trigger iterating over pti_s for each subterm in the requested term
+*** Define new class to step through subterms (like etp) and create instance same class
+**** Skip if term is a vbl
+**** Obtain epr for main term
+**** Register for solutions from epr
+**** Each solution: 
+***** Notify requestor of unified term
+**** When getting notified From child:
+***** Create new top term from substitution
+***** Send new term and the vbv to requestor
+*** So Eqs sees a set of modulated terms for left and right sides.
+**** For each pair,
+***** Create eqs to unify that pair
+***** Combine solution from that unification with soln for the modulation,
+***** Pass combined soln to parent eqs requestor
+
+*** Construct simpler example to see if pti_s are being generated on demand
+*** Is there a pti end to end to trigger cascade?
+**** 6 needs to see 8, because it has a var on one side, but there is nothing to create it
+
+
+* c
+
+
+* Work backwards from 13 to get 12, by replacing vbls in 8 to match 13.
+* Can negation of 12 be derived from final negation of 13 and 8?
+
+*   (= (f x (f y z)) (f (f x y) z))            3
+*                  Replace (f y z) <- e = (f w w) where w = y, w = z
+*** Equate (f 0 1) (f 2 2)
+*   (= (f x e) (f (f x y) y))                   7: (3 <- 4)
+*                 replace (f x e) <-x
+*** Equate (f 0 e) (f 1 e)
+*   (= x (f (f x y) y))                          8:  (7 <- 2)
+*                 replace (f x y) <- c = (f a b) where x = a, y = b
+*** Equate (f 0 1) (f a b)
+*  (= a (f c b))                                  9: (8 <- 5)
+*                  Replace (f x y) <- e = (f w w) where w = x, w = y
+*** Equate (f 0 1) (f 2 2)
+*   (= (f y f(y z)) (f e z))                    10: (3 <- 4)
+*                 replace (f e z) <-z
+*** Equate (f e 0) (f e 1)
+*   (= (f y (f y z)) z)                          11: (10 <- 1)
+*                 replace (f y z) <- a = (f c b) where y = c, z = b
+*** Equate (f 0 1) (f c b)
+*  (= (f c a) b)                                   12: (11 <- 9)
+*                 replace (f x y) <- b = (f c a) where x = c, y = a
+*** Equate (f 0 1) (f c a)
+* (= c (f b a))                                   13: 12 <- 8
+* What drives the demand based on goal?
+** Start from 3 <-4(7) <- 2(8) <- 5(9) 
+********* 3 <- 4(10) <- 1(11) <- 9(12)                           
+********* 3 <-4(7) <- 2(8) <- 12(13)                                     means 12 into 8, yielding 13
+
+* == from 3
+** c - equate x in 8. x from x <= f( x e), (f x ..) from 3
+* How does c get driven?
+** Skip 4. 2 is what results in 8 being just a vbl on left
+** How does 8 and 12 get driven?
+
+* Want to generate pti with a vbl on on side
+** Reason: they can match any term
+** What happens in this case? (when 8 us created)
+*** Looking for a place where desired term exists, c in this case
+**** Iterator that generates that term
+*** Then find a pti that can pull that term out
+**** Single vbl is most direct
+***** Lhs vbl matches desired term
+**** Other terms could get unified with target, result in smaller goals
+***** Eqs issues requests on first time, after it processes solns
+
+* This should happen:
+
+*   (= x (f (f x y) y))                          8:  (7 <- 2)
+*                 replace (f x y) <- c = (f a b) where x = a, y = b
+*** Equate (f 0 1) (f a b)
+*  (= a (f c b))                                  9: (8 <- 5)
+
+* What is the eqs that should should request that replacement?
+** Work back from goal again?
+
+* Work backwards through proof to see what demands should be made
+
+* We now have 8, but need 12
+
+* Res.SaveForFilter
+** Report
+** Write fn to track which steps are found
+
+** found
+* +		ascNew	{(nil  (=  (F  @0 (F  @0 @1)) @1))}       11
+* +		ascNew	{(nil  (=  @0 (F  (F  @0 @1) @1)))}	    8
+* 7 not need, because it got 8 another way
+* 10 not need, because it got 11 another way
+
+* 1-6, 7X, 8, (9), 10X, 11, (12), (13)
+
+* Origin of negated clauses:
+* Resolve 8 and 6.
+*** (( (= C (F B A)) ))
+*** (() (= @0 (F (F @0 @1) @1)) )
+** Equate @0 C  -> soln
+** Equate B ~ (F C @1)
+*** 12 would solve that, but does not exist yet
+*** Next is equate A @1
+** Need a new kind of object that drives request for 12
+*** How does that request encourage further steps?
+*** It is a literal, Treat it like a clause
+*** That goal is a negation, if it is resolved away (contradiction found), the soln will prove next step
+
+** Agc (array goal clause)
+*** Derive from asc?
+*** When to form one?
+**** As soon as eqs is created
+**** Create 2 Agc: L,R and R,L
+**** Reference to both on the eqs
+*** When eqs receives soln, remove the two Agc
+**** How to remove from Ckn, Pqi etc?
+***** Mark as deleted
+***** Each place that iterates over list needs to check
+***** Is it just another alternative?
+*** What to do when soln is received?
+**** It is not the final proof, just results in soln to eqs that it was based on
+**** Asc has ribLeft and ribRight
+**** What does verification proof look like?
+***** Asserts A \/ ~A, then disproves ~A
+***** Agc is the declaration of ~A as a negated hypothesis
+***** Empty clause shows it is false, so A can be used in following steps as lemma
+**** What soln to build so verification can produce proof?
+*** Treat like acs otherwise?
+**** Is negative, so no pti created
+*** How to prove is complete?
+*** What side terms should be added?
+**** None available, since it is starting from an eqs
+**** Could there be side terms associated with an eqs?
+*** Simpler test to see that it works
+**** Check that one is created by eqs
+
+**** Check deleted are not processed after other soln is found
+
+** In this case the Agc results from 8 and 6, it is an equate of two terms. Could be more
+*** If Each desired equate was a pti, then soln would go through
+*** So create negation of that pti. 
+*** When negation is refuted ->
+**** Need to recognize that it is not the final proof
+
+** Put waiting for soln into Vbv tree
+*** Then continue through to next step in Etp
+*** How to require consistent solutions?
+**** Treat it as a new etp-like object?
+*** Issue all pairs from etp at same time?
+**** Then as each soln is found, create new one with fewer open requests
+**** How to do ones with no choice first?
+***** Simple cases have no replacement
+***** No replacement can be checked in first pass
+****** Synchronous calls to create child eqs 
+****** fFirst: call fn to do first pass on each child term, recursively
+****** Now Eqs does top level, calls Etp to do children one at a time, waiting for vbv
+
+** Class to process all children in one pass
+*** For each child
+**** If no replacement needed, 
+***** Put into base soln
+***** Apply sbst to later steps
+**** Else, Is not immediate
+***** Need to find a soln to each of these
+***** Issue: want  to collapse down, but solns will come to all,
+****** How to avoid duplication when soln comes to original that also applies to sub?
+******* Prioritize subset, don't propogate up if it works.
+
+** Instead of being part of proof, can it just trigger creation of something that will be used by itself?
+*** Eqs with no soln create am equality clause to resolve against.
+*** The proof of the other side is a valid proof, so no need for something more
+*** When finding empty resolve, if one side is the goal:
+**** Verify the proof, but do not report completion.
+
+** Don't worry about completing all the later unification yet,
+*** Just create object for any eqs that cannot be equated 
+**** Mark as no longer needed (or at least lower priority)
+*** When to create it?
+**** Have etp iterate through children first,
+****** and if not, create negated equality goal for that etp term pair
+*** Move Eqs first step into separate method.
+*** New etp does first pass over all children pairs to make eqs and do eqs first step
+*** If no subst needed, it is done
+*** Else create negated equality goal
+*** Do nested? Only make sense when the two line up (ie. Same or vbl, no pti used)
+**** What about the case of an equality that handles a conflict in a lower level?
+**** Only skip use of goal if entire term is without conflict
+**** If that case there will be no lower level eqs/etp.
+
+
+* Para3:
+** Validation when Ngc or other Gfh
+** It is allowing a proof to proceed with gfh
+*** Is the gfh being lost somewhere?
+* Fixed a case that should have been equated on first try.
+* Added skolem vbls in negation
+
+* Blocked on step:
+* (() (= C (F A B)))
+*** (() (= @0 (F (F @0 @1) @1)) ) 
+* => paramodulation
+* (() (= A (F C B)))
+
+* How should that happen here?
+
+* Iook at what negated goals are being generated
+** What should be the ones to use in proof
+
+
+* Motivation
+* Resolve 8 and 6.
+*** (( (= C (F B A)) ))
+*** (() (= @0 (F (F @0 @1) @1)) )
+** Equate @0 C  -> soln
+** Equate B : (F C @1)
+*** 12  (() (= B (F C A))) would solve that, but does not exist yet
+*** Next is equate A @1
+** What is the negated clause that is generated?
+*** Is equating (F B A)with (F (F C @1) @1)
+** Look for (() (= (F B A) (F (F C @1) @1)))
+*** Why is that not found?
+**** found (nil  (=  (F  @0 (F  @0 @1)) @1))
+*** Look for when steps and 8 and 6 are resolved
+
+* Is not requested
+** "(F B A)", "(F (F C @0) @0)")
+* Where should that come from?
+
+******* Asc asc13 = new Asc(cbd.lparse.lsxParse("(() (= C (F B A)) )"));
+******* Asc asc8 = new Asc(cbd.lparse.lsxParse("(() (= @0 (F (F @0 @1) @1)) )"));
+
+* +		objRight	{Etp#2 3,8 (((=  C (F  B A))) ((=  @0 (F  (F  @0 @1) @1))))}	object {reslab.Etp}page Maritza Sophia Amaya Cosplay & content creator
+* Is not finding that atp/eqs
+
+* Use the other test to find the eqs number where it was created (need to adjust)
+** Is the firstTime logic messing things up?
+*** Include that in the other test
+* How to trap when those two asc are resolved? Make a tcd to make it obvious
+
+
+* found 16: (nil  (=  (F  E @0) @0))
+* have: 0, 
+* found 17: (nil  (=  (F  @0 E) @0))
+* have: 0, 1, 
+* found 18: (nil  (=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2)))
+* have: 0, 1, 2, 
+* found 19: (nil  (=  (F  @0 @0) E))
+* have: 0, 1, 2, 3, 
+* found 20: (nil  (=  (F  A B) C))
+* have: 0, 1, 2, 3, 4, 
+* found 21: (((=  C (F  B A))))
+* have: 0, 1, 2, 3, 4, 5, 
+* found 437: (nil  (=  (F  @0 (F  @0 @1)) @1))
+* have: 0, 1, 2, 3, 4, 5, 10, 
+* found 3719: (nil  (=  @0 (F  (F  @0 @1) @1)))
+* have: 0, 1, 2, 3, 4, 5, 7, 10, 
+* found 6799: (nil  (=  (F  @0 E) (F  (F  @0 @1) @1)))
+* have: 0, 1, 2, 3, 4, 5, 6, 7, 10, 
+
+* Why isn't this being resolved? Is it created?
+* found 3719: (nil  (=  @0 (F  (F  @0 @1) @1)))
+
+* Show content of gnp
+
+* Has trash because the skolem are unique
+* How to filter out dup Ngc
+** The skolem vbls are not referenced anywhere outside the clause
+** Why are there even dups? Shouldn't they be only one for eqs?
+* +		atpToEquate	{(((F  E Q0)) ((F  Q0 E)))}	reslab.Atp
+*** Atp has skolem vbl in them, so they do not match
+** hashCode and Equals to treat them as the same
+*** But they could become referenced elsewhere
+*** When the Ngc is first created, check if there is already one like that
+*** The new one can be considered the same as any with the same pattern of skolems
+*** Need a specific hashTable with that equality rule
+**** Has just the Ngc in it
+*** Just check if there are any vbls in the atp?
+**** That could still be a useful one to negate
+**** Which atp/eqs are redundant?
+**** If an eqs is the main level of Ngc, no need to negate
+***** It should be listed as literal already
+**** gnpAscAsc.VerboseLefts()
+** There is a proliferation of Ngc with new skolem  constants
+*** Have skolem functions from mixed sources
+*** Reduce priority
+**** Eqs priority comes from length of atp
+**** Need to score the symbols too:
+***** Depth of skolem fn
+***** Lsm.nObscurity
+***** Get from max obscurity when building Ngc
+* Where to stop to look at what is in gnpAscAsc
+
+* res.gnpAscAsc.VerboseLefts()
+* <GnpR#1
+** Lefts:
+
+*** (nil  (=  E E))
+*** (nil  (=  C C))
+*** (nil  (=  @0 @0))
+
+*** (nil  (=  (F  E @0) @0))
+*** (nil  (=  (F  @0 E) @0))
+*** (nil  (=  (F  @0 @0) E))
+*** (nil  (=  (F  A B) C))
+*** (nil  (=  E (F  @0 @0)))
+*** (nil  (=  C (F  A B)))
+*** (nil  (=  @0 (F  @0 E)))
+*** (nil  (=  @0 (F  E @0)))
+
+*** (nil  (=  (F  A B) (F  A B)))
+*** (nil  (=  (F  @0 @0) (F  @0 @0)))
+*** (nil  (=  (F  @0 E) (F  @0 E)))
+*** (nil  (=  (F  (F  @0 @1) @1) @0))
+*** (nil  (=  (F  @0 (F  @0 @1)) @1))
+*** (nil  (=  (F  A (F  E B)) C))
+*** (nil  (=  C (F  (F  A B) E)))
+*** (nil  (=  (F  @0 @0) (F  @1 @1)))
+
+
+*** (nil  (=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2)))
+
+
+
+** Rights:
+** <BasR 7R filtered=1 un=0>
+*** (((=  C (F  B A))))
+** <BasR 18R filtered=4101 un=0>
+*** (((=  (F  E Q_5.0) (F  A B))))
+*** (((=  (F  B A) (F  A B))))
+
+* Would like to mark the higher level lsm in a asc that is proven down, but the eqs are already in gnp
+
+* Find out where the expected Asc is
+
+
+* Resolve 8 and 6.
+*** (( (= C (F B A)) ))
+*** (() (= @0 (F (F @0 @1) @1)) )
+** Equate @0 C  -> soln
+** (F B A)  -0 (F (F C @0) @1)
+** Equate B - (F C @0)
+*** 12 would solve that, but does not exist yet   (= (F C A) B)
+*** Next is equate A @1
+** Need a new kind of object that drives request for that
+* Want to chect the an ngc is created
+** (( (= B (F C Q_x)) ) )
+* What does that drive the creation of?
+* That is a right, what left will resolve with it?
+* What is the next step going backwards?
+
+* Trace  the creation of each type of object, by combining trace info from sources
+*** e.g. start from creation of an asc from 2 inputs (left/right asc/pti)
+** Pass in result of combiner to ctor
+*** Issues:
+**** Skip when not in debug
+**** Depends on: combiner being used, type of object created
+**** Combiner on each tde?
+**** Combine report and call to ctor?
+***** Or set later (or pass in fn to get on request)
+***** Ctor is a way to make sure all the cases are covered
+*** Important cases are eqs, asc, etp, epr
+*** This will be used to control priorities
+**** Initially to hand hold it to confirm that a proof is possible
+***** Short term: steering the proof 
+****** Use to prioritize steps  coming from desired resolutions
+**** Long term: to use to set priorities based on what an object is needed for
+***** Problem: boosting priority later
+****** Add to new higher priority, skip in old
+** What is the trace object?
+*** Used to set priorities.  How?
+**** Method to return priority, given arg (Rib)
+**** e.g. max priority of two resolvants for asc
+**** Problem: share between levels for Prp
+*** Is combined for doing trace log
+** Apply combiner to arguments from report
+*** Take previous trace value and combines with new trace value
+** Add field to everything being traced: new base class
+*** Or add getter interface
+** Uses
+*** Log every report that has trace value, or passes filter
+*** Report as they happen or when destination is reached, user combine tree
+** Combine report and trace api:
+*** Defined report handler that starts or combines trace info
+
+* Report when asc is created from given source
+** Use tcdNewAsc:
+*** Look for the asc that should be created: resolve 8 and 6.
+*** Then use that to trace what happens after
+
+* Why is it not even starting 13,8?
+** Asc13.nId = 14            (( (= C (F B A)) ) )
+** Asc8.nId=15              (() (= @0 (F (F @0 @1) @1)) )"
+
+
+
+* There are a lot of startResolve, so too much is going on at one.
+* Need to reduce the rate of startResolve, so other things get processed
+** When should it be ready to process another pair?
+** Why are those tcdTransferLeftEqs not accomplishing? Because it switches to make more stuff
+** Let etp drain out until a solution is found, don't look for new solution
+** How to drop the priority?
+
+* Show that the logic works first
+** Bump the priority on steps that lead to proof
+** Add trace info, use trace info in proof
+
+* Fix Ipr, then go back to guiding the proof
+
+
+* When Asc are are used for multiple negated goals,
+*** it should be min priority, but currently can't change priority after something is added to gnp
+
+
+** Hit null in ProofTrack
+*** types of gfcSource
+**** If gfcSource is Ngc, there is no ribLeft, ribRight.
+***** That is a hypothesis, use natural induction inference rule. No verfication needed.
+**** gfcSource: Gfi - is final step when emtpy clause found
+***** Verify the proof of conclusion from the hypthesis
+***** How to the Gfl and Gfp affect the verification?
+*** Turn off verification for now
+
+* Report: 
+* 212	Save for filter
+* 14	TransferRight - Epr
+* 12	TransferRight - Cpg
+* 12	TransferLeft - Cpg
+* 557	StartResolve
+* 12905	TransferLeft - Epr
+* 17797	TransferLeft - Eqs
+* 3687	Register Etp
+* 6339	Launch Eub
+* 10380	TransferRight - Eqs
+* 30000	Soln To Eqs
+* 30000	Eqs to Ent
+* 54	New Cmr
+* 198	NewAscConnect
+* 8	NewAscResolve
+* 8	NewAscNegate
+
+* nLoops:10002
+* Eqs: 72, 2335120
+* Res: 1, 173664
+* Epr: 4, 68880
+
+* looking for 0: (nil  (=  (F  E @0) @0))
+* looking for 1: (nil  (=  (F  @0 E) @0))
+* looking for 2: (nil  (=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2)))
+* looking for 3: (nil  (=  (F  @0 @0) E))
+* looking for 4: (nil  (=  (F  A B) C))
+* looking for 5: (((=  C (F  B A))))
+* looking for 6: (nil  (=  (F  @0 E) (F  (F  @0 @1) @1)))
+* looking for 7: (nil  (=  @0 (F  (F  @0 @1) @1)))
+* looking for 8: (nil  (=  A (F  C B)))
+* looking for 9: (nil  (=  (F  @0 (F  @0 @1)) (F  E @1)))
+* looking for 10: (nil  (=  (F  @0 (F  @0 @1)) @1))
+* looking for 11: (nil  (=  (F  C A) B))
+* looking for 12: (nil  (=  C (F  B A)))
+* looking for 13: (((=  (F  B A) (F  (F  C @0) @0))))
+* have: 0, 1, 2, 3, 4, 5, 7, 10, 
+
+* How to get para3 working?  6,8,9,11,12,13 missing
+** Why aren't intermediate steps being found?
+** Identify what steps are needed, what predecessors ?
+** Trace objects, with combiner
+**** print out objects that result from predessor steps to what is needed
+**** give special priority to the sucessors of important predecessors
+
+
+* Add tracing, to know which objects come from predecessor steps
+** can list them out: by type
+*** if the desired predecessors appears in tree of sources
+
+* Add field to all types of objects (common base class)
+* Define class to hold predecessors
+* See earlier notes
+
+* Why no 6?
+*** 2: (nil  (=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2)))
+*** 3: (nil  (=  (F  @0 @0) E))
+* => 6: (nil  (=  (F  @0 E) (F  (F  @0 @1) @1)))
+
+* 3@0 ~ 2@1, 3@0 ~ 2@2
+* Is application of pti from 3 to 2.
+* -		ascB	{(nil  (=  (F  @0 @0) E))}	reslab.Asc#19
+* {3->6 in (nil    (=  (F  @0 @0) E))#19}
+* Find the eqs formed for the two terms, then where is that soln used to 
+* When is that pti applied? When resolution step needs it? Only resolution is final step
+** What ngc is going to be used?
+
+* Resolve 8 and 6.
+*** (( (=  C    (F B                  A)) ))
+*** (() (= @0 (F (F @0 @1) @1)) )
+** Equate @0 C  -> soln
+** Need Equate (= B  (F C @1))
+*** 12 would solve that, but does not exist yet
+*** Next is equate A @1
+** Need a new kind of object that drives request for 12
+* Look for negated clause (( (= B (F C @0)) ) )
+** that can only be refuted when @0 ~ A
+** need to assume (= @0 A), then (( (= B (F C @0)) ) ) can be refuted - assuming 12 succeeds, 
+** That results in ( ( (= Q.n A) ) ) 
+*** how does that help?
+
+* The following isn't good because it generates clauses before they have evidence to support
+** Can the creation of negated clause be deferred until end of the Etp?
+**** (want an intermediate test case to pass first)
+**** put the clauses needed on a list, launch them at end of etp
+**** fix: around call to res.gnpAscAsc.ascIsSubsumed(, add/check hash table
+**** Define Vhy
+**** Notified when the asc is refuted, which results in the parent eqs having a solution
+***** Has a gnp: 
+****** Left is eqs that is notified of soln
+****** Right is the proof of the negation ? Or special cases
+***** When refutation occurs, the asc resulting from Gfh will create asc, then pti
+****** That should be filtered immediately, so the pti is create
+****** Pti will be fed to the same eqs as before, which will proceed to end of Etp
+****** Is it worth tracking to speed that up?
+****** If there is a disjunction in the gfh?
+******* That produces pti with side conditions, that needs to be ok
+**** Passed to etp to get remaining arguments
+**** At end of etp, is called to 
+***** prevent etp from reporting soln
+****** i.e. don’t call "eqsToNotify.TransferRight(vbvOutput)"
+***** Also perform substitution into candidate negated clause and launch final Ngc
+**** Implements Esn
+***** Has method that Etp.fCombine uses to check if final (vbv is true)
+**** What if eqs/etp need multiple clauses to be refuted?
+***** Refutation results in new object that has fewer terms needed to be negated
+**** Don't launch search until all known pti have been checked already
+***** That can be complex, so skip it
+
+* Will this solve para3?
+** Where will 12 come from?
+** Instead of ngc, it can result in new asc:
+*** ( ( 12 )  13)
+*** 13 will refute 6
+*** ( ( 9 ) 12 )  ?  What would drive creation of this ? Something equated to ( 12 ) like 6 was?
+*** ( ( 5) 9 )  ?
+**** then 5 establishes result
+
+* If there as a ~12, then these two would resolve:
+** 12:       (=  B    (F  C            A))
+*********** +------------+
+** 11:  (() (= @0 (F @1 (F @1 @0))))
+* Looking for 9:            (= A (F C B))
+*** generate a negated clause for 9
+* So  ( ( 9 ) 12), because ~12 would be refuted
+
+* 9:         (= A    (F          C           B))
+********* +-----------+
+* 8     (() (= @0 (F (F @0 @1) @1)) )
+* Looking for 5:       (= C (F A B))
+* So  ( ( 5 ) 9)
+* What would cause that Eqs to be created?
+** the ((9) ~6)
+
+* Why is ~12 created?  Working backwards from 13, which is needed to resolve with 6: (((= C (F B A))))
+
+** 13:        (= C     (F B                  A))    <- must B that is matched by inner F term, because B is in 12
+********* +-----------+
+* 8        (() (= @0 (F (F @0 @1) @1)) )
+** 12:       (=  B    (F  C  A))  <- generate Ngc from this
+* So ((12)  13)
+
+* SO far have:
+** ((5) 9)  using 8
+** ((9) 12)  using 11
+** ((12)  13)  using 8
+** ((13))  is 6
+
+* Why are the main steps being performed?
+** They are resolution steps
+
+* Still need intermediate terms
+** Compound pti look like regular solutions to child Eqs
+
+** 7 is: 3 with 4 applied at (F @1 @2)
+*** 3: (= (F @0 (F @1 @2)) (F (F @0 @1) @2))
+******** +------------+
+**** 4:            (= (F @0 @0) E)
+** 8 is: 7 with 2 applied  - 7 is 4 into 3; so 7 is 3,4,2
+*** 7: (= (F @0 E) (F (F @0 @1) @1))
+***** +---------+
+*** 2: (= (F @0 E) @0)
+*** 11:  (() (= @0 (F @1 (F @1 @0))))    1 into 10
+***** 1: (= (F E @0) @0)
+***** 10: (= (F @0 (F @0 @1) @1))     3 with 4 applied at (F @0 @1)
+**** 3: (= (F @0 (F @1 @2)) (F (F @0 @1) @2))
+**** 4: (= (F @0 @0) E)
+
+* Express the manual proof as a series of steps
+** Proof outline in code: how to express, then verify
+***** main steps are resolution steps
+***** manually, identify the starting Asc (5, 9, 12) - is right clause (negative from previous step, start at 6)
+***** and the base of the compound pti
+***** then identify the child terms where lower level pti is needed
+***** how to identify child position:  the eqs to solve
+****** Etp is a series of Eqs
+***** Refer to eqs as the Nth child-eqs of etp, identify the Etp by its Atp
+***** When each of those child-eqs is created, find it in proof outline
+***** Store ref to eqs in proof outline object, for use in later steps
+***** Or just match to symbolic Eqs
+***** Etp has a list of symbolic eqs expressed as Atp
+**** So each main step is: left and right clause (both are equality, but not as Pti)
+***** Each has two children, each is a direct match or a child eqs to solve
+***** Each eqs is a separate subproblem, follow same pattern
+****** Refer to eqs as an object that holds ref to actual eqs when it is created
+**** Then can watch as that tree gets filled in
+*** Turn off resolution while solving Eqs to get Vbv
+**** Use EubTest1, but add more pti?
+**** Want a test that waits for soln to an Eqs, takes in axioms, 
+***** does not do resolution or other - don't add res to prs? Res.ascProve
+
+
+*** Some steps are a series 
+** Use the steps to set high priority on any object that matches
+*** Need to identity the left and/or right input into a gnp
+**** e.g. a key step will want to get soln to eqs early
+** Construct Vbv by solving a subproblem directly before main problem
+** Increase priority on existing object if needed
+** Once soln is found, that start removing priority boosts
+
+
+
+* Can the above steps be done with 7/2 and 3/4 separately?
+
+
+* Look at main level proof steps and see if the pti_s can be applied separately
+** Which order?
+
+
+* Start with resolving 3 left and 6 right.
+* 3:  (() (= (F @0 (F @1 @2)) (F (F @0 @1) @2) ))
+* 4:                       (F @0 @0) 
+******* => E                                                        @0 ~ @1,@2 
+* 2:           (F  @0 E                )
+*** => @0                                                                     @0 ~ C
+* Hyp 12:                                        (F   C     A) 
+************* => B
+* Rhs of the eqs, from resolution:
+* 6: ((  (= C                              (F B                 A)) ) )
+* Want it to result in
+* ( ( 12 ) ~6)
+* But how to get that from the eqs, which has the two literals?
+** Since the eqs is literal level, it means one literal can be converted into the other
+** That means if one is true, the other is also
+** ((9) ( <=> 3 ~6) )
+** Since 8 is axiom, then ~6 is true, if 9 is.
+
+
+* Derivation of ( (5) 9) :  from 8
+** ~9 used in the resolution is from the hyp above
+* 3:  (() (= (F @0 (F @1 @2)) (F (F @0 @1) @2) ))
+* 4:                       (F @0 @0) => E                 @0 ~ @1,@2 
+* 2:           (F  @0 E                ) => @0             @0 ~ C
+* 5:                                                 (F    A     B ) => C
+* 9:         (= A                            (F C                   B))
+* So:   (() ( <=> 3 9) )  =>  (() 9)
+
+
+
+* Pass through the Vhy when copying, merging
+** Simplify equality:
+*** Build the vhy lists in order of decreasing eqs.nId
+* Etp will invoke fn that creates clause with needed pti -> resulting eqs as an equality
+* How would an ordinary equality solve that requesting eqs? 
+** Eqs will have registered itself with a Epr, Epr will wait for Pti
+* Verify proof created using Vhy
+
+* Create simple class with Ngc, use this to drive resolution
+** This avoid generating the full clause from parent Etp, when it is likely junk
+** When an empty clause is found:
+**** create pti for the eqs, with the literals used in the proof (with substitutions applied)
+** Check what happens with para3
+* A lot of junk with new skolem constants
+
+* Is this working for the planned soln?
+** What is the first required step?
+*** Eqs, asc,
+** Watch resolution 3, 6; with 4,2 and hyp 9 in between
+** Trace the products of that resolution (Epu)
+*** Put an object on the objects produced by that epu
+*** Then call combiner stored on res
+**** Default combiner returns null
+**** Main other forms tree from non-null
+*** Each time an object is produced, put trace object on it
+**** Pass combiner the Tcd and list of arguments
+**** Basic combiner chooses the non-null input as its value
+***** Builds a historical tree
+*** Call fn to set trace value, that fn call do the reporting
+**** Can it replace current reporting?
+**** Change report to focus on the new object
+*** Fn called by track fn then decides what is next step
+*** Args: newObj, tcs, other inputs
+*** Advantage is that tracking info is set, so rules can be based on the history
+**** Fn to search history
+**** Functions to Filter output: contains some ancestor
+**** Show steps to arrive an object
+
+* Test Gfh with a simple test
+** Two clauses, eqs, ngc, resolve that ngc with another
+**** (() (p a)) , ((p b) ) =>  (( (= a b) ) )
+*** ( ( (= a b) ) (p b) )
+*** TinyProofNew
+**** DoProof(@"(   (() (P A))  (((= A B)) (P B)) (() (P B))  )");
+*** That fails to contradict (((= a b)))
+*** The conclusion is negated, so there should be a resolution of (() (P A)) and (((P B)))
+*** That produces a negated clause (((= A B))) to refute
+*** Negated conclusion should resolve with right of the middle clause.
+*** Why no resolution on (P B) ?
+**** Only left is (P A)
+**** Is a right:  (((=  A B)) (P  B))
+**** So does not resolve with (((P B)))
+*** That isn't a true stmt, so example doesn't work
+** To construct a new example:
+*** Need:
+**** Eqs generated a negated equality clause
+***** That is a right
+**** Need term with only positives so it is a left
+**** Problem is that a positive equality will be used as a pti
+**** Need an equality that is created only by some other step
+**** Is only generated as a result of demand from matching the negated term
+***** It will be a right (neg literal)
+
+* Go back to tracking down para3
+** Check the completed ngc send by Etp
+
+* Strategies
+** Ngc as soon as immediate Etp fails : fUseNegatedGoals
+*** Problem: lots of skolems,because eqs_s have variables
+** Vhy: defer until end of parent Eqs: fBuildClauseFromHyp
+*** Notifies all parents
+*** Not implemented
+
+* Use equality axioms on demand:
+** If the predicate or function symbols match
+** When Child eqs fails on first try: introduce side literals that are the negated equality of the child pairs
+*** This is similar to the ngc, but that is a separate clause that is merged in when refuted
+*** Equality axioms is really the justification of ngc
+** Can this help with creating an example?
+*** example of the incompleteness without it
+*** Ex2 is very complicated
+*** Avoid a pti, but the negated equality generated from Eqs
+*** Need two step?
+**** What stops the second step from going directly from a pti?
+*** Need resolution between two literals that differ on a child term
+*** There is no equality to match that literal, but it does come from some substitution/resolution
+**** Why is resolution complete, but Eqs not: the equality axioms
+**** Equivalence too?
+****** reflexivity, symmetry, transitivity are handled in code
+**** Really it is paramodulation that is missing: apply equality everywhere
+**** Negated eqs and also equality axiom introduce side literals
+***** How does that help find an example?
+***** Paramodulation replaces one term by another, and adds side literals
+
+** Ex2Steps
+*** Later
+****             How to check when solution arrives?
+****             create Etr to get solution from the Eqs
+****             check that Ngc is created, use it for next ste
+**** Add counts for negated Hyps created (See "Report:")
+*** Is not finding solution. How far does it get?
+**** Loop for the sequence of solutions to child eqs, using the pti
+**** Do WatchPair for those steps, action is to report them, track which are missing, found
+**** cannot solve that Eqs until Ngc is created and solved
+**** test for creation of the correct Ngc
+***** if that fails, create list of Eqs to watch, have Watch check if on that list, report
+
+* How to stop and see the Ngc for children of Eqs#0?
+** Turn off unless trace has right structure?
+** Trace has list of alternatives, to see if any match
+*** Could also create separate hash table to refer the list of sources
+
+* Start with resolving 3 left and 6 right.
+* 3:  (() (= (F @0 (F @1 @2)) (F (F @0 @1) @2) ))
+******** +-------------+
+* 4:                       (F @0 @0) => E                 @0 ~ @1,@2 
+***** +----------------------+
+* 2:           (F  @0 E                )
+******* => @0                                                 @0 ~ C
+*************** +-------------+
+* Hyp 12:                                          (F   C     A)
+***************** => B
+* Rhs of the eqs, from resolution:
+* 6: ((  (= C                                  (F  B                 A)) ) )
+
+* 2 is applied as pti for eqs of literals of 3 and 6
+
+* Eqs#1 is the left child terms of 3,6
+** Does eqs#1 get a solution?, hard part is second child
+** It should have one, there is no problem there
+** Need to trace through why there is no soln for Eqs#1
+
+* {{eqs#0 (((=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2))) ((=  C (F  B A))))}}	reslab.Eqs
+* {{eqs#1 (((F  @0 (F  @1 @2))) (C))}}	reslab.Eqs
+
+* <#1100 
+** <#1101 1/6 0:6$1100>     (nil  (=  (F  @0 E) @0))
+** <#1102 3/6 >     (nil  (=  (F  @0 @0) E))
+** 0:4$1101, 1:4$1102, 2:5$1102>     (((F  @0 (F  @1 @2))) (C))
+
+
+* Look at second child of 3 vs 6
+* Soln from first child sent to second child of etp
+* {Etp#0 2,13 (((=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2))) ((=  C (F  B A))))}
+
+* tcdRegisterEtp
+* etpNew	{Etp#143 7,14 (((=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2))) ((=  C (F  B A))))}	reslab.Etp
+* +		eqsToSolve	{{eqs#0 (((=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2))) ((=  C (F  B A))))}}	reslab.Eqs
+* +		eqsChild	{{eqs#87 (((F  (F  C @0) @0)) ((F  B A)))}}	reslab.Eqs
+
+* +		objData	{Etp#16 7,14 (((=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2))) ((=  C (F  B A))))}	object {reslab.Etp}
+
+* Why two Etp that are the same? Which will get the soln?
+*** Etp#16
+**** this	{Etp#0 2,13 (((=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2))) ((=  C (F  B A))))}
+**** esnSolution	{<#109 <#110 1/6 0:3$109><#111 6/3 >0:4$110, 1:4$111, 2:5$111>}
+***** <#109 
+****** <#110 1/6 0:3$109>     (nil  (=  (F  E @0) @0))
+****** <#111 6/3 >     (nil  (=  (F  A B) C))
+****** 0:4$110, 1:4$111, 2:5$111>     (((F  @0 (F  @1 @2))) (C))
+
+
+*** Etp#143
+**** this	{Etp#0 2,13 (((=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2))) ((=  C (F  B A))))}
+**** esnSolution	{<#1100 <#1101 1/6 0:6$1100><#1102 3/6 >0:4$1101, 1:4$1102, 2:5$1102>}
+***** <#1100 
+****** <#1101 1/6 0:6$1100>     (nil  (=  (F  @0 E) @0))
+****** <#1102 3/6 >     (nil  (=  (F  @0 @0) E))
+****** 0:4$1101, 1:4$1102, 2:5$1102>     (((F  @0 (F  @1 @2))) (C))
+* Etp#143 is simpler solution, does Etp#16 lead to a proof?
+
+* Find solution being reported back to Etp#143.
+** How to know to ignore Etp#16? Where did Etp#143 appear? Vbv#1100 appear in kHavePti2ToChildEqs
+** Problem with nCached is it is not specific to solution
+** How to know vbvPrev#1114 is the one we want?
+** Watch pair to get eqsChild for second child
+** +		etpPrev	{Etp#0 2,13 (((=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2))) ((=  C (F  B A))))}	reslab.Etp
+** +		vbvPrev	{<#1114 <#1115 2/6 0:13$B><#1116 4/6 >0:4$1115, 1:4$1116, 2:5$1116>}	reslab.Vbv
+** +		eqsChild	{{eqs#87 (((F  (F  C @0) @0)) ((F  B A)))}}	reslab.Eqs
+
+** etpSecondChild	{Etp#143 7,14 (((=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2))) ((=  C (F  B A))))}	reslab.Etp
+** +		atpChild	{(((F  (F  C @0) @0)) ((F  B A)))}	reslab.Atp
+*** Questions
+**** What soln is sent to etpSecondChild?
+***** None
+**** Is an Ngc created for that?
+**** Is A backfilled before Ngc I ?
+*** First child is the eqs that should result in Ngc for 12
+** +		eqsWhere12Needed	{{eqs#87 (((F  (F  C @0) @0)) ((F  B A)))}}	reslab.Eqs
+*** Was processed already
+*** How to get eqs#87?
+**** etpPrev	{Etp#0 2,13 (((=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2))) ((=  C (F  B A))))}	reslab.Etp
+**** vbvPrev	{<#1114 <#1115 2/6 0:13$B><#1116 4/6 >0:4$1115, 1:4$1116, 2:5$1116>}	reslab.Vbv
+*** How to get 1114? (for vbvPrev)
+
+*** +		atpChild	{(((F  (F  C @0) @0)) ((F  B A)))}	reslab.Atp
+** From atp#315
+** -		atpToEquate	{(((F  (F  C @0) @0)) ((F  B A)))}	reslab.Atp
+** kEtpWhereNgcNeeded: the eqs is about to do first step
+*** Look if ngc results
+
+** It creates
+*** +		ascS	{(((=  (F  (F  C Q_87.0) Q_87.0) (F  B A))))}	reslab.Asc
+
+** What is the next step for that Asc? It will need a proof, and then soln comes back
+** Negation of that Ngc is
+*** (() (=  (F  (F  C @0) @0) (F  B A)))
+** That is more general than
+*** (() (=  (F  (F  C @0) @0) (F  B A)))
+** If @0 is A that works (with another Ngc for 12, is that circular?)
+*** Why did that come out as the same next step?
+*** Rhs should be B only
+*** Eqs for ngc is for the first child, not that one
+** Also need hypothesis (= A @0), and have that be cancelled
+*** Solve this one after getting the correct Ngc
+** So skip this ngc, and find first child for its etp.
+
+* How to solve:
+** Write tests of pti that check that vbl from eqs can be matched inside the pti and passed through
+** Allow Eqs to bind a skolem symbol for ngc (or other hyp) to a value
+*** The unification and refutation results in a proof of a special case, which is used in the eqs/etp
+*** Store on vba that it is a skolem symbol, not vbl id
+*** Refutation of ngc results in a pti, but replace the vbl in that with the value assigned in that pti
+*** Need to apply substitutions to skolem symbols (Spb)
+*** Or treat them as vbls in the Ngc?
+**** Try this first
+**** Difference is that if not equated to vbl it becomes a skolem constant
+**** When refutation comes back to ngc, check what happened to each of those
+**** Shv makes calls to gfh.MakeAsc.
+***** Where to get info about values for skolems?
+****** Use info on fProcessAscb.esnSolution?
+****** gfbSource has the hypotheses
+****** If vbv assigns a value to a vbl used as Ngc, replace it with that value
+****** Otherwise replace with skolem for that vbl
+**** Need to associate each asc with the correct Vbv
+***** The only thing needed is the value assigned to ngc skolems?
+**** How to get mob and mvb?
+***** Is from the spl when eqs was obtained
+***** Store on the ngc? No, is shared across eqs.yeah,
+
+** Driving what happens
+*** Have Prs or a new class have a queue of steps to perform
+*** Make new pri to perform those steps instead of doing lookup in gnp
+*** Apply a series of steps as a macro, rather than waiting to see if it happens
+**** Select the rules to apply for each phase
+**** Mix of fixed an free running as needed
+**** Use this to work out experiments
+*** Test calls fn tha applies desired next step
+**** Create special pri and add to queue at that point
+**** Then return to prs, and notify will happen
+**** Free run when nothing in queue, or set flag to make it stop
+** 
+** 
+** Next:
+*** Look for the Ngc that is the end of phase 1. Is it correct?
+**** Add steps to get the grand child of rhs
+*** Ngc.ascForEqs
+
+* When soln comes back from Eqs to a resolution involving an Asc from Ngc,
+** Replace remaining vbls with skolem constants
+** No need for term code in Ngc.ascFromNgc 
+** Do the replacement in the merge terms code
+** Currently when a proof is found, Shv.fProcessAscb calls gfhHypothesis.MakeAsc
+*** Replace vbls when called from Shv, if the vbl came from the Ngc
+*** If ngc vbl was matched with a non-ngc, then don't skolemize it
+** How to test this? Not just code, but the idea
+** The proof is finding a special case that refutes the Ngc
+*** Want to build that special case that has been established
+**** e.g. axiom is equality that matches requested pattern
+** Capture Ngc literals used in proof, with substitutions applied
+**** Reason: refutation may be only for special cases
+**** Then apply subst for every vbl that appears in it, and terms sbst'd into it
+**** Proof tree has Vbv
+***** Use Proof verification code?
+****** Vbls and offsets in vbv refer to asc
+***** Show fully substituted
+***** Then apply other sbst where it matches a vbl in the Ngc result
+***** At end convert into clause
+*** Don't skolemize the Ngc
+*** Prevent problems by not resolving clauses with Ngc that involve any other negation, including hyp
+****             gfhHypothesis.MakeAsc(res, (Vbv)esnSolution);
+
+
+
+* 09293291961
+
+
+
+
+* kHaveNgcNeeded
+* +		eqsForNgc	{{eqs#16420 (((F  C @0)) (B))}}	reslab.Eqs
+
+* Generate solns that assign value for @0, then soln gets sent  to next step in etp
+** create Ngc that asserts that there is no such @0
+** subproblem will show one that  A does solve it, that refutes Ngc
+** refutation of Ngc is a soln that assigns @0~A
+** that will lead to complete proof
+
+* Look for next Ngc kNgcFromEqsLower
+* ascFromNgc	{(((=  (F  C @0) B)))}	reslab.Asc
+* nId	7772	long
+* -		gfbSource	{<Ngc#7771>}	reslab.Gfb {reslab.Ngc}
+* +		eqsGoal	{{eqs#7769 (((F  C @0)) (B))}}	reslab.Eqs
+*** nId	7771	long
+
+* Is there any proof from that? Break in Shv.fProcessAscb
+** Add axiom to for last third of proof
+
+* Ex2Steps3v6
+** What is needed to get it to finish?
+** Need to refute with @0~A
+*** ascFromNgc	{(((=  (F  C @0) B)))}	reslab.Asc
+** No Ngc has been refuted
+
+* Trace why the asc is not refuted
+** Is it being processed by gnp?
+
+* Form a new example like Ex2Steps3v6, but for next steps
+** Each Ngc with an additional variable, then refutes with 5 and works backwards through those
+** Steps themselves go backward through proof
+** 6:     ((  (= C    (F B   A)) ) )        (= C (F B A))   
+** ~12: {(((=  B   (F  C @0) )))}     (= B (F C A))   swap 1st   @0~A
+** ~9        (= @0 (F @1 B))           (= A (F C B)    swap 2nd  @1~C
+** ?          (= @1 (F @0 @2))                                                  @2~B
+** 5          (= C     (F A    B) )           (= C (F A B) )  swap 1st
+** Swap the outside term with one of the children of F. other is replaced by vbl?
+
+** Make TfcEx2Eqs1 take parameters to swap 1st swap vs swap second
+*** Take parameters for the atpToEquateMain to make
+*** How to combine into proof?
+**** Use the ngc built by one step as input to the next
+**** Check that clauses used to create desired atpToEquateMain are started
+**** Final: watch 5 being resolved with all vbls, then trace back to final proof
+**** How to have single InstrumentedProof handle 3 phases?
+***** Steps set flags that are checked elsewhere
+***** Define a new step at end of phase to transition to new phase
+****** Does different from what Init, Init2 do.
+*** Modify and set up test to swap with second F arg
+*** Then have first phase transition use ngc and then set flag and continue to second phase
+
+
+
+
+* Add steps at the end to create Epu for next step: calls Init for next phase
+** Phase 4: makeEpu for asc from ngc with 5
+*** Walk forward from refutation to previous Ngc
+** Check that solution is passed from res to asc to ngc to be sent to the eqs, 
+*** and then to objects waiting for the eqs
+** Check that soln proceeds from eqs for ngc to main eqs, then initial epu for that phase
+*** That epu then generates a refutation that should be passed back again
+* Hangs at end of phase two in auto:
+* +		atpSecondArg	{(((F  @0 @1)) (@2))}	reslab.Atp
+* It does don't a tcdEqsToNgc, because there is a vbl on on side.
+
+* Options
+** Add a case that allows an ngc?
+*** Too much junk from bare vbl
+** Don't submit ngc until the end, so vbls are removed
+*** Use Vhy
+** Where does this sbst go in the proof as is?
+** Don't make Ngc until a conflicting vbl assignment is made
+*** Vbls are already sbst'd out ahead of time
+*** What happens when @2 is assigned to A after already assigned?
+*** Ngc should come in next etp, no change needed, just look for it
+
+* {Etp#1948 7,16 (((=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2)))
+********* ((=  (F  C   @3)                  B)))}	object {reslab.Etp}
+* (((F  (F  C @0) @1)) (B))
+****** B     C
+
+* There is not soln yet for ascNgcFC0B, both are negated
+* (F C (F @0 @1)) B
+* What at the constraints on @0 and @1?
+
+
+* Has hypothesis (= (F C @0) B)
+** So in this context is it positive, can be resolved with ascNgcFFC01B
+
+* Need a soln to negation of (= @0 (F @1 @2)) such that @0 is A (so it can match next term)
+* Apply pti of assoc to lhs of (((F  (F  C @0) @1)) (B))
+* (If hyp can be negated, then it can be used, but here is not proved yet.)
+* How to get (= @0 (F @1 @2)) as an Ngc?
+** Treat the vbl sbst as an ngc?
+** Also apply e=xx , to make @1 be C and @2 be B
+** Then ngc is (= @0 (F C B))
+
+* Idea: don't release Ngc until end of resolution. Apply all bindings to those vbls
+** Doesn't affect equality of Vbv it is attached to
+** Merging Vbv carries it along, result has combined list of Vhy
+*** (dup the Vhy, is just eqs)
+** Vhy holds eqs, don't form Ngc or Asc yet
+** When resolvant is built, if it is not filtered out, then 
+*** For each Vhy
+*** Perform sbst on eqs
+*** Create Ngc and Asc
+** Problem: have to consider all orders, seems over general
+*** All eqs need to be ngc anyway
+
+** Have (nil) : kEndPhase3
+** Ngc.MakeAsc
+** +		ascR	{(nil  (=  (F  Q_265.0 Q_265.1) @0))}	reslab.Asc
+
+
+** <#2578 
+*** <#2579 0:3$A, 1:9$A>     (((=  @0 (F  @1 @2))))
+*** 2:6$2579>     (nil  (=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2)))
+
+** How to set ribLeft/Right ?
+*** Elsewhere is set from abt
+*** That seems insufficient in case there are multiple terms to resolve
+
+** ascR looks messed up
+** Ngc#270
+** +		eqsGoal	{{eqs#265 (((F  @0 @1)) (@2))}}	reslab.Eqs
+
+** What should happen next?
+*** Third pass was supposed to rotate result of R2 (following phase 1)
+*** That would produce negated equality that would resolve with axiom 5
+*** How to apply solution back to previous Ngc?
+**** Negation of desired eqs led to a contradiction
+**** An equality hypothesis was formed from the eqs
+**** Shv.fProcessAscb
+***** Instead of calling MakeAsc
+***** Soln to the eqs is the solution to the refutation mapped as needed
+****** Refutation is on right, but top of vbv is on left
+****** Flip the A,B of the Vbv.
+****** Report to listeners of eqs
+*** Is there a need for Gfi ?
+
+
+* kMakeEpu3: what next?
+* Started EquateUnify
+* Want to get when Epu reports solution -> SaveAsc, left is #12, right is #2385
+
+* +		objData	{Epu#43130 2,2 (((=  C (F  A B))) ((=  @0 (F  @1 @2))))}	object {reslab.Epu}
+* Why not hitting Epu.fProcessSolution ?
+
+* +		eqsStart	{{eqs#43132 (((=  C (F  A B))) ((=  @0 (F  @1 @2))))}}	reslab.Eqs
+* Get immediate 
+
+* eqsChild	{{eqs#43140 (((F  A B)) ((F  @0 @1)))}}	reslab.Eqs
+* Does not have immediate soln. why not?
+
+* Build up vbv for immediate
+
+
+* eqsToNotify	{{eqs#2812 (((F  A B)) ((F  @0 @1)))}}	reslab.Eqs
+* +		vbvOutput	{<#2820 0:2$2820, 1:3$2820>}	reslab.Vbv
+
+* Pass soln as immediate to
+* +		etpNew	{Etp#2810 3,8 (((=  C (F  A B))) ((=  @0 (F  @1 @2))))}	reslab.Etp
+
+* +		eqsStart	{{eqs#2804 (((=  C (F  A B))) ((=  @0 (F  @1 @2))))}}	reslab.Eqs
+* -		this	{Epu#2802 2,2 (((=  C (F  A B))) ((=  @0 (F  @1 @2))))}	reslab.Epu
+
+* What to watch for in kSolnFCFAB_F0F12?
+* +		gfhHypothesis	{<Ngc#202>}	reslab.Gfh {reslab.Ngc}
+* +		vbvSolution	{<#2907 <#2908 0:3$A, 1:5$A, 2:6$A>>}	reslab.Vbv
+* +		this	{{eqs#197 (((F  @0 @1)) (@2))}}	reslab.Eqs
+* Eqs, ngc, ascS  tcdEqsToNgc
+* +		eqsSecondArg	{{eqs#197 (((F  @0 @1)) (@2))}}	reslab.Eqs
+* +		ngcF012	{<Ngc#202>}	reslab.Ngc
+* tcdAscFromNgc
+* +		ascFromEpu3	{(nil  (=  (F  Q_197.0 Q_197.1) Q_197.2))}	reslab.Asc
+* Why isn't that ABC?
+
+* fReplaceWithSkolem is true
+* Ngc.ascForEqs - if !fReplaceWithSkolem, still need to lookup in vbvSolution
+
+
+* Where does vbv fed into Ngc.MakeAsc come from? Soln to eqs that allows literals to cancel
+** Enter an eqs
+** Get the vbv from that
+** Pass vbv to Ngc.MakeAsc, get back Asc
+** Check it resolves as expected
+* Finish PerformNgcRefute
+
+* How to check the Asc built by Eqs.MakeNgc ? (tcdEqsToNgc)
+* Fails: the vbls are renumbered in atpToRefute
+* So the vbl values are not swapped
+* Map vbl_s in asc and vbv back to original?
+
+* Create Eqs, that results in Ngc, build proof from Ngc, 
+* How to use proof refuting of Ngc in another proof?
+** Making asc from Ngc needs to do subst on Asc using vbv for each step of proof
+** That gives a special case of original Eqs that is true
+** Asc from Ngc results in pti that will result in soln from eqs
+
+
+* How to test sbst and replacement in NgcRefute?
+** Want a special case with vbls in eqsToRefute
+** Sbst occurs, vbl is passed through, vbl introduced in proof
+
+
+* +		ascFromNgc	{(nil  (=  A (F  @0 @1)))}	reslab.Asc
+
+* +		vbvSolution	{<#119 <#120 0:6$A>>}	reslab.Vbv
+* <#119 
+** <#120 0:6$A>     (((=  A (F  B @0))))
+** >     (nil  (=  A (F  B C)))
+
+* Why isn't @0 replaced?
+* +		atpResult	{((A) ((F  B @0)))}	reslab.Atp
+* Error: soln is mapped to asc. Is being used on an atp
+** Where does that mapping occur?  Epu.MapValue
+** Where was vbv#119 created?
+
+* Vbv#119 Comes from
+* ((Vbv)esnSolution).Verbose()
+* <#100 0:5$100>     (((=  A (F  B C))) ((=  A (F  B @0))))
+
+* How to use a Vbv that has been mapped to asc on an Atp?
+* Can the Spl be run on asc from the vbv.asb ?
+
+* Atp comes from eqsGoal.atpToEquate;
+* Can the spl use the asb from the vbv?
+* Want the main input to be the atp, but values from the vbv.asb
+
+* vbvForValue is getting it from fMatchVbvForValue
+** that uses 
+*** asbNew = asbLeft;
+* Need it to use vbvLeft.asb
+* See what that breaks, define virtual fMatchVbvForValue if needed
+
+* ascSbstfromRefutation: Recursively expand proof
+** What is offset term? 
+** Is term expanded from ascLeft or right
+** Create clause with all literals from children
+** How are mvb and mob being used?
+
+* Tests for ascSbstfromRefutation 
+
+* Ex2Phase1
+
+* Found refutation: 
+* +		ribLeft	{(nil  (=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2)))}	reslab.Rib {reslab.Asc}
+
+
+* first level
+* +		ascLeft	null	reslab.Asc
+* +		ascRight	{(nil  (=  (F  @0 @1) @2))}	reslab.Asc
+
+** ribRight  Asc#2850	{(((=  @0 (F  @1 @2))))}	reslab.Rib {reslab.Asc}
+* +		esnSolution	{<#2846 <#2847 >0:6$2847, 1:3$2847>}	reslab.Esn {reslab.Vbv}
+* Expanding ribRight
+* Then expanding  Asc#3058 {(((=  (F  @0 @1) @2)))}
+** esnSolution	null	reslab.Esn
+
+* Reverted: Added ascCurrent. To Asc.ascSbstfromRefutation
+
+* <#3051 
+** <#3052 0:3$A, 1:9$A>     (((=  @0 (F  @1 @2))))
+** 2:6$3052>     (nil  (=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2)))
+
+
+* vbvEpu3Mrg	{<#3007 <#3008 0:3$A, 1:5$A, 2:6$A>>}	reslab.Vbv
+* <#3007 
+** <#3008 0:3$A, 1:5$A, 2:6$A>     (((=  @0 (F  @1 @2))))
+** >     (nil  (=  C (F  A B)))
+
+* Is soln to
+* +		avcA	{[ (nil  (=  C (F  A B)))]}	reslab.Avc
+* +		avcB	{[0,0,0 (((=  @0 (F  @1 @2))))]}	reslab.Avc
+
+* +		vbvEpu3Mrg	{<#3007 <#3008 0:3$A, 1:5$A, 2:6$A>>}	reslab.Vbv
+
+* This asc (= @0 @1) (= @1 @0) is coming from previous step in proof
+
+* Should a vbl swap have ocurred at second level of ascSbstfromRefutation ?
+* ascR	{(nil  (=  (F  @0 @1) @2))}	reslab.Asc
+* nId	3015	long
+
+* It builds
+* -		ascR#3016	{(nil  (=  C (F  A B)))}	reslab.Asc
+* Should that get reported back?  tcdAscFromNgc, 
+* +		gfbSource	{<Gfi#3013>}	reslab.Gfb {reslab.Gfi}
+* +		esnSolution	{<#3007 <#3008 0:3$A, 1:5$A, 2:6$A>>}	reslab.Esn {reslab.Vbv}
+
+* WatchPair made on ngcF012, not the gfi
+* +		ngcF012	{<Ngc#204>}	reslab.Ngc
+* Is it correct?
+
+* ascFromEpu3#3016 { (nil(= C(F  A B)))}
+
+* How to determine what the expected result is there?
+
+* Where did it go wrong to not use vbv with all the steps?
+** Find that last epu and the vbv that results
+** +		epuThird	{Epu#2899 2,2 (((=  C (F  A B))) ((=  @0 (F  @1 @2))))}	reslab.Epu
+* Is that vbv fine, was Asc#2846 built with the full set of steps?
+** No
+
+* Draw diagram of the Asc used in proof
+
+* First:
+** res.rgascAxioms[3]  Asc#10   	{(nil  (=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2)))}	reslab.Asc
+** res.rgascAxioms[8] Asc#15          	{(((=  C (F  B A))))}	reslab.Asc
+* => ascNgcFC0B#2501	{(((=  (F  C @0) B)))}	reslab.Asc
+
+* Second:
+* Asc#10   	{(nil  (=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2)))}
+* ascNgcFC0B#2501	ascNgcFC0B	{(((=  (F  C @0) B)))}	reslab.Asc
+* => ascNgcF012#206   (kHaveNgc2) 	ascNgcF012	{(((=  (F  @0 @1) @2)))}	reslab.Asc
+
+* Reverse
+* res.rgascAxioms[nAxRIndex]
+* ascNgcF012
+* => asc0_F12#2850	{(((=  @0 (F  @1 @2))))}	reslab.Asc
+
+* Third:
+** res.rgascAxioms[3]  Asc#10   	{(nil  (=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2)))}	reslab.Asc
+* asc0_F12#2850	{(((=  @0 (F  @1 @2))))}	reslab.Asc
+* =>  
+
+* kSolnFCFAB_F0F12  has too simpkle a Vbv,
+
+
+
+* Is this right?
+** res.rgascAxioms[nAx5Index=5] Asc#12	{(nil  (=  C (F  A B)))}	reslab.Asc
+** asc0_F12#2850	{(((=  @0 (F  @1 @2))))}	reslab.Asc
+** =>
+
+* kHaveFirstChildEqsToSolveForEpu is ok
+** data  Etp#2865 2,13 (((=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2))) ((=  @3 (F  @4 @5))))
+
+* Gets mixed up with ABC
+
+* Etp3vs6 is used in multple phases? fixed
+
+** kThirdAuto:kAtpForEpu  looks fine
+
+* kStep: kThirdAuto:kMakeEpu3 (30)   looks like it skipped ahead
+
+** walkl forward from kThirdAuto:kAtpForEpu
+
+
+* kHaveFirstChildEqsToSolveForEpu (line 612) is an fWatch, so where is the next step after that backtrack?
+* kStep: kThirdAuto:kAtpForEpu (2)
+
+* How to understand result of doing fWatch that is already done
+** How did it get back to that place?
+*** It is replaying , but with earlier steps inserted
+*** So the next step after fWatch is what came after the inserted step
+
+* StartPair(ref tsp5_Third, res.rgascAxioms[nAx5Index], asc0_F12, KSteps.kMakeEpu3);
+* Renamed kMakeEpu3 tp be kMakeEpuWithAx5
+* Continue to rename Epu3 to be 5
+
+* That will just match up the vbls and terms. Where is the flip supposed to happen?
+** Map back should occur when the same Asc as before is referenced, by vblIds renumbered
+** Where does 3rd phase complete with new use of same Asc?
+*** See all uses of StartPair
+*** kAscRFromEpuR2 has two that both use nAx5Index
+
+* kAscRFromEpuR2 does two StartPair, both with asc0_F12
+
+* Ax5 pass just sends result to 3rd pass. Does the flip occur in rest of 3?
+
+* The flip is really that a Ngc can use used to match an Asc that is swapped
+
+* So check that soln Ax5 passed back to 3rd will complete 
+
+* Web page, click to run to that point in proof, display data
+** Transfer proof outline to JS objects, map to display using React 
+** Put tag from proof into outline
+** Show the tcd, data
+** Button to show/hide
+** What to add to test method to generate that output?
+*** Output as json objects
+*** Organize into parts of proof:
+**** Reference to parent part
+**** Which role in parent
+*** How to layout?
+**** Hierarchy of steps
+*** Pass along a structure with each step, to show current stack of goals
+**** Create the goals in a tree
+*** Step should highlight the terms being equated
+
+* Where to apply Ax5 directly to 
+
+* Why doesn't this has a phase 3 name?
+* kAscRFromEpuR2
+
+* What is structure of steps?
+** Epu
+** What are the rules for sequences of tcd?
+
+* kMakeEpuAx5 is not needed - removed
+
+* Where should the pti for ax5 be applied?
+** Where should it be when that is needed?
+** What is the last thing to be created before that?
+** Has done rhs of eps for epu, is first child of that
+** First child of etp3vs6_2
+******** // eqsFor3rdNgc    { { eqs#199 (((F  @0 @1)) (@2))}}	reslab.Eqs
+** That’s what to apply the pti to
+** Which pti?
+
+** Apply pti to eqsToMatchAx5 in kFirstChild3rdRhs
+*** GnpEpr.ProcessPair <- 
+
+** Why does the Epr for (F, vbl) have pti5RtL - it is not a vbl
+** -		eprLeft	{{Epr#18 }}	reslab.Epr
+** Where is place where pti5RtL is supposed to be applied to 
+** +		this	{{eqs#199 (((F  @0 @1)) (@2))}}	reslab.Eqs ?
+*** That Epr is for when a vbl is on one side of pti
+*** But this pti has other
+*** Need an Epr for anything on one side, so it will match a vbl?
+**** eprObtainForNonVbl ?
+
+* Makes it to kGetEE3, but not to kMergeP3_01
+** Too many etp
+*** Because added eprObtainForVblOrNon . Lines 115, 131, in Eqs.cs
+*** Why did that match so many?
+**** The direct assignment of vbl to other side is simpler
+*** Why is this needed?
+*** +		eqsToMatchAx5	{{eqs#215 (((F  @0 @1)) (@2))}}	reslab.Eqs
+*** +		pti5RtL	{4->3 in (nil  (=  C (F  A B)))}	reslab.Pti
+**** Because ex2 3rd phase, doesn't reach k3rdAx5
+**** Need a way to invoke that pti instead of direct assignment of @2
+*** How to avoid flooding?
+**** What is the minimal condition where pti is needed?
+
+*** EprGnp is generating pti/eqs pairs even when mgu is sufficient
+**** How to get it to generate only for pti_s that are needed
+**** How to pass through supply to consumer in case mgu was not sucessful?
+**** As part of vbv to try again?
+*** Why isn't the most general unifier enough?
+
+** Fix problem with Epr for NonVbl
+*** Non vbl epr only matches a vbl
+*** Pass along object in Vbv for immediate soln
+*** Request new soln from EprGnp when previous soln fails
+**** There is a tree of generators in the vbv
+*** How to know where to request more solutions
+*** More general: stop demand in row of gnp when soln found
+
+
+** For now, hack in  creation of Epr only for that pti and eqs (two places)
+** Is that hack being applied?
+** Set break on adding eqs pti, getting pair on that gnp
+*** Eqs is applied, but no pti
+*** AddDeferredPti is called for new Pti in res.SavePti
+*** Which pti is expected?
+**** pti5RtL?
+
+* epu12vR2 is null
+** Does not hit line where it was set
+** Has order changed?
+** epu12vR2 is set in kMakeEpu, hod did it get past that?
+** Don't enter kThirdAuto until processing par at line 877
+** kAscRFromEpuR2
+
+* eqsF01_FAB, vbvF01_FAB
+** look for soln to go back to eulEqs3rdAx5, then to make an eur
+*** Then back to kHaveEqsFor3rdNgc, continue to finish that third Epu
+*** That will result in refutation, so new axiom is created, to be sent to second, then first
+
+*** +		etpFirstChild3rdRhs	{Etp#42440 2,7 (((F  (F  @0 @1) @1)) ((F  @2 @3)))}	reslab.Etp
+
+*** +		eqsFor3rdRhs	{{eqs#42438 (((F  (F  @0 @1) @1)) ((F  @2 @3)))}}	reslab.Eqs
+
+
+* Data driven tracing
+** Define objects to hold trace info: Tif (tcd, target, input, result)
+** Use unique string to identify objects in file
+** Report error if string maps to another object
+** Write out file
+** Map object -> Tif
+** Convert existing code to data
+*** Check that it works
+** Commands in file
+*** Add watchPair, target, startPair , watch/restart
+*** Stop in debugger
+** Functions to call in depbugger
+*** Add watch pair/target
+*** Watch result of eqsObtain(atp)
+*** Add comment
+** Use
+*** Dynamic
+**** Init method assigns labels to axioms
+**** fNextStep: kStep that was registers identifies the tif that requested
+*** Generate class with enum, vars, switch, cases
+** Steps
+*** Write out as data
+*** Read in data
+*** Methods to extend test manually
+*** Run dynamically
+
+* Gets to s2_102, second time, then gets lost
+* kApplyMapped0C
+* Is missing                          StartPair(ref tspR_F012, res.rgascAxioms[nAxRIndex], ascNgcF012, (int) KSteps.kMakeEpuR2);
+** is added to phase 3 (kReverseSecond)
+* Problem: phase for action
+
+* Fails in Tif.AddAction
+** if (tifCurrent.kTime != Tif.KTime.kFirst
+* Value is now kAfter
+
+* Purpose is to avoid generating code second time through
+* Reset after restart?
+* In Tfc.fWatch
+** How to track first time after that?
+** New fn to call on tscOutput set set first after
+** Set on Tiw at tail
+** kTime is on Tsc
+** Effect is line tsc.NextStep
+*** If first on tiw, then go to first
+** How to find that Tip? It happened before restart, not recently
+*** Why isn't NextStep on stack?
+
+
+* Still s2_102 : asc_211 is null
+** kApplyMapped0C
+** ascNgcF012
+** Did it reach s0_105 here asc_211 is set
+** s0_104 is not referenced
+
+** Is in wrong place: line 529
+******* WatchPair (res.rgascAxioms[6], asc_211, Tcd.tcdMakeEpu, "", (int) KSteps.s3_103)
+*** Because it comes after SetPhase ? That shouldn't change tifCurrent,
+*** But it comes after fWatch
+*** What is the id of that stmt?  Tip407
+*** Where should that stmt have gone?
+*** 407 is a watch pair, comes from Tsp
+*** Tsp.Perform adds a watch pair, need to turn that off
+* Why doesn't it reach s0_105 aka kHaveNgc2 ?
+** After reaching line 582 new/1356 old
+
+** s0_105 <- s0_104 <- line 582
+** It goes to s2_104. which is correct?
+*** There is no reference to s0_104, why was it created?
+*** FoundBid calles fNextStep, but phase is old
+* Added nPhase to tfc
+* Always in kReverseSecond 
+
+
+* Why generate?
+** Make uniform
+** Able to move forward with generated based on commands
+*** Stop and and switch to manual?
+** Even doing manually need to keep track of where in proof
+*** UI that expands
+*** How to know where in proof it is?
+*** How to keep UI live? 
+**** Send messages, client keeps state
+
+* Top down:
+** Language to express proof steps
+*** Rules to expand those into substeps
+*** Finally down to objects to track in code
+*** Lower level steps refer to parent level, then create objects that attach
+**** Has two parents, so can't be method on object
+**** Static fn with two objects to refer to
+**** ctx.pair(leftTerm,rightTerm,childNum, ptiExpr
+** Rules
+*** Resolve
+**** Left and right clause
+**** Mask for left and right
+*** Apply rule to match left and right subterms
+**** Location to apply: 
+***** Match object
+***** Position (is same on both sides)
+**** Pti to apply: clause, literal position, direction
+** Display
+*** Compute column for each term
+**** Class to represent step in proof, has column
+**** Traverse down to get width
+**** Up to add widths
+*** Spacing: 
+**** Pair has term on left and right (show above, below)
+**** Use max width between those two
+** Substitutions
+*** Left/right, vbl num, value: symbol, vbl&origin
+*** Create automatically by holding the value assigned to left and right vbls
+** Manually verify
+** How to expand into proof steps using Tfc etc?
+*** Traverse proof tree, call functions in Tif that construct the Tis, etc
+
+
+* New file
+** Classes needed:
+*** methods
+**** Create context, has symbol table
+**** Find axiom by name
+**** Find step. By name? or clause pair name, then series of child numbers
+***** Child 0 for pti of 'x ='
+**** Refer to pti by name, direction, position
+**** Refer to resolvant by clause and mask
+**** build from two clauses (static)
+**** Create object to represent application of pti at nth child of pair
+***** Find parent parent to apply to
+**** Apply incoming substitution  (like Etp)
+***** How to use Spl code?
+****** Take raw child atp and find new one?
+**** Construct substitutions
+***** How to map substitution to proof steps?
+**** Determine sizes, positions
+**** Print with spacing
+***** Left and right terms
+***** Applied steps (vbl can match term, is not always child)
+***** Show substitutions
+**** Generate test
+** How to use these classes
+*** Express the example
+**** Construct pairs of clauses, by name
+***** How to get derived clauses? 
+****** Initially, just add manually
+****** Later they will result from resolution or hypotheses
+**** Add pti steps between terms: refer to a pair and a position
+**** Apply substitutions
+***** Obtain eqs
+***** How to select the desired solution
+****** Allow printing them (via ui)
+* 
+* How does this differ from running Etp etc.?
+** Don't have solns to children yet
+** When soln is obtained, it affects what the next step is.
+** Running proof could generate steps, but need to pick which soln, and assemble into proof
+** Use a hook to construct the steps, but that will generate lots of junk
+** Hook can match the proof step provided, only construct with soln when it matches
+* Purpose of input is to select sequence of steps
+** Want something less tedious, confusing to express proof steps
+** Attach pti to place in proof where that filter applies
+** Proof steps allows referring to inputs
+*** How to automatically refer to incoming solns based on proof?
+**** Instead of vars to hold intermediate results, use hash table keyed by proof locations
+**** Where are those values used to register?
+***** e.g. Resulting vbv from a child term
+**** Don't need to perform sbts, etc outside of regular logic, just make calls to WatchPair, etc.
+***** During construction of test and replay using generated code
+*** Build up set of code to create steps using given proof
+**** Each hook point will have a method to check the cases where it is used
+
+* Replace steps with more general code
+** Object passed in is location in proof: extend Iba, implement FoundBid
+** Tree structure to find other objects
+** Traverse to root object to refer to existing code
+** General form: (se code generator)
+*** Add incoming objects to store using proof objects as key
+*** Get objects for next step
+*** Call fn to register next step
+** Go through proof and replace with general case
+
+** Class structure
+**** Each side has array of widths and positions
+***** Positions allows hit detection
+***** Use hot detection to view gnp, rates of activity, send msg to set a breakpoint
+***** How to pass that data to UI?
+**** Where each obj (eg eqs) is used
+***** This implies base class, derived classes to refer to eqs, etc (bid)
+***** Reference: 
+****** Target has list of references to it
+****** Reference has: location where reference occurred, target
+*** See methods above
+** Development steps
+*** Rule: construct step that calls StartPair for a pair
+**** Create step to refer to as next step, but it is not understood yet
+**** How to advance to next step?
+***** Where is the hook for that? Tsp.Perform
+***** See where tcdMakeEpu  is called for Report: EquateUnify
+***** Proceed with execution of proof
+***** Trap on report: that gives a new object that can be used to identify the path
+***** Create a graph of reports, objects input, objects created
+***** When desired object is created, follow the path through the graph to find the steps
+***** Hash from object to report that generated that object (could be multiple)
+***** Then, output steps (require for Report) when the inputs are available
+**** What are the goal objects to trace back for?
+***** Empty, desired hypothesis (that satisfies given function or matches pattern)
+**** How are backward steps handled?
+***** If first need to refer to object occurs before first time it can be derived from known objects
+*** Create object (Irp) to handle Report by adding to collection of tuples of <tcd,target,input,data>
+**** Also check for reaching desired object: satisfy fn passed in, which could use all 4 in report tuple
+***** Could also add the global of the current queue object for that res
+**** When found: 
+***** If intermediate, set the next goal
+****** Compute next goal
+****** e.g. start clause pair
+***** Graph is formed by shared objects in tuple
+****** Purpose of graph: to construct short proof
+****** See progress of proof to extend when it gets stuck
+****** Provide objects used to walk forward in proof
+***** Find shortest path: depth first search, set distance on each tuple
+****** Traverse links between tuples, links is an object on common (any position in tuple)
+****** If link goes back in time, then set watch
+***** How to display progress:
+****** Print out state of proof outline
+****** How to annotate display of proof?
+******* Block with buttons to expand
+******** } Show component steps
+********* Each child term forms pair
+********* Use containment for lower level or subgoal
+******** } Simple text only: clear and write outline
+********* How to find component parts from graph?
+********** w Based on which tcd define exit and entry on path (indent, unindent)
+********** w Pop out for watch
+********** w , then return to depth
+
+
+* Have proof outline statement be processing of a pair or pti, etc
+** Start from lower level proof steps and work up
+*** How to implement Report ~> fNextStep to dispatch to current state machine?
+*** Utility Pushes state machine  to top of stack
+*** Problem: when action is registered, it could be any machine
+**** Progress can come in different places in proof
+**** Machines are all active, object passed in directs to which one
+***** Enums are scoped locally 
+**** Stack is only used when finishing a step: tells caller what to do next
+***** Fns create state machines. Return only when all replay is done up to that point
+****** Ie is the frontier
+****** What does fn look like? Starts state machine, has fn with switch stmt
+******* Has local enum, switch stmt like now
+******* Where are vars? Member vbls of that machine class
+*** base class for machine has return addr: machine and state
+**** ctor for base machine takes return add
+**** at final state, jump to return
+**** other parm: location in proof outline tree
+
+* Break up kHaveFirstChildEqsToSolveForEpu into reusable parts
+** kFirstManual:
+*** Create child state to apply pti2LtR to first child (line 210)
+** kReverseSecond:
+*** Is equatable, so just wait for soln to eqs
+** Others: go back for eqs and then split that state
+
+** next below top is sequence of objects for each child of top etp
+*** - apply pti
+*** - complete eqs
+*** - fWatch and then do
+**** - wait for child of etp   - same as line 264
+*** How to refer to etp?
+* A special object takes the nStep and invokes the old step fn
+** Inherit that method for now onto all (non-top) tfc
+* Can also take parameter, like nin2 or nin3
+* Takes object in outline tree to process
+** Pair has: left, right, object for etp
+** Etp: seq of child 
+*** Etp mgr maintains child number
+*** Reset child number on restart (initial state)
+*** Increment child number when previous is done
+* Proof outline class has factory fn to create instance of tfc class for that factory
+** The outline class is passed the factory so it can get the children the outline provides according to that class
+* Move start of phase to epu machine (move the enums there)
+** Pass child of pair/epu to the etp factory it makes
+
+* Next:
+** Use Petp as first child
+*** Later: Move kHaveEqsToSolveForEpu to Petp (uses tcdRegisterEtpByOffset)
+**** Is first child of top Atp
+*** Make children needed for switch in kHaveFirstChildEqsToSolveForEpu
+*** Pob classes needed:
+**** For now, each takes next KStep
+**** Apply pti
+***** Arg is pti
+**** tcdEqsToEnt: wait for soln to eqs
+***** No arg
+**** Watch, provide
+***** Later: child is etp
+*** Add instance for first child to each Rpo
+*** Construct child tfc to handle Pob
+**** Define this class
+**** How to build it?
+**** Where is Pob.Perform called from?
+**** Call fn on Pob class
+*** make eqsFirstChildEqsToSolve a Vhd<Eqs>
+*** kHaveFirstChildEqsToSolveForEpu is special case for now: first child of Petp
+**** Get nth child of Petp
+**** Call Perform
+***** Parent tfc needs to save child tfc, pass into perform
+****** Etp has n of them (one for each Pob child)
+****** For now, just use one for that step
+****** Then move to Petp
+***** Define ChildComplete on base Tfc
+*** Pob creates instance of the Tfc class it needs
+**** That tfc the creates its child tfc from the children of its pob
+*** Replace childComplete by calling fNextStep on the parent tfc with saved step
+*** Replace -1, -2 etc with automatic tfc id (for uniqueness check)
+
+
+** Converting manual test to automated
+*** Where s the new  test
+*** TfcTop.childComplete marks end of phase
+*** Fix generated test (Ex2TrackGen) ?
+*** Main thing is test is completed.
+**** What is next step in migrating from manual test code to outline?
+***** What progress has been made so far?
+****** See PouEx2
+***** Does TfcPhase, and then fallls out to old code
+****** Old code is in Ex2TrackMan
+****** First fail back is to kHaveEulForEqs1
+**** Why are some calls to ChildComplete in man and one in TfcPob ?
+**** Remove switch from TfcPhase, move into child controllers
+**** Remove steps from TfcEx2Base
+***** Add child controllers
+*** What new class of controller is needed?
+**** Should be related to the steps in proof
+***** Separate out the instructions from the tfc that runs it
+***** Rpo is top level step to resolve two clauses
+****** (should provide term number, mask)
+***** Define lower level steps, then the tfc classes to process them
+****** Manual outline is in PouEx2.cs
+***** Kinds of steps
+****** Apply pti - pou is the pti and position, etc.
+****** Apply etp to one side, then the other
+***** How does nesting provide benefit over sequence? If it is reusable
+*** kFirstManual
+**** Waits for tcdApplyPtiToEqs
+***** Provide information where to get objects to wait for
+****** eqsFirstChildEqsToSolve, 
+****** tfcTop.pou.vpti2LtR.tVal
+***** Express this in a general way in tree of pou
+***** What is generalization of how to get inputs to watch for?
+****** So children can be reusable
+***** One side is the pti, that goes on psb
+***** TfcPhase has a single child that is used in all cases
+**** Start with specific step Psb sub-classes for WatchPair, fWatch
+***** Construct with into to obtain arguments
+**** Define Pob classes for watchPair and fWatch
+***** Add as children of Tfc
+***** TfcPhase constructs child Tfc from child Psb, pass control to it
+****** Make it top stack?
+****** Where is return, what is next?
+******* Next child
+****** Phase 1 child is top level of processing Pti
+******* It has child that appears in switch statement in phase
+******* Then return to Next child of pti step
+***** What is next? In each phase?
+****** kReverseSecond phase starts with matching etp
+***** Pob classes:
+****** StartEtp - there is a Petp : Pob - shared with top level
+****** ApplyPti  - used when tern is single symbol
+******* PobApplyPti
+***** Tfc class for each
+****** Hold specific values
+***** Where to create the psb?
+****** As child objects of rpo in PouEx2
+***** Where does TfcPhase invoke the child?
+**** Define ChildComplete on tfc for Etp and Pti
+***** Go to next child
+**** Fn to return saved object: closest to top of stack
+***** Every result is saved somewhere
+***** Step says key to save under
+***** Generate starting point from current test?
+****** The tree would go straight for each phase
+****** How to make more structured?
+******* It will generate a tree than is all indented
+******* How to write code to traverse down?
+******* Go down looking for the tcd that matches next step
+******* That will make the tree more branchy by moving to siblings
+***** How to convert single hash table now to stack form?
+****** Linear search for now
+****** Repeating pattern, map them to use same symbol for lookup
+******* Recursive and sibling
+**** Convert objects used to generate code to generate the Pob tree
+***** Pob for a general step
+***** For each kind of stmt:
+******* (finer grain than step, then match patterns)
+****** Stmts are siblings
+****** Pob to hold info
+****** Tfc to perform 
+***** Add Pob_s into tree: step, stmts
+***** Tfc for
+****** TfcStep
+****** TfcStmt
+******* Each kind of stmt
+******* See subclasses of Tib
+******* Add method like GenerateActionStmt
+******* Generates object (or code) that will result in code for the Pob
+
+***** Generate key object to lookup saved values
+***** Traverse backward through tfc to match
+****** Has class to hold each saved value
+**** Where to construct the new objects?
+***** Which method
+****** Construct step
+****** Construct stmt, add to step
+***** Is like generating code
+***** Tif.GenerateCase handles a step
+****** Calls tib.GenerateActionStmt(fwt, tsc); for each stmt
+***** Tsc.GenerateSwitch  -swtich stmt
+***** Tsc.Generate(fwt) - whole file, <- Tsc.Generate()
+**** Generate is like outputing the code for building outline code
+**** Call fn to build Pob tc from tsc
+
+
+**** Attach to TfcPhase
+***** What is the outline for that tfc?
+***** Then TfcPhase gets from there (first mode for running manual, then from Pob)
+***** Tfc registers using StartPair, then returns to let prover run
+
+
+**** check that all stmt types are generated
+
+*** Current problem: 
+***** TCaptureLeft.tff.bidInvoke(this);
+**** Code requires tscOutput to be set 
+**** Line 793, in Ex2TrackMan, what happens if it is gone?
+**** Line 939: remove CaptureRight
+*** Tos not implemented:
+**** StartPair
+**** Where to store tsp?
+**** Or go to TfcPhase instead of Tos
+
+*** TfcPhaseEx2 : has
+***** public void StartPair()
+***** {
+****** hph.StartPair()
+
+*** TfcPhaseBuilt has new Hph
+**** Is built in TfcBuiltEx2.itfMakePhase, so it is built by TfcTop from pou.psbFirst
+**** How to hook up contents of phase - after the Tos
+***** There are three Tos generated now,
+****** PouEx2 has 5 Rpo
+*** For Tos
+*** +		bidLeft	{(nil  (=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2)))}	reslab.Bid {reslab.Asc}
+*** +		bidRight	{(((=  (F  C @0) B)))}	reslab.Bid {reslab.Asc}
+*** Why isn't first pair a Rpo?
+**** ReadyToRun calls
+******* tfcPhaseFirst.StartPair();
+**** Have Tos refer to the next Itf (phase)?
+**** Search for matching
+***** tfc	{reslab.TfcBuiltEx2}	reslab.TestUtil.Tfc {reslab.TfcBuiltEx2}
+***** tfcPhaseFirst->tfcNext
+****** Hph->rpo
+
+
+** hascRight has not been filled in yet
+** Is probably vascNgcFC0B
+** Check all the places tVal is referenced in Ex2TrackMan and PouEx2
+*** Is assigned to
+*** Used as arg to WatchPair
+*** Used for if stmt
+
+** This is not mapped to the pou (built)
+**** tfcTop.pou.vascNgcFC0B.tVal = (Asc)objData;
+**** tfcTop.ChildComplete(this)
+**** Handler will look for next phase and start it
+**** So don't need to have Tos look for the phase.
+**** Top keeps track of current phase
+
+** Next: 
+
+*** Generate code and objects for updates to tVal
+**** GenerateActionStmt
+***** Store value in a dictionary, index by what?
+**** pobBuildOutline
+
+*** To replace
+**** Where is code to access the value from mpst_ivbValues ?
+*** Replace set/access of Vhd in the manual code as calls to setters
+
+
+** (1,80) not found
+*** Where is 80 referenced from?
+**** Top#144 has psbNext Tst:41, nStepId==80 psbStep93
+****** pobStmt92.SetNextTst(psbStep93)
+*** psbStep93/80 is near the end of phase 0
+**** Why is tfcPhaseCurrent.nTfcId==1?
+*** Does TChildComplete
+**** From where?
+
+
+** Step 82 is last of phase 0, so 1 is correct, why is it 1 for 80?
+** How did it go back to 80?
+*** Set break in TfcEx2Built.fNextStep - very next hit
+*** fNextStep ==80 comes from 
+**** -		this	{Tfs#113: }	reslab.TestUtil.Tfs
+*** Why is that Report/Hkb being processed now, after completing phase
+*** Was 80 his already? Yes
+**** It throws a restart, but next time through it reaches 
+***** +		tfsStep	{Tfs#115: }	reslab.TestUtil.Tfs
+**** Why a different path?  Tow#146
+***** It doesn't reach that if stmt in Tow#146 second time
+
+
+
+** Can it be done using Arfs only?
+
+
+** Use React to build editor for writing
+*** Axioms
+*** Proof outline
+** Display proof state: progress through proof outline
+
+
+Reboot
+** Where are we?
+*** proof fails, because of need to apply rule to match hypothesis
+*** manual proof trace is too long
+*** manual proof used to generate object representation of proof trace
+**** goal to build structured so parts can be reused
+*** running object proof fails because of phase problem
+** how to back up?
+*** options
+**** start small: simpler proofs
+***** what objects to build to aggregate steps in a structured way?
+****** apply a pti, ets, etc.
+****** start from axiom level: start resolution step
+****** method to examine clauses being resolved and generate trace objects
+******* how to guide that?
+******** manual approach captures ids, stores object references by name
+******** rue-usable structures will capture those references locally
+**** replace integer code of phase with an object
+**** test individual methods
+**** start from top level outline of proof
+***** define objects that will construct the needed reusable trace objects
+***** how to refer to sub-steps?
+****** by id, but display graphically?
+
+NextStep is the continuation: what to do with the result
+e.g. construct object to handle eqs, and then invoke X with the resulting Vbv
+X can transform and hand the Vbv to next child, or return it to parent
+that really means to set flags and watch
+state machine is form of continuation
+
+first: the argument to pass for next step is the Tst to call
+   (maybe it does that now?)
+next: pass in a object that has: step, context info
+    use that to replace global references/dictionary
+    actions reference field on the current context
+start with where an eqs is invoked and the result passed on
+   caller sets up that context
+   group the tst under that
+how to handle going backwards?
+
+the proof outline is really the evaluation of an expression
+   terms like WatchPair are binary operators
+   add in fWatch terms where needed
+   terms that need to be passed long distance are arguments from another
+              expression subterm
+   compile expression into linear outline (or interpret?)
+       push/pop from argument stack vs offset in frame
+    expression comes from functional applied to input pair
+   use tuples when both object and vbv are needed?
+           left, right, data
+           can be result from earlier step that is saved
+             note shared subexpression ?
+
+
+proof guide notation:
+   left and right are each an expression that says how to transform that side
+   the result of transformation of left and right must match
+   each term in expression can be
+      - form that has the pti to replace, 
+           remaining args are how to process the other size of that pti
+            with replacements being performed
+      - assume an ngc, which then has to be refuted
+      - other guide object, 
+             each Watch* handler pops off to get next sub-guide
+      - an function application that wraps arg in defined guide sequence
+   applying a pti may require a sub-pti first
+      first arg is the guide for how to match that side
+      second arg is guide for how to match the remote side
+
+outline generator traverses both sides, 
+    at bottom level both sides need to match
+
+proof outline expression
+   terms can be reached in multiple ways
+   terms can be used as args to multiple outer expressions
+   { let (left,right,data) = expr  result-expr }
+   an expr can be a literal,
+      then fWatch just validates that it equals expected literal
+   a WatchPair is generated when a expr is sent to a destination
+   WatchTarget/Input generated when proof needs to proceed to next report
+       to get the next needed value
+
+        
+support proof guide using non-generated Tst
+
+first steps
+  gud tree manual for now, later generate from outline
+  gud for phase has
+      gud for standard set for epu
+      gud rest of existing
+      later generate gud from outlines
+  replace tfcPhase, nNextStep
+  new classes
+     Stp  stepper
+       ctor takes nextTst
+       gudNext: fn that takes guide and returns guide for next step
+          default class creates new Gud with tstNext, same parent as before
+       StpNext class gets next Tst - generator sets that up: ctor is prev, sets reverse ptr
+       StpPop - calls gudNext on gud.gudParent
+         gudNext will create child gud for first child tst
+     Gud  guide
+       fn that returns Tst for current step
+       has term from proof guide for left and right
+       ptr to next, parent
+       Nin for position
+       GudSeq holds ref to tst, 
+          change last action in each sequence to new StpPop
+       name of tst indicates if it is manual or shared
+   action to move to next step has new StpNext(tstNext)
+   action for next phase: new StpPhase: tells gud to pop and go to next
+     each gud for phase has first Tst
+       make the generated outline have Tst as member variables, outline references them
+       
+  write outline:
+    a term cal split left and right sides for e.g. epu, tpi
+    ctor takes: parent, term info, 
+    term info: phase; pti; vbl sbst (left,right,both); make etp: n remaining subterms, ngc
+    
+  move away from explicit Vhd (make more reusable)
+    gud will declare the keys that it knows, other lookup for set/get goes to parent
+    keys are indexed by nin, get uses n, set uses n+1
+    vhd the uses more generic named key for set/get
+
+   automatic
+     build gud tree from outlines
+     how to automatically insert fWatch?
+       needed when pair occured already
+       record all pairings to see if already happended
+       replace with just doing all register up front and verify vs track and set after a changes
+     how to carve up generated tst to follow gud?
+       look for typical actions for each gud class
+       manually move sequences to place in gud tree
+       add StpPop to advance to next
+       get specific info from gud ctor (eg nin)
+       where possible, replace local tst sequence with reference to common set
+          different gud class for manual vs standard sequence
+     how to extend outline going forward? 
+       goal is generalized gud classes are enough
+
+get rid of mpn_bidLatest ?
+
+-----    
+another approach to build outline automatically:
+   create irr that captures a complete graph
+    start with each pair, log as tcd,left, right
+   record resulting reports, also tcd, left, right, data
+   use debugger to identify the pair to generate outline for
+   call debugger to use the graph to generate outline
+   report all the cases where an object is used that is not
+      create another graph between tcd reports that show the tffs to use
+
+reference the tff in the actual code, so it gets logged too
+     log those as well, or in a separate pass after?
+pack the tcd,left,right ids into a struct as a key
+define function to do depth first search from start to target (tcd,left,right)
+
+Use the generated net to construct the structured proof guide
+  - reason is so the outline generate the outline
+    - that allows changing the prover and getting back to that same point
+  - some tcd_s indicate transition from parent to child or back
+       e.g. register for resulting vbv, getting that vbv
+  - use that construct tree of requests
+  - format that as proof guide
+  - run prover again to capture all intermediate steps on that path
+  - pretty print generated guide, annotate with terms and vbv used
+
+steps to build guide  Gyd
+  define guide classes for epu, etp, etl,etr, eqs
+  class to capture guide info
+     child guides
+     associated terms, vbv (based on class)
+  add fields to tst
+     who ones it: guide, or attached
+  traverse
+    for each tst
+      check that it is owned
+      for each action
+         switch on tcd
+            return to existing  guide
+            child child guide: set parent,attach to parent
+         set owner of destination, check if already owned
+  output as c# code, nested indented
+         
+---------------------------
+tiwSave is null
+
+perform Tow#146
++		bidToWatch	{eqsㅕ2364 (((F  @0 (F  @1 @2))) ((F  C @3)))ㅑ}	reslab.Ibd {reslab.Eqs}
+problem is on second hit line 368
+
+tifCurrent.kTime is second (first time)
+   so fAddAction returns false
+
+
+-		tifCurrent	{reslab.TestUtil.Tif}	reslab.TestUtil.Tif
++		bidResult	{Etp#2362 2,13 (((=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2))) ((=  (F  C @3) B)))}	reslab.Bid {reslab.Etp}
+		kCapture	kData	reslab.TestUtil.Tif.KCapture
+		kTime	kSecond	reslab.TestUtil.Tif.KTime
+		nId	7	int
+		nPhase	-1	int
+		nStepId	3	int
+		stStep	"s-1_3"	string
+
+tow#146:
+    Tst psbStep98 = new Tst(pouOutline, 1, 3);
+            Tow pobStmt100 = new Tow(psbStep98);
+            pobStmt100.SetToWatch (new Arf(2364, typeof(reslab.Eqs), "eqsㅕ2364 (((F  @0 (F  @1 @2))) ((F  C @3)))ㅑ"));
+            pobStmt100.SetNextTst(psbStep101);
+
+is problem with how new call to tfm.tscOutput.NextStep is made?
+did it perform Restart() ? is in Tow.fPerform
+
+first time through, it is added to Bid. 
+
+tifCurrent.kTime  is second
+
+is it the right tifCurrent? seems like it is out of sync?
+   that watch is not on bid, but this says Tow was not performed yet
+is phase wrong? there is no phase?
+tst still have phases, which is used in lookup
+need to set phase on tfc. start with 0
+
+problem only happens when producing output
+
+
+TfcEx2Built.fNextStep has nTfcId==-1, passes in this to 
+
+Regen has a duplicate:
+
+
+49,50c49,50
+<             Tst psbStep75 = new Tst(pouOutline, 0, 82);
+<             Tst psbStep77 = new Tst(pouOutline, 0, 83);
+---
+>             Tst psbStep76 = new Tst(pouOutline, 0, 82);
+>             Tst psbStep78 = new Tst(pouOutline, 0, 83);
+
+ Top pobStmt75 = new Top(psbStep71);
+            pobStmt75.SetTarget (new Arf(12, typeof(reslab.Asc), "(nil  (=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2)))"));
+            pobStmt75.SetInput (new Arf(2347, typeof(reslab.Asc), "(((=  (F  C @0) B)))"));
+            pobStmt75.SetTcd(Tcd.tcdMakeEpu);
+            pobStmt75.SetNextTst(psbStep81);
+why was that created?
+
+		nGenIdV	75	int
+		nId	288	int
+
+is made from:
+
+		nId	31	int
+		nPhase	0	int
+
+-		tib	{reslab.TestUtil.Tip}	reslab.TestUtil.Tib {reslab.TestUtil.Tip}
++		bidInput	{(((=  (F  C @0) B)))}	reslab.Ibd {reslab.Asc}
++		bidTarget	{(nil  (=  (F  @0 (F  @1 @2)) (F  (F  @0 @1) @2)))}	reslab.Ibd {reslab.Asc}
+		nId	179	int
+		stLabel	"make Epu from left and right"	string
+is the start of a phase
+
+Tip#179 is a dup of Tip#178
+178:
+179:  on Bid of 2351: does a WatchPair.  Is Tsp#3
+
+Tip#178 comes from call to WatchPair from Top#136 registered as
+-		this	{Tfs#113: find etp posn where ngc needed}	reslab.TestUtil.Tfs
+		nId	113	int
+		nNextStep	81	int
+		stActionLabel	"find etp posn where ngc needed"	string
+
+registered on +		tcdEvent	{<tcd tcdRegisterEtpByOffset>}	reslab.Tcd
+ikaAction	{Tfs#113: find etp posn where ngc needed}	reslab.Ika {reslab.TestUtil.Tfs}
+that invokes
+Tst#41 has child:
+-		pob	{reslab.TestUtil.Top}	reslab.TestUtil.Pst {reslab.TestUtil.Top}
++		ibdInput	{<Arf 2347>}	reslab.Ibd {reslab.TestUtil.Arf}
++		ibdTarget	{<Arf 12>}	reslab.Ibd {reslab.TestUtil.Arf}
+		kNext	kMakeEpu	reslab.TestUtil.TfcEx2Base.KSteps
+		nGenIdV	-1	int
+		nId	136	int
+the Top#136 does a WatchPair
+
+vs Tsp#3
+which is correct ?  Tsp injects a WatchPair/StartPair
+   comes from hph built in both TfcPhaseBuilt and TfcPhaseEx2
+
+second one looks correct, because it is fired from creation of ngc, so it starts a new phase
+
+Tos <- Tis <- StartPair
+  but it doesn't do antything
+  Tis generated StartPair in GenerateActionStmt
+
+Hph.StartPair creates a Tsp
+that registers on Bid (first time only)
+
+why does Ex2TrackBuild have     pobStmt74.SetTcd(Tcd.tcdMakeEpu);
+how does  built outline change phase?
+    it is set up in ctor for TfcTop
+called in startup and in ChildComplete
+
+removed Tis/Tos
+
+Macro definition/calls
+  define classes for macro defn, macro call
+  generate code for constructing outline: macro call generates call inline
+    the macro call will be inferred again later
+  construct macro instantiation by copy or function call? 
+    two kinds of macro defn?
+
+  if copy, how to handle value substitution? it is a different kind of object
+  generate outline code from the macro definition tree
+    parameters to fn are macro parms
+    reference parameter values in the function body
+
+  for now, just code the calls/defn fn directly
+
+ TODO:
+                if Tst are macro-ized, there could be nesting collisions
+             there should be statements in the outline that save Target, Input, data and match agains Arf
+             that can match on id, but put string for doc. thats what a Vhd is
+               TfcBuild extends TfcEx2Top, but is otherwise independent
+       split the Tob that are from input (even needed?) and those from code
+
+
+             
+             should constructed objects refer to var or to Bod?
+             construct not vars for the bid, but objects that hold the bid
+                then actions that say where to save to can be regenerated
+                need functions to call during assignment to create the output objects
+             version of stmt should hold where each Bod is registered, 
+             for each capture, generate assignment
+             after result?
+             other kUsage with Bod, do those need vars?
+             after hit on fWatch, set var - lookup the Bod, new KCapture for kWatch
+       remove Arf after regen is successful   
+       
+
+  - add Gyd classes, output a tree instead of list
+  - when creating the output, check each Tst and following with a pattern
+     if pattern matches, construct invocation, put substs as arguments
+  - build set of rules for patterns
+      use recursive descent to try patterns
+      use greedy matching
+      operators: not, *, +, ?, (), |, concat
+      match objects using a list of field ids, specific values or varaibles
+      subsequent use of variable returns previous value
+      express output as a macro invocation with variables, children
+
+  do pattern matching before macro expansion
+     because the macro calls will go away when expanded
+
+
+a WatchPair/Input/Target is really an action with attached Tod_s to get result
+skip fWatch, automatically check if even already happened
+   pair: look at the matrix
+   single: set up watch 
+larger structure: view as a flow of data
+   tracing vbv, but also getting the eqs after sbst, wait for vbv result of pair
+
+have Tob classes take Hbb only
+make Hbb and Arf have a common interface, separate from Ibd
+
+
+generate watches
+   record all events?
+   for now, just have a list to restart on
+
+insert markers to outline that are regenerated
+  output indented
+  compare actual outline to expected from inserted markers
+  
+
+cleanup pti init code
+
+
+Function based creation of outline
+****** create objects to build outline
+******* use derived classes for specific, e.g. more hbb for input, destination
+******* create object will all parameters as members, use for monitoring
+******* method to set break
+******* refer to elements of tree as expr: root.a.s1.b etc
+******* setters are methods, have method to run code to build to next step/action
+******* flags indicate with code path prover takes
+******** builder code creates next action(s)
+******** return same node in tree to easily set next flag, pass in hbb etc
+********* method that builds a child returns it to allow easy setting flags on it
+******** refer to preset using vhd(?) from Ex2
+****** build in output format, so resulting outline runs, can be compared
+***** Classes
+****** resolution
+****** modulate?
+****** start pair
+****** start eqs
+****** start etp (each kind of finish is own function)
+****** fn with series of calls for terms in etp
+****** start pti
+****** class for both sides of Pti
+***** copy the sections of outline code into the functions
+****** copy and paste in "} fn {"
+****** add parms for hbb that are shared betweem functions 
+***** outout objects: add refs to the input objects to keep track of where they came from
+***** set flags usings path of names
+***** check list of objects to do fWatch on, insert action and Tst for those
+***** when running, output trace of where in functions it is
+****** tree of objects would help with that (UI)
+****** use that to set breaks when that is executed (using path)
+****** show position in tree
+***** Proof structure
+****** treat later modulation steps as lower level steps
+****** invoke them as a child of a single step
+****** pass in hbb and next Tst to pass to WatchPair when modulation result obtained
+******* then use that Tst to to proceed with the rest of that modulation, it is the equality to use
+**** classes to write
+***** build method creates Tst to use before insertion point, and after.
+***** Insert method sets data members on child so it buids into that slot
+***** check using compare to existing outline
+****** hash the member values and compare sequence numbers
+***** members for: Tst to add actions to, Tst to use as final dest
+***** do insert, then build on child
+***** layout initial tree of proof structure
+***** function to cause fWatch:
+****** how to refer to results of method calls within a Tst step?
+******* define a method on class that has that action
+******* sets flag that causes build to insert fWatch, Tsst
+**** Test:
+******* call compare with existint sequence (could from prev tree)
+**** resolve:
+***** steps for header
+***** child for gap eqs
+***** footer
+***** how to set watch flag? - when it gets to the level where the action is done
+***** code that constructs
+***** Construct and install an eqs
+****** allow test to set parms on TpEqs, then build it
+****** TpEtp
+******* header, child for each subterm, footer
+
+
+
+
+-----------------------------------
+
+mismatch: TpEul like 245 has Toa for TEqsSub
+    does eub.eqsSub;
+
+old: line 319 has Toi for tcdTransferLeftEqs
+   old is getting lower level solutions?
+
+new is a list of child
+for now, create a new Tp* ?
+both are unique: just an if?
+
+where does next Tp start ?
+
+where does the other use of TpEul come back from child eqs?
+
+tcdMapEuhSoln
+
+where to process rhs of pti2?
+   add an InsertEur like InsertEul
+
+first move diff stuff preceeding  into something associate with eqs
+   312, vs 246
+    TpEqs needs part to get eqs
+  how to stitch the parts together?
+      create a Tst as exit for first, start of next
+  need to insert tpeqsChild, to set puoOutline
+ how to pass forward eqs?
+
+add calls to Build, within insert
+
+need to Have Eul invoke TpGetEqsB, which creates Eqs
+
+why is bodHbv2037 being referenced at such a low level?
+   is hbvEqsInput for TpEul
+   is same as bodHbv160 in TpEtp
+   is eqsToNotify  in Eur
+      so it seems like part of exit
+
+   bodHbv2029    272    hbvEqsInput  in TpEtp
+   bodHbv2035    279     bodHbv158  in TpEtp
+   bodHbv2037    282   bodHbv160    in TpEtp
+      they are used in both Pti
+
+TpGetEqsPhase1Pti4  is really tail end of Etp for pti4?
+   is applying Eur to Etp
+
+have nothing for InsertGetEqs?  or its strivial, then do TpEtp
+
+trivial eqs, then attach etp
+
+finish assignments in InsertWrapUp
+
+--------------------
+Tod#49
+hbvEqsOutput - is never set
+   is bodHbv2029
+
+Tow#50
+            Tow tibStmt226 = new Tow(tifStep9);
++		bidToWatch	{eqsㅕ302 ((@0) (@1))ㅑ}	reslab.Bid {reslab.Eqs}
+Tst#51 has no actions
+tpEqs has nothing in it
+
+--
+perform Top#61   is not fired
+
++		bidTarget	{eqsㅕ302 ((@0) (@1))ㅑ}	reslab.Bid {reslab.Eqs}
++		bidInput	{3->6 in (nil  (=  (F  @0 @0) E))}	reslab.Bid {reslab.Pti}
+line 294
+
+why doesn't tree outline hit Tsc.NextStep ?
+   called from TfcEx2Top.ReadyToRun
+    is for output
+
+old:
++		bidTarget	{eqsㅕ2038 (((F  @0 @1)) (E))ㅑ}	reslab.Bid {reslab.Eqs}
++		bidInput	{3->6 in (nil  (=  (F  @0 @0) E))}	reslab.Bid {reslab.Pti}
+  psbNext tst#11
+
+old hits:
+step  tcdApplyPtiToEqs 11 (max 10)
+	left: eqsㅕ2038 (((F  @0 @1)) (E))ㅑ
+	right: 3->6 in (nil  (=  (F  @0 @0) E))
+	data: Eul#2073 3->6 in (nil  (=  (F  @0 @0) E))
+
+new:
+  tstNext tst#62
+
+Old has, but new is missing:
+
+perform Top#109 (108)
+           Top tibStmt216 = new Top(tifStep7);  line 271
+step  tcdRegisterEtpByOffset 8 (max 7)
+	left: eqsㅕ2030 (((F  @0 (F  @1 @2))) ((F  @3 E)))ㅑ
+	right: <Nin#2>
+	data: Etp#2032 2,7 (((F  @0 (F  @1 @2))) ((F  @3 E)))
+step  tcdRegisterEtpByOffset 9 (max 8)
+	left: eqsㅕ2030 (((F  @0 (F  @1 @2))) ((F  @3 E)))ㅑ
+	right: <Nin#3>
+	data: Etp#2036 3,8 (((F  @0 (F  @1 @2))) ((F  @3 E)))
+
+new has:
+perform Top#45 (40)
+step  tcdRegisterEtpByOffset 46 (max 42)
+	left: eqsㅕ2030 (((F  @0 (F  @1 @2))) ((F  @3 E)))ㅑ
+	right: <Nin#2>
+	data: Etp#2032 2,7 (((F  @0 (F  @1 @2))) ((F  @3 E)))
+
+this is missing the nin3
+   how to set break in TpEtp.Build?
+    build Top#45
+added fSkipEqs, now it gets both nin 2 and 3
+hangs soon after
+
+perform Tod#51 (50)
+
+is missing
+          Tow tibStmt226 = new Tow(tifStep9);
+Tow#52
++		bidToWatch	{eqsㅕ2038 (((F  @0 @1)) (E))ㅑ}	reslab.Bid {reslab.Eqs}
+restarts first time, but hang is after second tme
+
+tstToUp   tst#44
+
+tpEqs1_0_2
+   when tpEtp is build, the eqs does not have eul
+
+---
+Old has
+
+
+perform Tog#116 (115)
+step  tcdLaunchEur 12 (max 11)
+	left: Eul#2073 3->6 in (nil  (=  (F  @0 @0) E))
+	right: <#2143 <#2144 1/6 >0:4$2144, 1:5$2144>
+	data: Eur#2147 3->6 in (nil  (=  (F  @0 @0) E))
+perform Tod#117 (116)
+perform Toi#118 (117)
+step  tcdTransferLeftEqs 13 (max 12)
+	left: eqsㅕ492 ((E) (E))ㅑ
+	right: Eur#2147 3->6 in (nil  (=  (F  @0 @0) E))
+	data: 
+perform Tod#119 (118)
+perform Toi#120 (119)
+
+
+New has
+
+perform Tog#59 (58)
+step  tcdLaunchEur 55 (max 57)
+	left: Eul#2073 3->6 in (nil  (=  (F  @0 @0) E))
+	right: <#2143 <#2144 1/6 >0:4$2144, 1:5$2144>
+	data: Eur#2147 3->6 in (nil  (=  (F  @0 @0) E))
+perform Tod#60 (59)
+perform Tod#61 (60)
+perform Top#65 (61)
+step  tcdLaunchEur 31 (max 57)
+	left: Eul#2028 3->6 in (nil  (=  (F  @0 E) @0))
+	right: <#2263 <#2264 1/6 ><#2265 3/6 >0:4$2264, 1:4$2265, 2:5$2265>
+	data: Eur#2269 3->6 in (nil  (=  (F  @0 E) @0))
+perform Tod#36 (65)
+perform Tod#37 (65)
+
+TpGetEqsPhase1Pti4Up is not being performed
+
+hbvEqsInput  is null on TpEqs#14
+
+from hbvEqsOutput on TpGetEqsPhase1Pti4#13
+   in not set in InsertGetEqs on TpEul#12
+line 265?
+bodHbv2029  ?  tibStmt215 =  Top#108
++		bidTarget	{eqsㅕ2030 (((F  @0 (F  @1 @2))) ((F  @3 E)))ㅑ}	reslab.Bid {reslab.Eqs}
+
+is tcdRegisterEtpByOffset
+
+how to see tree objects: link from the tst etc?
+   in order to see where to get value from
+
+TpEtp#9 pass down hbvEqsInput to TpEeqs#11, then to TpEul#12
+
+   tibStmt215  is Top#108
+   bodHbv2029 
+       +		bidTarget	{eqsㅕ2030 (((F  @0 (F  @1 @2))) ((F  @3 E)))ㅑ}	reslab.Bid {reslab.Eqs}
+
+why is that top hitting?
+
+old has this:
+  step  tcdNewBid 7 (max 6)
+	left: 
+	right: 
+	data: eqsㅕ2030 nullㅑ
+
+on old, Top#108 is hit from Bid.Bid :  after a restart
+there should be a Tiw on 2030
+Tow#107
+
+            Tow tibStmt121 = new Tow(tifStep6);
+            tibStmt121.SetToWatch (bodHbv2030);
+            tibStmt121.SetNextTst(tifStep7);
+
+new has Tow#41
+
+top#45 is that one already: 2030 vs nin#2, tcdRegisterEtpByOffset
+
+top#60 should be something else?
+   maybe shouldn't even be there?
+
+new       old
+45       tibStmt215 108
+47 top   tibStmt216 110
+48 tod  tibStmt27     tibStmt223
+toa    tibStmt28   tibStmt224
+tod tibStmt29  tibStmt225
+tow tibStmt226   tibStmt226
+top tibStmt30    tibStmt326
+tod tibStmt107   tibStmt337
+tog tibStmt108   tibStmt338
+tod tibStmt117  tibStmt341
+tod tibStmt118 
+toi                   tibStmt342 
+    should have been start of TpGetEqsPhase1Pti4Up
+toi#65
+top tibStmt23  
+
+TpEul needs to create gap for child
+   InsertGetEqs looks suspect
+                    toi#118 tibStmt342
++		ibdInput	{hbv_Eur#2147 3->6 in (nil  (=  (F  @0 @0) E))}	reslab.Vrf {reslab.TestUtil.Hbv<reslab.Eur>}
+
+new: Toi#62
+
+tibStmt118 is Tod#60
+tstNext#61, why doesn't it run the Toi#62?
+   pobNext is null
+  parent is tst#54
+
+is back to Top#56 - is wromg  how did that happen?
+
+when is Tod#60 created?  tibStmt118 is tof#60
+
+is created under tstToGetEqs, that needs to be made tstNext so Toi is attached
+    need to pass that tst#54 down from Eul as tstStart 
+
+need to have hbvEurInput be value:
++		bidInput	{Eur#2147 3->6 in (nil  (=  (F  @0 @0) E))}	reslab.Bid {reslab.Eur}
+
+Toi#61
+	bodHbv2268	{hbv_Eur#2147 3->6 in (nil  (=  (F  @0 @0) E))}	reslab.TestUtil.Hbv<reslab.Eur>
+   on TpEul
+
+-----
+Now makes it to: perform Top#68 (66)
+check for nulls before that too
+
+tibStmt342 == Toi#61
+
+made it to run top#71, but that did not hit
+        tibStmt357  - tcdSolnToEqs
+   hbvEtp is null
+how to pass in 
+   bodHbv2036 Etp#2036 3,8 (((F  @0 (F  @1 @2))) ((F  @3 E))), set in tibStmt223
+
+step  tcdRegisterEtpByOffset 47 (max 45)
+	left: eqsㅕ2030 (((F  @0 (F  @1 @2))) ((F  @3 E)))ㅑ
+	right: <Nin#3>
+	data: Etp#2036 3,8 (((F  @0 (F  @1 @2))) ((F  @3 E)))
+
+
+     tpGetEqsPhase1Pti2.tpEqs.InsertEtp(tpEtp1_0_R);    // use Etp
+
+shared with tibStmt27
+
+that shows where in the stack.
+create and pass in an Hbv<Etp>
+
+tst#47
+
+pass in a hbv for bodHbv2036, store on hlp
+
+is it bodHbv158 ? is already on hlpEtp
+
+tibStmt27 is Tod#48 - is the hbvPlace on that the Etp#2036  ?  yes
+   is on hlp(1)
+    on tpEtp1_0_R
+
+top#71 : bidTarget is null
+
+where is bodHbv2036  needed?
+         tibStmt357.SetTarget(hbvEtp);  
+     in  TpGetEqsPhase1Pti4Up  - tpPti4Up
+
+  TpEtp  
+2nd level up
+
+has flow really move up?
+    tcdEurToNotifyEqs - is at end of Euh.fProcessSolution
+
+TpEtp.InsertWrapUp: create a new tst for second gap
+
+parent Etp -> Eul -> Eqs -> Etp . hlp(1) .		bodHbv158	
+
+------------
+made it to
+
+step  tcdNewBid 78 (max 74)
+	left: 
+	right: 
+	data: <#2184 0/0 >
+that's all that's been moved over so far
+
+add second gap to end of TpEtp for object to handle return up
+******* isnt that what InsertWrapUp does?
+******* in Ex2TrackRegen8.cs
+******* each tcd is registered to some class
+******** child Tp should be off the TP for the tcd
+******* tpGetEqsPhase1Pti2 - line 346 tibStmt506  to tibStmt542, line 391
+******* tpEtp1: line 413  tibStmt554  
+
+describe Tp classes as a structure of references
+fit those patterns to the structure of the outline
+what to match in patterns?
+******* tcd
+******* nextTst
+******* type of action
+******* how to match pattern?
+******** graph match?
+******** create graph representation of Tp classes
+********* member vars
+********* Build
+********** sequence
+********** if
+********** For
+********* Insert: passes values down to new child
+******** intermediate Tp classes create equivalence: all must refer to same Hbv
+
+******* interpret Tp defn, look for conflicts
+******** map Hbv, tst to instances of defn
+******** try different defns
+******** reported differences that prevent match
+******** start with broad defns, then make specific
+******** identify sequences, start pair that is not a local step
+******* change current functions that create steps/actions to be defns that have those as generalized
+******** replace member vars with instances of a vbl class, with info on name, type, parent
+******** iterate through defs to find first one that matches
+******** build list of defns
+******** based on paths through code
+******** how to model the intermediate objects?
+********* applying child generates list of pairs of hbv on parent and child
+********* speed up search for tree by applying tags
+
+****** Next steps:
+******* convert existing tp to defns
+******* algorithm to search
+******** top level takes outline, collection of defns as input
+******** top level is phases, match the ax as parameter (typed)
+******** at insertion point
+********* for each tag on insertion point (or just one for now)
+********* for each defn for that tag
+********* for each step/action in outline
+********* get next stmt in defn
+********* perform match method on defn
+********** check result: roll back or proceed
+******* build collection of defns
+******** fall back matches any except next step
+******** create set of Mtg - to group Mdf, referenced by insertion points
+
+******* things match algorith has to do
+******** how to step through when the outline branches
+********* where does it branch? when there are multiple actions in same Tst
+********* recurse down each fork until the end of it, 
+********* what other termination condition? stop at fn?
+******** match fields in each action
+********* allow match on NOT match on type of action (for use by match all)
+******** adv
+******** bind hbv
+******** return Mdi subtree
+******* next in code:
+******** method to compare step
+********* lookup handler for defn side:
+********** one for each type, match class (one for tst also)
+********** handle insertion point
+********* invoke handler
+********* handler calls bind fn for each arg
+********* create Mdi from bottom up, so they can backtrack easily
+********* build up list of bindings, then wrap with Mdi
+********* is insertion point action or step?
+********* get match working first, then build resulting structured outline
+********** result is tree of pattern instances, with vbls bindings between levels
+******* unit test
+******** create patterns: Mpt
+********* Mtg.AddMpt: call Build method to add steps to this.
+********* tpProof: a series of Mpi
+******** convert to automatic matching of vbls
+******** tpProof: is a sequence of Mip,
+********* how to set next in sequence?
+********* that's tstStart, tstExit in old pattern
+
+********* Mip for steps where lower level occurs
+******** add ToString methods
+******** log progress: matches
+******** add code to build match tree
+******** display tree
+******* modify existing patterns
+******** put in Mpr where tst are passed in
+********* create Mtg, add child Mpt to that, set on Mpr
+********* add Mdv with reference to next step
+********* see top level proof outline for the Mpt to build, parms to set
+********* call Build to create instance, modify to new Mpt, set up first step
+******* tstStart: where actions are added to at start of Build()
+******** replace insertion point with Mpr
+********* Get rid of Insert
+******** replace tstStart with a Tst, set as first for Mpt
+******** replace tstExit: use mdsExit
+********* modify mapping, when parent value is also mdsExit, repeat on grandparent
+******* tstNext : replace with backpatch
+******** take are that is preceeding Tob, call SetNextTst On it
+******** replace existing calls to SetNextTst
+******** how to map exit of Mpr at end of parent?
+******* fill in missing Hbv
+******** check for missing values: as it goes along
+******** what hbv values to replace with?
+******* create instances of Mpt_s following TfcBuiltTree
+******** attach them to Mtg
+******** where to reference the mtg? where to create more Mpr
+********* follow placement of TfcBuiltTree
+********* insertion points are the tst vbls
+********* for each insert call in ResTrack.cs, add an Mpr, Mtg,
+********** build Mpt, add to mtg
+******* Create mtg from the test:
+******** create Mpt instead for every object built
+******** Mtg for each location location
+******** where are Mrf? in the pattern, where insertion occurs
+******** add Mpt to Mtg, may be more than one if multiple insertions
+
+
+
+
+
+
+
+

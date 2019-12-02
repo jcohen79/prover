@@ -1,0 +1,23 @@
+#+STARTUP: showall
+* Purpose: find out why a proof is not working
+* Interactive: create out into repl. 
+** Make prover be an iterator, so it can be pause and there are no nested repls. 
+** Purpose: help debug queries, proofs, specs
+** How to make iterator?
+*** Iterator state holds vars and indicates where to go back to
+*** Main loop
+**** Call Step method on active object
+**** Method sets active object (keep reusing them, set fields)
+**** Check if stop requested: return, otherwise continue in loop
+*** lsxSearch(), cmi.fResolveClauses(), before and after filter
+*** abt.fUnify should be changed to call fn on Cmi to handle symmetry
+** In environment
+*** Read sequent from file
+*** Combine axioms, etc into sequent to prove/query
+*** Set flags where to stop (match a given clause or use checker fn), or pause via ui
+*** Set symbols to left, right, etc.
+*** Set clause to fMatch, or contains a term
+*** Add clause (using symbol) to a list that stops or traces when resolving from that
+*** Command to show track back a clause
+*** List all clauses that match a pattern
+*** Subqueries: keep current state, add new set of clauses that can then be discarded

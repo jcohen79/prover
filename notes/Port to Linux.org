@@ -1,0 +1,19 @@
+#+STARTUP: showall
+* Mono or Core.net?
+** Just copy to linux, install mono, try existing binaries
+** Start with http://www.mono-project.com/docs/
+** Later can use core.net
+
+* Need to port to http://www.antlr.org/ to replace Irony
+** Only if doesn't run on Mono
+** Rename lsmNil to lprNull, use lprCdr
+** Define grammar
+** Create Lpr tree
+** Remove graph project
+** https://github.com/antlr/antlr4/issues/1142
+** https://github.com/tunnelvisionlabs/antlr4cs - use antlr in vis studio
+** https://github.com/antlr/antlr4/pull/1229 discussion
+* https://www.ubuntu.com/download/desktop/create-a-usb-stick-on-windows
+* Install tptp.org
+* Install core.net
+

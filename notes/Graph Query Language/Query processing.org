@@ -1,0 +1,69 @@
+#+STARTUP: showall
+* Plan
+** Syntax
+*** Define WHERE syntax
+**** Reference pattern syntax for WHERE
+*** FROM query AS vbl - (restrict matching)
+****  vbl is used in WHERE, default to entire graph
+*** A = WHERE …
+** Define class
+*** Copy existing pattern test code and add to class
+**** Iterate from, perform match on each, on each match run template
+*** Process parse tree into query 
+** Test: Construct query directly
+*** Load some pattern examples into graph
+*** Modify pattern examples to use FROM / AS
+*** Chain queries
+** Interaction: command line for now
+*** Loop: read, parse, process, run, display
+*** Put query into context for use as FROM
+*** Interface to run command on object that is returned from processing
+*** A = WHERE … : A has list and also vertices in pattern
+*** Then add SELECT … FROM A [ WHERE … ]
+
+
+* How to specify which objects in pattern to use as members of resulting list?
+** SELECT b FROM … AS a WHERE …b..a..
+** Actually generates output unless SELECT is in some other context. Direct reference to vertex in SELECT means some default output.
+
+* Query class
+** Data
+*** Query: Template expr
+*** From: expr to return list (evaluate when running query, use session symbol table). Default to entire graph.
+*** Where: pattern
+** Method
+*** List iterator
+**** Evaluate FROM expr: iterator for graph or another query iterator
+*** Run
+**** Create local symbol table
+***** GraphMatch goes on table: 
+****** Name, vertex, or edge as key; value is matched
+***** Used for lookup in select
+**** Start matching of pattern, list iterator
+***** Add AS to symbol table (default is any in pattern matches). 
+***** AS a,b - a or b
+**** If no WHERE specified: iterate over FROM and invoke SELECT
+**** For each GraphMatch in list iterator
+***** Evaluate select expr
+****** What is a vertex reference? Search symbol table built from WHERE pattern.
+** Interface for FROM:
+*** Used when query is saved in SymbolTable
+*** Pass in needed arguments
+*** Allows running query, providing iterator
+**** Later: parameters to subquery
+* Connect to SELECT
+** Add interface to GraphMatch to allow lookup data by vertex
+** Add GraphMatch to context
+** Parsed SELECT is a template: list of vertices that link to EmitAtoms
+** Basis is the data vertex looked up using GraphMatch
+
+
+
+* Recursive queries: (less important than templates)
+** Put SELECT inside SELECT, refer to names in enclosing scope
+** Save parameterized query: define name (parms) { select … }
+*** Invoked using name(args)
+*** The contet of the reference to name determines if result is the query or run code gen.
+
+
+

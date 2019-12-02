@@ -1,0 +1,12 @@
+#+STARTUP: showall
+* [[file:_main.org][_main]]
+* [[file:Plan.org][Plan]]
+* [[file:Graph interaction.org][Graph interaction]]
+* [[file:Older Graph Notes.org][Older Graph Notes]]
+* [[file:Goals.org][Goals]]
+* [[file:Browser based api.org][Browser based api]]
+* [[file:In-browser editing.org][In-browser editing]]
+* [[file:Installation notes for MathJax.org][Installation notes for MathJax]]
+* [[file:Current web development.org][Current web development]]
+* [[file:Equation editor.org][Equation editor]]
+

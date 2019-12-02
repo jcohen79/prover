@@ -1,0 +1,98 @@
+#+STARTUP: showall
+
+* http://www-cgi.cs.cmu.edu/~fp/papers/thesis87.pdf
+** Proof Transformations in Higher-Order Logic
+** Non-deterministic, seems very complex
+
+
+** http://www.doc.ic.ac.uk/~svb/CL&C/CL&C08/Papers/McKinley.pdf
+*** Herbrand expansion proofs and proof identity
+
+** https://en.wikipedia.org/wiki/Herbrand's_theorem
+*** "a skolemized sequent is derivable iff it has a Herbrand sequent"
+*** https://en.wikipedia.org/wiki/Herbrandization
+**** Is dual to skolemization
+**** Preserves validility (true for all interpretation)skolemization preserves satisfiability (there is an interpretation that makes formula true)
+
+
+** https://arxiv.org/pdf/1308.0428.pdf
+*** Expansion Trees with Cut
+
+
+** https://plato.stanford.edu/entries/proof-theoretic-semantics/
+
+
+
+** http://www.doc.ic.ac.uk/crg/events/ARW07/submissions/Robinson.pdf
+*** Using Resolution to Generate Natural Proofs
+
+
+** https://www.ijcai.org/Proceedings/89-1/Papers/060.pdf
+*** Refers to Pfenning, but is more shorter
+*** "Structuring Computer Generated Proofs "
+**** Proceedings of the Eleventh International Joint Conference on Artificial Intelligence (I)
+**** IJCAI-89 Contents Vol1
+
+**** From <https://www.ijcai.org/proceedings/1989-1> 
+
+*** Details are in [Lingenfelder, 1986] Christoph Lingenfelder, Transformation of Refutation Graphs into Natural Deduction Proofs, SR-86-10, Uni Kaiserslautern
+
+*** Norbert Eisinger, Completeness, Confluence, and Related Properties of Clause Graph Resolution,
+**** https://pdfs.semanticscholar.org/fa10/89462487a721ab320e42030a08832d89f8ba.pdf
+***** Reduction Rules for Resolution Based Systems
+**** (ordered book)
+***** Eisinger, Norbert ; Ohlbach, Hans Jürgen ; Präcklein, Axel
+***** Content available: Elsevier ScienceDirect Journals Complete
+
+***** Artificial Intelligence, Volume 50, Issue 2, July 1991, Pages 141-181
+
+
+
+
+
+
+**** What you always wanted to know about clause graph resolution
+***** Norbert Eisinger
+
+**** 8th International Conference on Automated Deduction : Oxford, England, July 27-August 1, 1986 : proceedings
+**** International Conference on Automated Deduction (8th : 1986 : Oxford, England) Jörg H. Siekmann
+**** 1986 Berlin ; New York : Springer-Verlag
+**** Available at Engineering Library - Stacks-Floors 3&4 (Call Number: QA76.9.A96 I57 1986)
+
+
+
+
+
+*** Lingenfelder notes
+**** Clause graph
+**** Literal node
+**** Clause node
+**** Literal
+**** Clause graph link
+**** Atom
+**** Positive/negative literal
+**** Shore (positive/negative)
+**** Pure literal node
+**** Subgraph of clause graph
+**** Walk in clause graph
+**** Proof line
+**** NDP natural deduction proof
+**** External/internal line
+
+*** Google for 'transform resolution proof to Natural deduction"
+
+*** Xiaorong Huang "Translating machine-generated resolution proofs into ND-proofs at the assertion level."
+**** https://www.semanticscholar.org/paper/Translating-Machine-Generated-Resolution-Proofs-Huang/93ec39c48f8d6c99e325b896b97450522e2a1578
+
+*** Translation of resolution proofs into short first-order proofs without choice axioms Hans de Nivelle ∗
+**** http://www.sciencedirect.com/science/article/pii/S0890540105000416
+
+*** H. de Nivelle, Extraction of proofs from the clausal normal form transformation, in: J. Bradfield (Ed.), Proceedings of the 16 International Workshop on Computer Science Logic (CSL 2002), Lecture Notes in Artificial Intelligence,
+
+*** Automated Proof Construction in Type Theory using Resolution
+**** H. de Nivelle
+**** http://dspace.library.uu.nl/bitstream/handle/1874/89/c1.pdf
+**** https://pdfs.semanticscholar.org/d86c/36c131ebf936f1f977a2a690ea5381a37aca.pdf
+**** Gives a lambda expression for resolution proof
+
+** Since the 1980s, type theory has been a popular choice for the logical basis of computer theorem proving systems. hol [24], imps [20], Isabelle [46], ProofPower [40], pvs [45], and tps are examples of systems based on versions of Church’s type theory, and Agda [11], Automath [44], Coq [10], lego [48], and Nuprl [9] are examples of systems based on constructive type theories.

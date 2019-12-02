@@ -1,0 +1,17 @@
+#+STARTUP: showall
+* * convert existing to org mode items
+* ** program to do conversion
+* *** what is the file format? - top level is one =*=, one for for each
+* ***** define class with indentation, link to previous with same or lower
+* ***** skip blank line
+* ***** if indentation increases
+* ****** push onto stack
+* ******        
+* ***** if decrease
+* ****** find corresponding entry in stack
+* ****** walk back links, 
+* ****** how to handle return to previous indent
+* ****** remove leading special char if it matches
+* ***** write line with markup
+* ***** close file
+

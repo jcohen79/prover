@@ -1,0 +1,67 @@
+#+STARTUP: showall
+
+
+
+* Use theorem proving to determine the expected outcome of tests
+** The model did that previously, but was hard to maintain because it integrated all the behaviors into code.
+** Expressing behavior as individual axioms allows the interaction to be handled by the prover.
+** Model
+*** Purpose
+**** Sends commands to app
+**** Creates representative objects correspond to predicates (semantic resolution)
+**** Evaluates state using predicates
+**** The specifications describe the expected results of the predicates
+**** How to determine the allowed next steps?
+***** Each command is described by a predicate. See which ones are true in a given state.
+***** Old approach had to implement each transition wherever it applied. Specs can describe at a higher level where the transition should be and what they should do.
+*** Generate model code from a specification of the model
+**** Provide skeleton of model
+***** Need initial model for semantic resolution, then refine it
+****** Model needs to be a valid valuation. Report what needs o be chaged
+**** Skeleton refers to query to fill in content
+***** Transitions
+****** Which transitions are allowed
+****** Parameters to generate for each transition
+***** Commands (response to transition)
+***** Calls to app
+***** Validation
+**** Find the list of transitions
+***** Get list of function/predicate symbols; see for each one, check if it satisifies f(x) & other conditions.
+****** How to terminate?
+****** Create an assertion whose refutation requires checking each possible transition. Then how to read out the info from the proof?
+******* Each predicate will be resolved out at some point.
+****** Assert that each transition has been set as either enabled or disabled, and if enabled has a valid parameter setting
+**** Find the parameters for event for each transition
+***** Part of refutation should be that parameters are valid. Then for example the result from a random function should be asserted as valid.
+
+* Use to simplify model base testing
+*** Map app tree to sdi, make assertions about them
+**** Don't try to construct state, just compare to previous state
+***** Check conditions between previous and new state
+***** Check system invariant
+***** Command specifies relation between before and after state
+*** Can spec language speed up state checking?
+**** It's easier to analyze for completeness
+*** How to perform checks driven by formal specs?
+**** Evaluate,  symbol table refers to Sdi objects, methods
+** Change Sdi to report unexpected behavior
+*** Summarize by feature/command: inconsistencies found
+*** Update model state after each command
+**** Objects and attributes
+**** Express conditions to check for
+**** Model still says what commands are enabled
+**** Eventually catch up: when behavior is completely specified
+*** First step is just drive more behavior
+**** That will check changes in app behavior
+**** Then add more checks, conditions in specs
+
+
+* Generate code for model based testing
+** Check post-conditions of commands. This is not tested now.
+*** This is simple evaluation
+** Currently the testing is mainly what commands are enabled: otherwise a problem shows up in model or app.
+
+
+* Convert existing model to symbolic form
+** Start generating reports of what is defined
+** Express in form than can be regenerated

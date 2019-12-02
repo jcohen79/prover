@@ -1,0 +1,24 @@
+#+STARTUP: showall
+
+* * Org mode
+* ** https://alxndr.github.io/blog/2015/06/20/getting-started-with-Spacemacs.html
+* ** https://bitbucket.org/genivu/prover/src/master/
+* ** https://karl-voit.at/apps-I-am-using/
+* ** https://orgmode.org/orgcard.pdf
+* ** https://orgmode.org/orgguide.pdf
+* ** https://orgmode.org/org.pdf
+* ** https://emacs.stackexchange.com/questions/29385/generate-a-toc-index-org-file-out-our-headings-from-all-org-files
+
+* * Emacs
+* ** https://www.masteringemacs.org/article/running-shells-in-emacs-overview
+* ** https://www.gnu.org/software/emacs/manual/html_node/emacs/Registers.html#Registers
+* ** https://www.gnu.org/software/emacs/refcards/pdf/refcard.pdf 
+* ** http://spacemacs.org/doc/DOCUMENTATION.html
+* ** https://github.com/typester/emacs/blob/master/lisp/iimage.el
+* ** https://stackoverflow.com/questions/9780124/insert-image-into-text-buffer
+* ** https://stackoverflow.com/questions/1494658/how-can-i-change-my-cygwin-home-folder-after-installation
+* ** https://cygwin.com/cygwin-ug-net/cygwin-ug-net.html
+* * Eclipse
+* ** using Vrapper: [[http://vrapper.sourceforge.net/home/][doc]]
+
+

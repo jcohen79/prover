@@ -1,0 +1,87 @@
+#+STARTUP: showall
+* Purpose: 
+** Make it standard/easier to bind methods to vertices. Is a high level visitor pattern for complex structures.
+** Used for
+*** Path expression
+*** Code gen
+*** Query language
+*** Transform parse tree to input to graph matching
+*** Specialized code for eg. invoking resolution as part of applications
+** Allow same graph to be displayed, executed or transformed. Based on language (like EmitConfig)
+** Support consistent interpretive and code gen (compiled) approaches 
+*** Associate both compiled and symbolic definition of methods
+** Allow multiple transformations to be constructed from a single template
+* Is basically a dispatcher
+** Automate the EmitConfig.Setup by using reflection
+** Instead of returning a value, call to provide the edgedef/context to set for the result(s)
+*** That's what it will do anyway most of the time
+*** Can use tail of edge to handle distinct results, not just list
+*** Provide convenience method Result(value) to create the edge
+** Provide a collection of available evaluators, based on looking for edgedef on basis
+*** Potentially also conditions applied to the basis
+*** Language is a set of edgedefs, with methods registered for each 
+**** } Also has the edge path to find the method
+* Evaluator for a structure: 
+**  class that invokes correct method for a vertex
+*** Generalize based on existing emit path 
+**** } Apply atom provides or refers to path to use
+**** } What symbol to use as origin for fn path? Always basis?
+**** } How to allow context to provide that?
+**** } Allow for inheritance of possible paths (each language provides a path)
+*** How to write recursive calls: call method on evaluator with vertex and def used to locate that arg (or otherwise identifies step in algorithm). Also source vertex? Just use the edge, it has all that.
+*** Options for evaluator - define interface and subclasses to mix/match
+**** } Find def node for vertex arg
+**** } Get sub-evaluator
+**** } Sub-restrictor
+*** Core uses the options to get sub eval and method,
+**** }  check args, invoke method, return result
+** Put attributes on methods to say when each method is invoked
+*** Purpose: easily register method or class to use (more general that Emit)
+*** Eval: function that is applied to edge or vertex
+**** } Methods call eval on their arguments, (that traverses the graph). Arguments are defined by the edges to traverse. Identifier the evaluator to apply.
+**** }  then assemble the results.
+*** Use reflection to add references to methods into def objects in the graph. A graph then has a symbol table to find the objects to attach methods to.
+*** Need graph structure to define evaluator (e.g. codegen, query)
+**** } How to find the method for a given evaluator
+**** } Group methods by evaluator being defined.
+**** } Evaluators can inherit from each other
+**** } Avoid locking methods to specific edgedefs: Add methods to a language structure than can then be applied to a given graph structure.
+*** Key language features
+**** } Eval: evaluator is obtained from vertex
+**** } Lambda: bind and then evaluate terms in sequence.
+***** Bind means to build a symbol table.
+***** This is language that should be generated, then translate to eg. C#
+** Standard arguments for method:
+*** Edge in graph being evaluated: get tail, edgedef, head if needed
+*** Object to hold parameters, so it can be extended
+*** Symbol table (save, bind and restore)
+*** Mode: current evaluator being run (is applied to subterms)
+*** restrictor
+** Evaluator gathers arguments and uses reflection to call method
+** Return value is a vertex
+** Can this concept be used to describe codegen and query?
+* Garbage collection: weak references, list of live references. Invoke cleanup to remove weak referenced objects.
+* Later: Need if expr
+** Virtual fn to call in case of null, or parser to return dummy child that is not null
+** Basis is null now
+** Create vertex for null
+*** BuildSubtree check for null child: assign null
+
+* Todo:
+** Goal: redefine codegen to use this approach
+*** Then add path expression
+*** Query processor
+** Define attribute to mark methods
+*** Delegate type: standard args
+*** Type to hold extra args
+** Find classes that contain methods to register:
+** http://stackoverflow.com/questions/949246/how-to-get-all-classes-within-namespace
+** Create vertex for each method
+*** Check args to match delegate
+** Add method/object to vertex indicated in attribute
+** Create evaluator
+*** Like emit, but check inheritance
+*** EmitConfig is a language
+** Recode codegen as evaluator
+
+* Test: construct example graph, parse and run a pathExpr with given start vertex, check result

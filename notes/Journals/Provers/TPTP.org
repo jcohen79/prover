@@ -1,0 +1,24 @@
+#+STARTUP: showall
+* Using TPTP
+
+* File structure http://www.cs.miami.edu/~tptp/TPTP/TR/TPTPTR.shtml
+** The languages currently supported are 
+*** thf - formulae in typed higher-order form,
+**** tff - formulae in typed first-order form, 
+*** fof - formulae in first order form
+*** cnf - formulae in clause normal form
+
+* From <http://www.cs.miami.edu/~tptp/TPTP/TR/TPTPTR.shtml> 
+
+
+* http://www.cs.miami.edu/~tptp/cgi-bin/SeeTPTP?Category=Documents&File=SyntaxBNF
+** PROLOG format
+** BNF looks like
+*** <TPTP_file>            ::= <TPTP_input>*
+** <TPTP_input>           ::= <annotated_formula> | <include>
+** Rules:  ::= syntax, :== semantic, ::- tokens, :::: char classes
+
+
+* http://www4.in.tum.de/~blanchet/tff1spec.pdf
+
+** TFF1:TheTPTPTypedFirst-OrderForm withRank-1Polymorphism

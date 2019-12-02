@@ -1,0 +1,15 @@
+#+STARTUP: showall
+* React
+*** is faster than Angular
+** https://facebook.github.io/react/docs/getting-started.html
+* SuperAgent:  get/post  https://visionmedia.github.io/superagent/
+* Flux: react framework - https://facebook.github.io/flux/docs/todo-list.html
+
+* Xming - X-Windows on windows - http://www.straightrunning.com/XmingNotes/
+
+
+* Devtool:
+** - webstorm
+
+* How to learn react?
+** Does Stackedit work with react?

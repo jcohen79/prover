@@ -1,0 +1,20 @@
+#+STARTUP: showall
+** Understand how axioms need to be structured so the correspond to code (see specification detail page)
+** Try out a resolution prover using Coq
+** First demo simple code generation
+*** Show that code corresponding to proof makes sense
+*** Simple example, without paramodulation
+** Write axioms - specs: commands, required output state
+** Write assertion to prove - there exists a sequence of commands with required output state
+** Relate to code:
+*** Associate method with each axiom. Type of method fits type of axiom
+*** Compose the methods using de Nivelle formula
+**** https://pdfs.semanticscholar.org/d86c/36c131ebf936f1f977a2a690ea5381a37aca.pdf
+*** Invoke method on initial state
+*** Write out result as term
+*** Convert term to code
+*** Run code
+
+* Issues
+** Formulate code for axioms according to type of axioms
+** What is input to combined function?

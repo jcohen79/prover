@@ -1,0 +1,41 @@
+#+STARTUP: showall
+* http://docs.mathjax.org/en/latest/misc/mathjax-in-use.html
+
+* Don't need stackedit
+** https://stackedit.io/
+** Git clone https://github.com/benweet/stackedit
+
+*** Install: https://github.com/benweet/stackedit/blob/master/doc/developer-guide.md#developer-guide
+
+**** Start stackedit:
+***** https://gist.github.com/nztim/68824b729aef5ffce2c4
+**** Guest: ip addr show
+**** Use cygwin/X
+***** http://x.cygwin.com/docs/ug/cygwin-x-ug.pdf
+**** Host: ssh -Y osboxes@192.168.1.121
+**** Cd stackedit ; pm2 start server.js
+**** http://192.168.1.121:3000/
+
+* Set up ssh into guest server
+** sudo apt-get update
+** sudo apt-get install openssh-server
+** sudo ufw allow 22
+
+** From <http://askubuntu.com/questions/51925/how-do-i-configure-a-new-ubuntu-installation-to-accept-ssh-connections> 
+
+** https://help.github.com/articles/generating-ssh-keys/
+** https://help.ubuntu.com/community/SSH/OpenSSH/Configuring
+
+
+** add mathjax to server
+*** bower install MathJax
+*** From <https://docs.mathjax.org/en/latest/installation.html> 
+*** Verify editing documents
+** Parse existing language into graph
+** Reload graph state with new document
+
+
+* Using
+** - Npm (node package manager)
+** - Bower - front end package manager
+** - http://docs.docker.com/windows/started/

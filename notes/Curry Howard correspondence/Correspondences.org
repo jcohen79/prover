@@ -1,0 +1,224 @@
+#+STARTUP: showall
+
+* | Logic                            | 	Type	                               |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Proof	                          | program	                              |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Formula	                        | type	                                 |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | conjunction (A /\ B)             | 	Product type (pair of A and B)	     |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Disjunction (A \/ B)             | 	Sum type (tagged union of A and B)	 |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | False	                          | Bottom type (empty type)	             |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | True                             | 	Unit type (singleton type)	         |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Universal quantification         | 	Generalized product type             |                                                                                                                                                                                     |   |   |
+* | (for all x in A, B(x) )          | 	dependent product from A to B)       |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Existential quantification       | 	Generalized sum type	               |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Implication (A implies B)        | 	Function type (function A to B)	    |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Hilbert-style deduction system	 | Type system for combinatory logic	    |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Natural deduction                | 	Type system for lambda calculus	    |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Hypotheses                       | 	Free variable	                      | Natural deduction                                                                                                                                                                   |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Implication elimination          | 	Application                          | 	"                                                                                                                                                                                 |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Implication introduction         | 	abstraction                          | 	"                                                                                                                                                                                 |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | A \/ ~A, Peirce’s Law            | 	callcc	                             | Peirce’s Law: T. Griffin. A formulae-as-types notion of control. In Principles of Programming Languages (POPL), pages 47–58. ACM, Jan. 1990.                                        |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Double negation translation      | 	Callback-passing style	             |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Friedman’s translation           | 	dynamic exceptions 	                |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Cohen’s forcing                  | 	global variables	                   |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Dialectica translation	         | scoped gotos (à la Python’s yield) 	  |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | continuations (τ cont)           | 	classical negation (¬A)              | 	https://www.cs.cmu.edu/~rwh/courses/typesys/hws/hw5/hw5-handout.pdf                                                                                                               |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Quantification over              | 	type abstraction in                  |                                                                                                                                                                                     |   |   |
+* | propositional variables in       | second-order                           |                                                                                                                                                                                     |   |   |
+* | second-order logic               | calculus                               |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | existential quantification       | 	data abstraction	                   |                                                                                                                                                                                     |   |   |
+* | in second-order logic	          |                                        |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Kolmogorov and Godel’s           | continuation-passing                   |                                                                                                                                                                                     |   |   |
+* | double-negation translation	    | style transformation	                 | C. Murthy. An evaluation semantics for classical proofs. In Logic in Computer Science (LICS), pages 96–107, 1991.                                                                   |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* |                                  | 	partial evaluation                   | 	R. Davies. A temporal-logic approach to binding-time analysis. In Logic in Computer Science (LICS), pages 184–195, 1996.                                                          |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* |                                  | 	functional reactive programming      | 	A. Jeffrey. Causality for free!: parametricity implies causality for functional reactive programs. In Programming Languages meets Program Verification (PLPV), pages 57–68, 2013. |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Cut-elimination                  | 	evaluation	                         |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Induction                        | 	recursion	                          |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+* | Consistency                      | 	termination	                        |                                                                                                                                                                                     |   |   |
+* |                                  |                                        |                                                                                                                                                                                     |   |   |
+* |----------------------------------+----------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+---|
+
+* Quantifiers are in section 9.1.4 in Mitchell, Foundations of Programming Languages
+
+* http://homepages.inf.ed.ac.uk/wadler/papers/propositions-as-types/propositions-as-types.pdf
+** Lots of discovery papers listed
+
+* https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence
+
+* https://en.wikipedia.org/wiki/Peirce%27s_law
+** ((P→Q)→P)→P  is the type of continuaton operators
+
+
+* https://en.wikipedia.org/wiki/Lambda-mu_calculus
+** https://metatheorem.wordpress.com/2011/11/23/notes-on-parigots-paper-introducing-the-lambda-mu-calculus/
+
+
+** For proof systems based on higher-order typed lambda calculus through a Curry–Howard isomorphism, cut elimination algorithms correspond to the strong normalization property (every proof term reduces in a finite number of steps into a normal form).
+*** From <https://en.wikipedia.org/wiki/Cut-elimination_theorem> 
+
+
+** Second order
+*** http://cstheory.stackexchange.com/questions/25367/how-to-translate-the-axiom-schema-of-induction-by-curry-howard
+
+
+* Lectures on the Curry-Howard Isomorphism, Volume 149 (Studies in Logic and the Foundations of Mathematics)
+** From <https://www.amazon.com/dp/0444520775/?tag=stackoverfl08-20> 
+** UW online: http://alliance-primo.hosted.exlibrisgroup.com/UW:all:CP71189404440001451
+
+* Advances in Natural Deduction: A Celebration of Dag Prawitz's Work
+** From <https://books.google.com/books?id=eOskBAAAQBAJ&pg=PA66&lpg=PA66&dq=equality+curry+howard&source=bl&ots=PISOqoCb6q&sig=BPmZRRUdc2YJnuAyPOvfDqt_wSE&hl=en&sa=X&ved=0ahUKEwil3Mjqk5DSAhVsz1QKHZcsA7EQ6AEIUDAJ#v=onepage&q=equality%20curry%20howard&f=false> 
+** UW Online: http://alliance-primo.hosted.exlibrisgroup.com/UW:all:CP71203186880001451
+** See:  Natural Deduction for Equality, pg 63
+
+* The Functional Interpretation of Logical Deduction
+
+** From <https://books.google.com/books?id=aFO6CgAAQBAJ&pg=PA151&lpg=PA151&dq=%22Natural+Deduction+for+Equality%22&source=bl&ots=9y1Cbg8UR8&sig=NBlJIYuCLFfihb5reusDOqwLn4E&hl=en&sa=X&ved=0ahUKEwjCsa36mZDSAhWJilQKHQOMB8YQ6AEIJjAD#v=onepage&q=%22Natural%20Deduction%20for%20Equality%22&f=false> 
+** UW OnlineL http://alliance-primo.hosted.exlibrisgroup.com/UW:all:CP71195078650001451
+
+* Type Theory and Formal Proof: An Introduction
+** From <https://books.google.com/books?id=wzTJBAAAQBAJ&printsec=frontcover&dq=dependent+type+theory&hl=en&sa=X&ved=0ahUKEwi1sva0oJDSAhVJ5GMKHTqzBBoQ6AEIKjAD#v=onepage&q=dependent%20type%20theory&f=false> 
+
+* Equality is described in Mitchell "Foundations for Programming Languages" pg 628
+
+* Practical Foundations for Programming Languages
+** From <https://www.cs.cmu.edu/~rwh/courses/typesys/> 
+** https://www.amazon.com/Practical-Foundations-Programming-Languages-Professor/dp/1107029570
+** http://www.cs.cmu.edu/~rwh/pfpl/2nded.pdf
+
+
+* Agda: language based on Dependent types
+** http://www.cse.chalmers.se/~ulfn/papers/thesis.pdf
+
+* Interesting discussion of the applicability
+** http://lambda-the-ultimate.org/node/1532
+
+* Idris: similar to Agda
+
+* PROOFS AND TYPES , Girard
+** http://www.paultaylor.eu/stable/prot.pdf
+
+* The Seven Virtues of Simple Type Theory
+** http://imps.mcmaster.ca/doc/seven-virtues.pdf
+** "Simple type theory, also known as higher-order logic"
+
+* Extended Curry-Howard terms for second-order logic
+** Math. Log. Quart. 59, No. 4–5, 274–285 (2013) / DOI 10.1002/malq.201100102
+** Pimpen Vejjajiva
+
+** file:///C:/Users/JonathanCohen/Downloads/Vejjajiva-2013-Mathematical_Logic_Quarterly.pdf (on sur-pro)
+
+
+* A Defense of Second-Order Logic
+** Bueno, Otávio
+** Axiomathes, 2010, Vol.20(2), pp.365-383
+** (no access, argues that objections to 2nd order can be met)
+
+** Second-order logic has a number of attractive features, in particular the
+** strong expressive resources it offers, and the possibility of articulating
+** categorical mathematical theories (such as arithmetic and analysis). But it
+** also has its costs. Five major charges have been launched against second-order
+** logic: (1) It is not axiomatizable; as opposed to first-order logic, it is
+** inherently incomplete. (2) It also has several semantics, and there is no
+** criterion to choose between them (Putnam, J Symbol Logic 45:464–482, 1980).
+** Therefore, it is not clear how this logic should be interpreted. (3)
+** Second-order logic also has strong ontological commitments: (a) it is
+** ontologically committed to classes (Resnik, J Phil 85:75–87, 1988), and (b)
+** according to Quine (Philosophy of logic, Prentice-Hall: Englewood Cliffs,
+** 1970), it is nothing more than “set theory in sheep’s clothing”. (4) It is
+** also not better than its first-order counterpart, in the following sense: if
+** first-order logic does not characterize adequately mathematical systems, given
+** the existence of non - isomorphic first-order interpretations, second-order
+** logic does not characterize them either, given the existence of different
+** interpretations of second-order theories (Melia, Analysis 55:127–134, 1995).
+** (5) Finally, as opposed to what is claimed by defenders of second-order logic
+** [such as Shapiro (J Symbol Logic 50:714–742, 1985)], this logic does not solve
+** the problem of referential access to mathematical objects (Azzouni,
+** Metaphysical myths, mathematical practice: the logic and epistemology of the
+** exact sciences, Cambridge University Press, Cambridge, 1994). In this paper, I
+** argue that the second-order theorist can solve each of these difficulties. As
+** a result, second-order logic provides the benefits of a rich framework without
+** the associated costs.
+
+* Where First-Order and Monadic Second-Order Logic Coincide MICHAEL ELBERFELD and
+* MARTIN GROHE, RWTH Aachen University TILL TANTAU, Universitat zu L ¨ ubeck
+* file:///C:/Users/JonathanCohen/Downloads/a25-elberfeld.pdf (SURFACE PRO) From
+* <http://dl.acm.org/citation.cfm?doid=2996393.2946799> We study on which classes
+* of graphs first-order logic (fo) and monadic second-order logic (mso) have the
+* same expressive power. We show that for all classes C of graphs that are closed
+* under taking subgraphs, fo and mso have the same expressive power on C if and
+* only if, C has bounded tree depth. Tree depth is a graph invariant that measures
+* the similarity of a graph to a star in a similar way that tree width measures
+* the similarity of a graph to a tree. For classes just closed under taking
+* induced subgraphs, we show an analogous result for guarded second-order logic
+* (gso), the variant of mso that not only allows quantification over vertex sets
+* but also over edge sets. A key tool in our proof is a Feferman--Vaught-type
+* theorem that works for infinite collections of structures despite being
+* constructive.
+
+* SECOND ORDER LOGIC OR SET THEORY? Väänänen, Jouko ; Jouko Väänänen The Bulletin
+* of Symbolic Logic, 1 March 2012, Vol.18(1), pp.91-121 [Cited by] We try to
+* answer the question which is the "right" foundation of
+* mathematics, secondorder logic or set theory. Since the former is usually
+* thought of as a formal language and the latter as a first order theory, we have
+* to rephrase the question. We formulate what we call the second order view and a
+* competing set theory view, and then discuss the merits of both views. On the
+* surface these two views seem to be in manifest conflict with each other.
+* However, our conclusion is that it is very difficult to see any real difference
+* between the two. We analyze a phenomenon we call internal categoricity which
+* extends the familiar categoricity results of second order logic to Henkin models
+* and show that set theory enjoys the same kind of internal categoricity. Thus the
+* existence of non-standard models, which is usually taken as a property of
+* first order set theory, and categoricity, which is usually taken as a property
+* of second orderaxiomatizations, can coherently coexist when put into their
+* proper context. We also take a fresh look at complete second order
+* axiomatizations and give a hierarchy result for second order characterizable
+* structures. Finally we consider the problem of existence in mathematics from
+* both points of view and find that second order logic depends on what we call
+* large domain assumptions, which come quite close to the meaning of the axioms of
+* set theory.
+
+* Logic and structure D. van (Dirk) Dalen, 1932 Dirk van Dalen's popular
+* textbook Logic and Structure, now in its fifth edition, provides a comprehensive
+* introduction to the basics of classical and intuitionistic logic, model theory
+* and Gödel's famous incompleteness theorem. Propositional and predicate logic are
+* presented in an easy-to-read style using Gentzen's natural deduction. The book
+* proceeds with some basic concepts and facts of model theory: a discussion on
+* compactness, Skolem-Löwenheim, non-standard models and quantifier elimination.
+* The discussion of classical logic is concluded with a concise exposition
+* of second-order logic. In view of the growing recognition of constructive
+* methods and principles, intuitionistic logic and Kripke semantics is carefully
+* explored. A number of specific constructive features, such as apartness and
+* equality, the Gödel translation, the disjunction and existence property are also
+* included. The last chapter on Gödel's first incompleteness theorem is
+* self-contained and provides a systematic exposition of the necessary recursion
+* theory. This new edition has been properly revised and contains a new section on
+* ultra-products.
+* -file:///C:/Users/JonathanCohen/Downloads/logic%20and%20structure.pdf Surface
+* pro

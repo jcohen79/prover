@@ -1,0 +1,38 @@
+Knowledge Map
+
+ short term
+	 how to make diagram update slowly?
+	     compute motion quickly, then user linear interpolation to final position
+		 don't start from overate, use old values, update old nodes instead of
+			 creating new
+		define a service to build diagrams, diagrams stored in mongo
+		   user can have a list of diagrams they ar working one, define with entities/relationships/attrs
+		   operations cause server to update a diagram, send changes to client
+		   
+
+ exploratory graph
+  make it touch oriented: click on node to show possible extensions
+  
+  client makes request, process updates in response
+   server builds  diagram in DB, send client a diagram update json command
+   
+  operations:
+     extend graph, trim graph
+	
+  	
+   
+ Application Modernization
+	 search db from ingestion
+	  generate diagram
+	  relationship to workbench:
+	         use the pipe to generate the json svg data to the client
+			 configure mapping of data structure to diagram/ Ul components
+				replace clumsy	attempts at DSLs in TS with real language,
+					 can view logic of Ul in multiple views
+			  WYSIWYG on sample data
+			 relations to whiteboard:
+				 having projection on desktop allows richer graphic ul
+				  show diagram of flow between pipe local vs remote
+			  
+			  
+	   how to demo?

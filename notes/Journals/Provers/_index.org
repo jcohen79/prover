@@ -1,0 +1,10 @@
+#+STARTUP: showall
+* [[file:_main.org][_main]]
+* [[file:TLA.org][TLA]]
+* [[file:PVS.org][PVS]]
+* [[file:LEO-II.org][LEO-II]]
+* [[file:TPTP.org][TPTP]]
+* [[file:Isabelle.org][Isabelle]]
+* [[file:Satallax.org][Satallax]]
+* [[file:Try it.org][Try it]]
+* ]

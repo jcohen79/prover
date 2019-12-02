@@ -1,0 +1,318 @@
+#+STARTUP: showall
+* [[file:eqs.png]]
+
+* If a soln to an eqs is subsumed by previous soln discard it
+** Need way to check for subsumed Vbv?
+
+* Why more than one solution for an eqs with a vbl?
+* 0FCAB TransferRight - Eqs: {eqs#0 ((@0) ((F  (F  @1 @2) @2)))}, <#2457 <#2458 1/3 0:3$2457>2:5$2458, 0:6$2458>
+
+
+* Todo: remove redundant vbv
+** Change vbv.nSize to add size for replacement
+
+* Eqs.fStep: how to consider in just one direction?
+** Flip result?
+* Cmr.fAcceptSolution seems wrong
+
+
+* Pvp TODO: add tests
+** Add versions of Pv6p with B&A side terms
+
+** Use same makeReplacementStep as for Pvp.pvpForJoin
+** Vbls
+*** Need to add pti vblIds that are needed.
+
+** Offsets
+*** Need to update mof in pvpStep.fPerform
+*** Add rgnRemoveDups to pvp
+** Cgs
+*** Sbst one pti into another pti, that creates a new pti. Need a new pvb class?
+
+
+
+
+** Use calls to nMapToLocalId in Pvp
+** vbvSource arg to nMapToLocalId might not be vbvA/B when processing a Pti
+* Where to put from? To verify that old value matches
+** Add a field to vbv for nReplaceFromPosn
+** Set similar to nReplaceFromPosn nReplaceWithPosn 
+* Need to update offsets in asc inserted into
+
+* Cgs: creates a new Pvp that can be used for many pvc
+** Put in cache
+
+
+* Sequence of tests
+** Matching fixed terms to check different offsets
+** Equate vbl to term
+** Terms that contain vbls
+** Multiple vbls with terms
+** One side vs other side
+** Then multiple vba single step
+** Pti
+** cmr
+* More multi-term unify tests: check that vba are merged
+
+** Asc.CreateProofSteps
+*** Add code to handle Paramodulation step as Rib ancestor
+**** Solution matches, pti (rhs) says what to check, replace
+**** Are there any clauses created this way? What about  Cmr?
+***** } Why is Cmr.Urg.Resolved not implemented?
+***** } Cmr.ascMakeCombined is implemented
+*** Need to show the pti that apply
+**** Map where the pti was applied in subproblem to location in actual asc
+***** } Need to apply the vba terms needed to match (same with resolution steps)
+**** Do the sbst need to apply to actual asc
+
+*** When K matches multiple terms,
+**** Need to set up search for more terms
+**** For verfication, Only report the mask that has max set of terms that K matches (both sides)
+
+* Failing reslab2 and russel: get the verification working first. Then work on 
+
+* rgnNewIdTable: fix handling for non $A, $B or get rid of
+* Have ugly vbvB in Vbv.MapVbaFromChild
+* How to validate SplitVbv, as used by Cmr and Eul?
+
+* Validate: if vblId n is sbst'd out, then mapping cannot map any output vblId back to n
+
+* Get rid of Vbv.avcOfValue: get rid of Abt
+
+** Fix SplitAt
+*** Remove old paramodulation class (Pmu?)
+*** Get rid of avcForValue
+**** Is used to build abt. See need to get rid of abt from fMergeTerms first. Replace with top pair of vbv?
+*** Remove Rte, replace with Vbv
+*** Clause context: Vcc: has value of $A and $B. 
+**** Eur is still flipped, it is the identity of the vbls that matters.
+**** Class with vbvForA, vbvForB  (rename others to vbvRefA, vbvRefB)
+**** No need to copy lower level Vbv.
+**** Pass around Vcc instead of vbvOutput, vbvPti, etc.
+*** debugging
+**** Define new class derived from Vba to add nId, vbaPred, vbv. Add vbaMake and use #if DEBUG
+**** Or write steps to log.
+*** fMergeTerms: asb is included in vbv, pass in vbv only.
+
+* Does Eqs need to check for x=F(x) 
+** If variable is bound, the result could match other side.
+
+* steps
+** Why is out of order reslab2 failing?
+
+** Get rid of Rte.avcForValue
+** Get rid of  Mtp.StartGlobalHack
+** Spb.rgnMapBack : need to put vbvLocalId in alternating bytes
+** Fix Spb based ShowTerm
+*** ShowTerm
+**** vbl
+*** Remove SetValueOnTde
+*** Remove SetVbvValueOnTde
+*** Remove rteRoot arg to shv.fMergeClauses
+** Using new ShowTerm
+*** Change Esd.EquatePair to not use Mtp
+**** Remove mtp
+**** Remove RteBuildTree, all of rte?
+** Replace Mtp.StartGlobalHack - using vbvLocalId_s
+** Define Vba as struct
+** Vbv uses index for first/next child
+** Remove rteFrom from fMergeClauses ? Replace with what?
+** New class that has:
+*** Array of vbv
+*** Array of vba
+** Pass arrays into ShowTerm
+** Create new base class for Euh, Etp
+*** Move id, Ent methods there
+*** Move fProcessSolution from Euh, Etp
+** Map each vbvLocaIId in new solution
+*** If refers to vbv in new soln, map shifts by offset
+*** If refers to atp that requested soln, then use map back to earlier vbv (maybe replace with new vbv using array)
+** Add new vblv/vbl instances when adding a soln containing a pti  (etp and others)
+*** Need to copy entire tree, so instead use fully qualified path as vbl id
+** Remove old code: res.fCpgParamodulation
+** Rename n, rgn to usage specific
+
+
+
+
+** Should offsets also map back to offset+vbvId?
+*** To convert atp soln back to form that identifies the vbls that occur in that term
+** Use vbvLocalId instead of vbvForValue, then map? (is just small perf improvement)
+** Merge ShowTerm into Spl, get rid of tde outside of embed
+
+
+** Each field is relative to some context. Describe that context.
+*** Then contexts can be mapped, describe effect on values relative to orignal context, result in new context
+
+** Review the logic in the map child fns for etp
+
+*** Get K example from book (misses removing tautology)
+*** Remove clauses that equality can show as tautology,  duplicate terms, or match K
+***** } Set up request, set up so when found it goes back and filter out later
+**** Remove  requests made by a clause that is removed - use gnp for receivers registered?
+**** Can never check all pti_s up front, so removing the clause after is the only option
+**** Need to handle all pairs of terms, in any order
+***** } Each pair of terms is an atp/eqs. 
+***** } Define class to attach to eqs
+****** Has a pair of terms, the clause appears in
+****** When match found, remove that clause and create a simpler asc, register its pairs
+****** Remove listeners for term pairs on old asc. 
+****** Asc has list of listeners
+***** } Attach list to Eqs for the atp of term pair.
+***** } Process solution for eqs does this list first.
+****** Only walk list for solutions that assign no vbls. Will just be rteFirst that also has no vbls
+******* Vbls that are bound to other vbls are needed. 
+******* No side literals 
+******* Can't allow other terms, those are special cases.
+
+**** Request eqs for each pair of terms
+***** } Will need them anyway
+***** } Listener first checks solution, skip if any vbls were set
+***** Set up an Etp like object to step through check for duplicates, match K, and tautology
+***** Continue Quick check during merge terms.
+***** Skip the rte (see if tests break)
+***** Define/register objects that wait for match (no sbst) to K, for dup with K. Also tautology between any pair of opposite literals. Have a list of all clauses to cancel for each one of those.
+***** Same for embed/filter out?
+
+** Avoid need to convert to Tde. Make vba array or replace tde with vba?
+** Verifier
+*** Generate program that defines results of steps as vbl
+**** Perform simple operations: find mgu, unify, resolve, substitute equality
+**** check expected results  each step
+**** First build list of records, execute them, then print them
+** More tests
+*** Variables
+**** Transitive pti
+**** Left and right side of pti
+**** Left and right side og clause that has pti applied
+*** Pti_s different levels
+**** Side literals to check vbls are substituted
+*** Check sbst applied from left to right in Eub
+*** Transitive pti
+*** Construct examples: resolve, including equality axioms
+**** Existing test generator does logical connectives, test sko
+**** Instead: select 
+***** Left, right clause:
+****** Num terms: pos/neg
+***** Num equalities: 
+****** num side literals
+***** Depth limit
+***** Subterm: 
+****** 1-term: Fn + subterm
+****** 2-term: fn + subterm+ subterm
+****** Constant (f0) 
+****** vbl
+**** Compare to eqm result
+**** If soln found: Perform generated validation
+** Vbv.nPriority() is broken, need to get value from pti vs asc , depending on nHeight
+** Check both directions of 
+*** Atp for eqsObtain
+*** Direction of Pti
+*** Equals for Asc: mark fn like '=' as symmetric; check both orders
+** How to handle a group of literals together?
+** Where is x=x handled? Starting axiom
+*** If two sides of pti are same, it is subsumed by x=x
+** Subsumes: Check for commutative
+** Add Eub to prs only if not empty.  Remove if exhausted, add back when reactivated
+** Capture source of asc: nested pti
+** Validate proofs
+*** Generate program that runs and 
+**** performs the pti
+**** Resolves clauses
+**** Saves result ,var name generated from id
+
+** How to equality inferences in half?
+*** Only do Cpg when nId that is <= on left side
+*** Do lookup in both directions
+*** Create compound pti in other direction
+**** Need to reverse the Rte
+
+*** Only to cpg inference in one direction?
+** Function to call from command window to display the prs queue, using latest res.
+*** ToString for each spr
+*** Flag to log add/remove from prs 
+**** https://github.com/NLog/NLog/wiki/Tutorial
+**** https://cmatskas.com/an-introduction-to-common-logging-api-2/
+**** https://msdn.microsoft.com/en-us/magazine/mt694089.aspx
+**** Add static loggers to Res? 
+
+
+** Later: get rid of abtToEquate. Really only needed for Eqr (partial)Add flag to res
+**** Tde are used for duration of fProcessSolution
+**** Make then specific to something constructed there: the abt? No more avc?
+** Don't produce until previous output is consumed
+*** Weight by consumer weight
+** Modify Gnp so it quickly goes back to active item
+** Reason: without this, Eqr keeps reapplying same Pti as Eqr
+*** To fix looping in Ex8OnDemand, Ex9Para 
+
+* Things to test
+** Other add other literals in equation clauses
+*** Check problems that came up
+*** Fix fMergeOtherTerms: fRight, fResolveNegSide
+*** Requirements
+**** Resolution vs modulation
+***** } Resolution: match just generates K, which is needed only to eliminate dups
+***** } Modulation: existing code does replacement
+**** ShowTerm: traverse each Rte at that level
+***** } Perform substitution on other literals for that rte, 
+****** compare to K if any, skip dup, add to ascb
+***** } Neg literals before; pos after
+**** Test: add literals, check that symbols are replaced, including lower level 
+*** fOccur check - use ShowTerm to look for full expansion of var?
+**** Change it to iterator of id, or use rte again?
+** Vbl vals on left for partial equate are not used
+** Could modulation occur after an Eqr?
+*** Currently iterates over positions in input literals
+*** Extend this to also step over positions in pti body?
+**** That is what happens for nested, the difference is those are for different locations
+**** Current approach require intermediate steps be own modulation step
+**** The eqr are just for subterms of the modulated term
+* Use this to check for subsumes: is it still needed, or is effort not worth it, or are they easier to find now?
+
+* ----------------------------------------------------
+
+
+* Problem:
+
+* ProveEq4Para
+
+* \forall x f(e,x)=x,
+* \forall x f(x,e)=x,
+* \forall x f(g(x),x) = e,
+* \forall x f(x,g(x)) = e,
+* \forall x \forall y \forall z f(x,f(y,z)) = f(f(x,y),z),
+* \forall x f(f(x,x),x) = e,
+* \forall x \forall y h(x,y) = f(f(f(x,y),g(x)),g(y))
+* \Rightarrow
+* h(h(a,b),b) = e
+
+* --------------------------------
+
+* ProveEq3Para
+
+* \forall x f(e,x) = x,
+* \forall x f(x,e) = x,
+* \forall x \forall y \forall z f(x,f(y,z)) = f(f(x,y),z),
+* \forall x f(x,x) = e,
+* f(a,b) = c
+* \Rightarrow
+* c = f(b,a)
+
+
+* Output progress messages
+** Status
+*** Number of queues, size of each queue
+*** Number items served each queue
+*** Number each type, how disposed
+**** Filtered out
+**** Added to existing
+**** Made new entry
+*** Watch items processed for each type of queue
+**** Define interface to perform counting, logging
+*** Show contents of each queue
+** Look at 
+*** Tasks
+*** Size of clauses in queue
+* Make a manual proof and try out steps as small proofs
+** See Example 8 page

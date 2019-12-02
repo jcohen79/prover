@@ -1,0 +1,35 @@
+#+STARTUP: showall
+
+* Use latex:
+** Can handle nested text for code templates
+
+* Lyx.org latex editor
+
+* http://www.texrendr.com/
+
+* Use OneNote:
+** Edit specs in OneNote, have program read and write from that as database.
+** Link to page to include rules.
+** Mix rules and comments
+** Enter command into file, server sees that and adds reply
+** How to handle mixed code/assertions?
+*** Symbol/font to mark code/expressions
+
+
+* Add a section to grammer for logic symbols
+** - Don't use ascii math yet (too much work)
+
+* Use mathjax in browser to render graphs
+
+* https://www.mathjax.org/
+* http://mathjax.readthedocs.org/en/latest/tex.html
+
+* Applications:
+** - Code generator
+** - Math axioms
+** - Physics
+** - Equation solver
+
+
+** - Add mathJax to client
+*** Add backticks around asciiMath

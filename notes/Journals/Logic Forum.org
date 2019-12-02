@@ -1,0 +1,14 @@
+#+STARTUP: showall
+* http://logic.berkeley.edu/
+** https://math.berkeley.edu/research/areas/logic
+** https://math.berkeley.edu/about/events/lectures/tarski
+
+* http://www.illc.uva.nl/LogicList/
+
+* http://forums.philosophyforums.com/logic-and-philosophy-of-math/
+** http://forums.philosophyforums.com/threads/recommended-reading-20167.html
+
+* Algorithms
+** http://www3.cs.stonybrook.edu/~algorithm
+
+* https://www.reddit.com/r/types/

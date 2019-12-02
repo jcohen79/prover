@@ -1,0 +1,38 @@
+#+STARTUP: showall
+
+
+* Support bound variables to get passed in from Query Language
+* Resolve symbol at run time or when setting up query from parsed input?
+** Refer to vertex in pattern, lookup by that vertex in GraphMatch, get value from there
+** Pass data vertices into SELECT  expr
+
+
+* More Atom Classes
+*** Var: define a symbol for the remainder of the current scope (sequence of template elements)
+*** Expressions
+**** Symbol: get value of var or parameter
+**** Operator atoms: edges to subexprs, arg for op to perform.
+***** Special edge for arg or special operations
+*** Statements
+**** If. Has then/else edges going to child branches, then the usual next link. Edge to condition expression vertex. Expression can use symbol bindings
+**** while
+**** Foreach
+**** Separator (inside foreach)
+**** Set value
+
+
+
+* Need a more concise way to build code subgraphs
+** Based on backquote: code template strings with place markers
+** Fluent coding to constructor builder
+*** Pass context, graph to add to, edgedef to connect sequential tokens
+
+* How to declare what edgesets should be present on a vertex, so code gen can be statically checked? 
+*** Define object type that when accessed finds the edge.
+*** Codegen method class defines those members.
+*** Later, code analysis can checked those class decs.
+
+
+* Test
+** Write templates to generate the template language
+** Validate by reading templates and parsing generated output, compare to original

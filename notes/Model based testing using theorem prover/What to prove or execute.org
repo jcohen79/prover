@@ -1,0 +1,74 @@
+#+STARTUP: showall
+* Approach
+** Use resolution to prove negation of hypothesis
+** That generates a series of refutations (assignment of values to terms)
+** Generate test cases 
+*** For each solution refutation:
+**** That implies disjunction of negation of clauses for negated hypothesis
+**** For each negated clause
+***** Assert the conjunction of negated literals
+***** Assembly all the clauses into Z3, with solution terms substituted in
+***** Those establish constraints on the values of universal vbls and skolem terms
+***** Find a solution, that is the test
+
+
+
+* Older:
+
+* Issue: The proof is a composition of functions, where the resulting function has the desired type: It's output has some desired dependence on the input. What do axioms need to correspond to in order for that proof program to be a test result, test method, or test generator?
+
+* TODO: 
+** check that axiom can be fn that builds code terms
+*** A variable xT of type T represents any term t of type T (provided that xT is replaced by t).
+*** So means a value for the var has that value.
+*** Girdard refers to (pg 17) [KriPar] J.L. Krivine and M. Parigot, Programming with proofs, Sixth symposium on somputation theory (Wendisch-Rietz, 1987). "give information about what the program calculates"
+** If the axioms can the code gen terms, does the proof put them together to generate the model methods?
+** How to axiomatize assignment? When evaluating, wxpand structure of term, looking for top one that assigns value to desired location. Write this out as axioms.
+** Try out simple example that builds code terms (should be clear it should work before trying to get it to actually work)
+
+* Some instances of equality are a check on the inputs. In other cases it is an assertion about the result of a step.
+
+* Series of steps are built up as monad?
+
+* Prove the existence of a term whose output has the desired properties, on the given conditions. 
+
+** There exists a value that meets the specifications
+** Program exhibits that value
+** Use a different levels. The value is a term that is the
+*** Test case: expected state of the app
+**** Is a pair of (input sequence, output state or sequence)
+**** Ie. Model is in the axioms, is run by the prover.
+***** Same problem as below: app is under-determined
+**** This would require axioms that are the inputs to the app
+**** Axioms for the test case to consider (could generate a series of proofs)
+**** Assertion is that there exists combinations of input/output that have the desired properties
+*** Test method: test case code
+**** Sequence of calls on app code. 
+**** Either Model generates expected value, or the expected values are in the test code.
+**** Problem is that the app has flexibility in what it can do, and model is needed to respond to that
+*** Test model: used by framework and test cases.
+**** Could run prover dynamically, or have it generate model code. Generated model code is much easier to debug.
+
+* Prove existence of model code.
+** Methods to generate
+*** Which commands are enabled
+*** Compute state that results from command, with input state as given.
+** For each method
+*** Prove existence of term that is series of statements that modify state, or return bool
+*** Consider all possible input states (possible check if command erroneously enabled)
+**** Result of statements meets model conditions in all cases
+*** Axioms include effects of statement types
+** Prover creates a Curry Howard function. How to get the code from that function?
+*** It is a function that constructs and returns the model code term?
+*** So the value of the axiom variable is a function that builds a code fragment?
+
+
+
+
+
+
+
+
+
+
+

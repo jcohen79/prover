@@ -1,0 +1,3 @@
+#+STARTUP: showall
+* [[file:_main.org][_main]]
+* [[file:Query processing.org][Query processing]]

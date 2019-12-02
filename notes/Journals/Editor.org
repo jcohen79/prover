@@ -1,0 +1,14 @@
+#+STARTUP: showall
+* E:\dev\src\Apps\MDE\XfiParse.cs
+* AppendEhoFromMdtokln 
+* ParseMdtokln
+** <- ParseBlockStructure <- EhoParsedFromEhiPara <- EhoRootFromEhiRoot
+
+* E:\dev\src\Apps\MDE\XfiTextMDE.cs
+* E:\dev\src\Apps\MDE\XfiParse.cs
+
+* Use ANTLR to generate C# parser
+** Reads sequence of node.
+** Now the nodes are stored as markdown domain
+** Simplify that to 
+* Invoke parse to create nodes

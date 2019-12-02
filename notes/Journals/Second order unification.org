@@ -1,0 +1,88 @@
+#+STARTUP: showall
+* The reason that higher order is needed is that a sequence xi of anything is a mapping from N to the domain of x.
+* To solve for that mapping we need to consider different functions to build up from, thus quantifying over all such possible functions.
+* Why isn't that just apply(xMapping, i) ? The domain of xMapping is a set of pairs. A domain of a set is not allowed in 1st order.
+
+
+* https://plato.stanford.edu/entries/logic-higher-order/
+** Mostly math
+
+* Translation from higher order to first order
+** http://jarda.peregrin.cz/mybibl/PDFTxt/484.pdf
+** Henkinian second-order interpretations do preserve satisfaction, is reducible to first order.
+** See Shapiro, Foundations without Foundationalism (ordered)
+
+
+* Levy, On the Undecidability of Second-Order Unification
+** https://www.microsoft.com/en-us/research/wp-content/uploads/2000/01/1-s2.0-S0890540100928773-main.pdf
+
+
+* A Complete Mechanization of Second-Order Type Theory
+** From <http://dl.acm.org/citation.cfm?doid=321752.321764> 
+** Journal of the ACM (JACM) JACM Homepage archive
+** Volume 20 Issue 2, April 1973 
+** Pages 333-364 
+
+** From <http://dl.acm.org/citation.cfm?doid=321752.321764> 
+
+
+
+* Other notes
+** https://www.researchgate.net/publication/220430612_A_Complete_Mechanization_of_Second-Order_Type_Theory
+
+
+
+* Automation of Higher-Order Logic
+** Authors: Christoph Benzm ̈uller and Dale Miller
+** Readers: Peter Andrews, Jasmin Blanchette, William Farmer,
+** Herman Geuvers, and Bruno Woltzenlogel Paleo
+** Venue: The Handbook of the History of Logic, eds. D. Gabbay & J. Woods
+** Volume 9: Logic and Computation, editor J ̈org Siekmann
+** Automation of Higher-Order Logic. Available from: https://www.researchgate.net/publication/260000943_Automation_of_Higher-Order_Logic [accessed Mar 29, 2017].
+
+
+** Handbook of History of Logic
+*** http://www.johnwoods.ca/hhl/
+*** Volume 9: Computational Logic
+*** C:\Users\JonathanCohen\OneDrive\Documents\articles\Benzmuller5.pdf
+
+* Huet: pre-unifiers: substitutions that can reduce the original unification problem to one involvingonly flex-flex equations. Huet showed that the search for pre-unifiers could be
+* done, in fact, without redundancy. He also showed how to build a resolution
+* procedure for ETT on pre-unification instead of unification by making flex-flex
+* equations into “constraints” on resolution 
+* Automation of Higher-Order Logic. Available from: https://www.researchgate.net/publication/260000943_Automation_of_Higher-Order_Logic [accessed Mar 30, 2017].  See references on Pg 22
+
+* Raising: Miller (22)
+* Induction invariants
+* Deduction-modulo - using first order
+* Description of higher order logic provers
+* Output in TSTP syntax
+
+
+* An Introduction to Mathematical Logic and Type Theory
+
+* http://stackoverflow.com/questions/1936432/higher-order-unification
+
+
+* Extensions and Applications of Higher-order Unification
+** C:\Users\JonathanCohen\OneDrive\Documents\articles\elliott90.pdf
+
+* Unification for type lambda calculus
+** C:\Users\JonathanCohen\OneDrive\Documents\articles\huet_unification.pdf
+
+
+* Equational unifier
+** C:\Users\JonathanCohen\OneDrive\Documents\articles\huet_equational.pdf
+
+
+* COMPLETE SETS OF UNIFIERS AND MATCHERS IN EQUATIONAL THEORIES * Franfois FAGES and Grrard HUET 
+** C:\Users\JonathanCohen\OneDrive\Documents\articles\huet_unifiers.pdf
+
+* Type/term inferencing 
+** http://adam.gundry.co.uk/pub/thesis/thesis-2013-12-03.pdf
+* ML first order dependent types
+** http://digitalcommons.ohsu.edu/cgi/viewcontent.cgi?article=3772&context=etd
+*** Relates to Elliotts work, uses matching instead of Elliots unifications
+
+
+

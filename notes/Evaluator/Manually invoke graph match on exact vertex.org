@@ -1,0 +1,14 @@
+#+STARTUP: showall
+* How to refer to specific node: an expression to navigate edges to find it
+* Path expression: Just need a list of edgedef names and index numbers. Lookup by id number.
+** Syntax for expression: sequence of edgedefs, index numbers
+*** Syntax for building common graph shapes
+*** Default edgedef for connecting items in a series, syntax can override
+*** Define path fragments so they can be reused. 
+*** Invoke function that returns next vertex. 
+*** Parameterized. Using literal and other expressions, allow reference to vertices on preceeding edges.
+* Bind specific vertices (not just one)
+** Define new syntax for pairing. Similar to how pairing is reported.
+** Modify algorithm to take in pairing from graph input. 
+** Modify algorithm to take input from graph, probably need to modify converter
+* Display matches in format that depends on content

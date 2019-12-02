@@ -1,0 +1,21 @@
+#+STARTUP: showall
+* Code generator to emit LaTeX version of graph
+*** Color: text: keywords, identifiers, operators. Background: nonterminal
+**** Nested boxes?
+***** http://tex.stackexchange.com/questions/45170/resize-box-to-fit-text
+***** http://tex.stackexchange.com/questions/83930/what-are-the-different-kinds-of-boxes-in-latex
+*** Draw graph in latex
+**** http://tex.stackexchange.com/questions/279221/trying-to-draw-a-picture-of-an-automata-in-texmaker-using-tikz
+** Top level to generate page header/footer to view LaTeX file
+** Web page header, footer. Test: 
+*** Wire it up to display a static list of terms.
+
+* Web page with LaTeX output using mathJax
+** Write test sample
+** Generate to match sample
+** Add to web server: POST text to parse, process, return page. Add MathJax to CG
+*** Define simple web page with box for input and output, respond in same format
+*** Show both raw and formatted
+* Reconstruct source - need loop and handle end of sequence
+*** Codegen for first token
+*** Token: Start emit from next token

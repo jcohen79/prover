@@ -1,0 +1,83 @@
+#+STARTUP: showall
+** Demo/Prototype
+*** Goal:
+**** Small example of specifications
+***** Start with small set of specs
+***** Find and show inconsistency
+****** See: What to Check in Specifications
+**** Write specifications
+***** Look for incompleteness, inconsistency
+***** Show that form of specification is useful, then generate code from it
+****  test simple coding rules
+***** Write code rule, expected derivation
+***** Write grammar
+***** Write verifier
+
+** Next Steps
+*** Clean up Sko, add tests
+*** Migrate to array based resolution
+*** Move to GPGPU
+*** Small example of specifications
+*** Software to Process Specifications
+*** Use constraint checker to analyze specs
+*** Compute new state as a result of command assertion
+*** Resolution as graph
+*** Manually invoke graph match on exact vertex
+
+* Work on formal specs for Whiteboards
+*** Simple specs.
+*** Info about commands can be located else, find through references (file/line num)
+*** Demo info about the specs
+*** Eventually get to code gen of commands
+*** Code generation rules
+*** Extend grammar for coding rules
+*** Modify reslab to run on graph
+
+* Specs to support Model Based Testing
+
+
+
+*** Evaluator
+**** Path expression
+**** In language invocation
+***** Method to evaluate each syntax term (depends on context)
+**** Use tree transformation to convert parse tree to graph match input
+***** Define graph structure needed to drive algorithm
+***** Drive execution from top down, evaluate subterms
+****** Pull data from parse tree
+*** Example specs to look for contradictions and inconsistencies
+**** Entities, relationships, attributes, properties
+**** Check for satisfiability of model
+**** Inconsistency: sequence of commands to violate axioms
+**** Add as conditions to Specs.cs
+**** Basic operations: validate model state (e.g. missing data)
+*** Define sequence of exact matches to check
+*** Invoke reslab to check applicability of rule
+**** Skolemize
+**** Convert Reslab to graph
+*** Define graph structure for building code structure
+
+
+
+** Experiment with matching based code generation
+*** See fundamentals
+*** Check for inconsistencies/incompleteness in specs
+**** Generate series of commands that leave some attribute unspecified
+** Query Language
+*** Interim output is just low level print of match
+** Formatted graph output
+*** Templates for use in query language
+**** Lookup bound references to vertices
+** Browser query/response dialog
+*** Formatted output (equations, diagrams)
+** Convert Resolution to graph
+*** Display, interact with proof
+** Formal semantics of application
+** Resolution driven code gen
+
+
+* Gaps
+** Examples of details flowing from specifications to templates
+** Handle aliasing, iteration/recursion
+** Error reporting
+* test

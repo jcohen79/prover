@@ -1,0 +1,57 @@
+#+STARTUP: showall
+* Types of constructs:
+** Declaration
+** Expression
+*** Logic
+*** arithmetic
+** Statement
+** Query
+*** Interactive, exploratory
+*** Report/web page generation
+
+
+* Type of declarations:
+** Macro
+** Function
+** Predicate
+** type
+
+
+* Macros:
+** Features needed
+*** Static content template
+*** Variable content
+**** Single expression
+**** List insertion
+**** Text - can do as string concat.
+**** Numeric/date formatting - functions
+*** Assemble fragments into a whole
+*** Arguments that are not evaluated at the call, but as needed
+*** Variable number of arguments, named parameters
+** macro NAME (parms) body
+
+
+* Type
+** Purpose: 
+*** Error checking
+*** speed up inference, 
+*** As documentation to clarify how function/predicates are used
+*** The types of the system being described are data, not types in this language
+** Allow more detailed type delineations - subset, intersection, disjoint, partition (disjoint + union)
+** Inheritance works because any relationship of a base type applies to a subset.
+** Covariant: A<B implies F(A) < F(B) (read only, e.g. enumerator can produce smaller type)
+** Contravariant: A<B implies F(A) > F(B) (write only, e.g. collector can accept larger types)
+** Bivariant: both
+** Nonvariant: neither, has to match exactly
+** Functions:  S1 → S2 ≤ T1 → T2 if T1 ≤ S1 and S2 ≤ T2. 
+*** (contravariant in the input type and covariant in the output type)
+** Options
+*** Use in and out keywords to identify variance of types
+*** Refer to arguments and result types using expressions and make assertions about them. This is similar to assertions about the values, but would be used to control inference.
+** When to use:
+*** Basics on argument types
+*** Can use bidirectional inference to relate function result expected/argument expected
+*** E.g. P1(x,y) ^ P2(y,z) <=> P3(x,y,z) - type of P2.z should be same as P3.z
+**** P1(x) -> P2(x) - P1.x has to be < P2.x. What is the general rule?
+
+

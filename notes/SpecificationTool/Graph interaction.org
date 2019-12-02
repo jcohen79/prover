@@ -1,0 +1,232 @@
+#+STARTUP: showall
+
+
+
+
+* See In-browser editing
+
+
+* make it easier to express and debug applications
+** write up description of language
+** how to write resolution
+** test cases for more elaborate language features
+** graph editor
+** line up data and pattern and check why not match
+** look for all places where  match can occur
+** what is a good way to look at data and patterns?
+*** web server should display in a form that looks like input
+*** what should input look like?
+
+
+* Problem
+** complexity of building an editor
+** how to represent the graph
+** diagram to see all relationships explicitly
+*** need to manually adjust to make diagram clear
+** other specialized languages that create implicit edges
+
+* Options
+** extend existing
+*** does it still need to be log based?
+** use whiteboards, draw
+*** now vs later
+** what to use in meantime?
+*** persistence, interaction
+**** get new input, see unfulfilled request, insert reply (timestamp)
+*** parse language from oneNote?
+**** parse updates, merge into local store, process requests, send reply as update to document
+** OneNote
+*** user logs in and edits OneNote
+*** server
+**** authenticate,  http://msdn.microsoft.com/en-us/library/hh826543.aspx#csharp
+**** polls workbook for updates  
+**** detect differences - exact text match for each query paragraph 
+**** parse text for modified paragraphs (discard response paragraphs)
+**** execute command for each modified query
+***** send reply as insert to paragraphs
+*** paragraph markers: %rule-Name, %data-Name,  %query-Name
+***** or use OneNote feature: heading, font, text/highlight color, 
+********* tag (definition, remember, question)
+**** data sections link up by referring to identified vertices
+*** how to apply rule pinned to specific vertices:
+***** is a query, parameters are: rule, list of pairs
+***** response: list of pairs
+*** how to create diagram: ink (object), png (img)?
+*** what does ink and shapes look like via api? Svg probably
+***** server can create diagrams, but how can user create/edit them?
+****** command interface in another window: connect A to B using C; move A by X,Y
+**** server created diagrams: 
+******* http://satsumagraph.sourceforge.net/doc/html/class_satsuma_1_1_drawing_1_1_force_directed_layout.html#details
+****** http://stackoverflow.com/questions/1250090/graph-layout-optimization-in-c-sharp?rq=1
+
+** what other html based editors? Need server to persist
+*** kerika
+* Extend existing client 
+** https://github.com/mbostock/d3/wiki/Force-Layout
+** how to persist: write entire space to file, reload
+** make the UI be more document centric rather than a log file
+** UI layout
+*** horizontal/vertical splitter
+**** use with angular: http://www.jqwidgets.com/jquery-widgets-demo/demos/jqxangular/index.htm?(arctic)
+**** dropdown to select content type
+**** resize: save dimensions on server by session id (part of REST URL)
+**** drag and drop node to a panel to display it (or type id, click on node and show its id)
+*** available contents
+**** list a data declarations (refer to vertices identified elsewhere)
+**** list of rules (correspondences)
+**** list of matches; by data vertex (input vs output), by rule, sequential
+**** filter on graphs that contain X or something that refers to/from X, or payload matches P
+**** show match results with constraints
+***** pin rule vertices to specific data
+***** how to show results: is a list of matches
+******* series of diagrams 
+*** how to improve diagrams: add text (payload)
+**** show legend of colors
+* Edit and save from UI
+*** write rules/data in source format
+** start with small examples:
+*** create/delete: color, vertex, edge, 
+*** set color, payload
+**** set identity of vertex: 
+***** data element is a rule that runs and creates instance
+***** running a rule can have parameters
+***** the apply is a diagram with vertex for invoked rule and its parameters
+***** simple case of data is a rule that has output that connects to known vertices
+**** how to avoid repeated running of rule:  only once for each set of matches
+*** module is
+**** set of rules (some create data), can be references to rules from other modules
+**** run: all rules are enabled
+**** conditional: match edge for containing module
+
+* Get started with new UI
+** https://docs.angularjs.org/guide
+** create test page
+*** try out splitter/angularjs example in jqwidgets
+****** http://www.jqwidgets.com/jquery-widgets-documentation/documentation/angularjs/angularjs.htm
+***** use jqwidgets with server app: 
+****** define components to pull into example lists (look at available jqwidgets to pick one)
+****** create angularjs directive to populate the content for a panel    (cache this to avoid unneeded traffic?)
+******* first test by directly using the directives, then making selectable
+****** button to add split (H/V),
+****** directive for configurable splitter
+****** service for accessing server methods (using $http)
+****** save state for session in file (as object structure)   <content-type {, id}>
+
+
+* Desired operations
+** want to view, edit rules and data, 
+** save and load
+** experiment by applying rule at select location
+*** pin specific vertices, search over the rest
+
+
+* Pattern language
+** name @ payload expr
+** firstName ~ secondName ^ color
+** nameFromFirst = nameFromSecond / colorForCorrespondenceLink
+** nameFromFirst = nameFromSecond \ color in other direction?
+** correspondence
+** 1.
+** 2.
+** 3.
+
+* patterns should be diagrams?
+** how to show
+*** payload
+*** edge colors
+*** which part of correspondence - box
+*** node identity not needed for pattern, just for later description	 
+** build/display graph in editor	  
+** palette to set mode of cursor
+*** create vertex, edge
+*** delete vertex, edge
+*** move vertex
+*** select color of edge
+*** select display color for edge color def
+*** select to edit payload, identifier
+** what format to store in file:
+*** sequence of statements
+
+* editing
+** yEd
+** graphml
+** http://graphml.graphdrawing.org/primer/graphml-primer.html
+
+*** http://www.eclipse.org/sirius/overview.html
+*** http://projects.eclipse.org/projects/modeling.sirius
+
+
+* purpose:
+** express various kinds data as graphs
+** e.g. project info, relationships
+** store as xml files in git
+** define various projections to graphs
+** how to edit quickly? solve that later, use property sheets for now
+*** eventually use whiteboard as editor
+** learn graph layout behavior
+** later export/import as csl/isx files for whiteboard
+** data migration tool using graph matching rules?
+*** need way to refer to external classes from text file used drive conversion
+*** then call method on constructed objects, e.g. serialize them using native code
+
+*** difference from IDW/tree:
+*** full power of theorem proving
+** experiment with performance, power of graph matching
+** examine generated results
+** create/view sample inputs
+
+* changes to graph match:
+** store extra info from import of graphml, yEd
+*** eg specific display info for yEd
+
+* Export to e.g. GraphML
+** define method Export
+*** like Format (e.g. in Vertex) is used in ToString
+** abstract output method: 
+*** pass in interface that can do either XML text or XML objects, or some other format
+*** need to make calls in text order (may have to check formatter for order to traverse)
+** call method on nested objects
+*** how to represent other kinds of objects in GraphML? (e.g. type definition)
+*** node to represent the object
+*** edge to the type object
+**** data on edge provides the edge class name
+*** how do these get included in the output?
+*** how do these get constructed on input?
+* Import
+** recognize special edges, node for identifying types
+** how to set a value on a graph edge?
+*** is a 'data' on the edge, value is the vertex for that value object, set field on edge
+*** or a literal (string, int, etc)
+*** define attributes that identify the graphml strings, methods to use
+** how to construct the C# objects?
+** is there a serialization API for C# to build on?
+** how to exclude the C# edges/vertices from the	data/pattern graphs?
+*** don't actually create the Edge or Vertex, require parmless ctors
+*** edge to special root Type vertex (identified by edge to itself)
+*** export that first
+*** registers handlers in table:
+***** define an Attribute to register export/import name
+**** [EximName("graphml","node")]
+*** export nodes first, then edges to them
+*** traverse graph
+**** data vertices for nested data objects
+**** graph vertices
+**** graph edges
+**** data edges between nested data objects, and vertices,edges
+
+
+
+* main:
+** command line options:
+** iterate over commands
+** split up command handling: Command: name, method
+** invoker for command line: write return value to output
+** new commands: 
+** start server
+** import graphml
+*** file, folder
+** export graphml
+** run named test, loads graph via code
+** command to enter commands via UI
+
+

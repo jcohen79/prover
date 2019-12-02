@@ -1,0 +1,10 @@
+#+STARTUP: showall
+* [[file:_main.org][_main]]
+* [[file:Semantics of graph.org][Semantics of graph]]
+* [[file:Resolution as graph.org][Resolution as graph]]
+* [[file:Reslab.org][Reslab]]
+* [[file:SKO, SAT Testing.org][SKO, SAT Testing]]
+* [[file:Math.org][Math]]
+* [[file:Array based theorem prover/_index.org][Array based theorem prover]]
+* [[file:GPU VM.org][GPU VM]]
+

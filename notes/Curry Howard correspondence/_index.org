@@ -1,0 +1,6 @@
+#+STARTUP: showall
+* [[file:_main.org][_main]]
+* [[file:Correspondences.org][Correspondences]]
+* [[file:Proof transformations.org][Proof transformations]]
+* [[file:Axioms.org][Axioms]]
+* [[file:ATP for Higher Order Logic.org][ATP for Higher Order Logic]]

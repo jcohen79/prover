@@ -1,0 +1,32 @@
+#+STARTUP: showall
+* Register formatters for other types. Eg. Graph match results, symbol table
+*** Debug output for SymbolTable, LookupExpression. 
+*** REPL to call display function that gets registered display method
+
+* Make parse tree conversion able to handle direct list children:
+**  pass parent down and connect children to it instead of pass child up - handle lists
+* 
+
+* Later: Formatter
+** How not to indent for each car/cdr term
+** Save indent position on stack and restore indent level
+** Indent for ( is 1
+** Insert newlines based on available space
+*** If token does not fit, find last previous token of that depth with something before it
+**** Insert line before
+**** Indent if previous indent was lower - need stack to restore
+**** Recheck spacing going forward from there
+**** Adjust space count for spacing
+*** When setting newline before, reset current line position, adjust indent
+** Check for unbalanced indents
+
+
+** Pass in flag for max length: Cutoff long lists, incoming edges.
+*** Fn to call for full output in command window
+** Make it easy to invoke a codegen from command window. Which one? Register a list that can check if that vertex is one that each codegen knows how to do.
+
+* 
+* More tests for grammar rules: 
+** Check that all punctuation is skipped (keep comments in case add back for tokens)
+** Other kinds of tokens: number, comments
+

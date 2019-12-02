@@ -1,0 +1,25 @@
+#+STARTUP: showall
+** Started from graph matching, to decide which patterns to apply.
+** Consistency and completeness of specs
+** Check correctness of model for app testing
+*** Check assertions about model
+*** Use app as model?
+**** Find states to test assertions, combinations of assertions
+***** Use generator to create combinations
+***** Look at example proofs of those combos to see if clauses lead to putting model into that state.
+***** Define a new predicate that is the desired state, then prove assertions about that state
+
+
+
+
+* How to use resolution to prove that various optimizations are sound and complete? (e.g. symmetry,..)
+** Start by showing that resolution is sounds and complete
+*** Define data structures and operations as functions, predicates
+*** Axioms that described assumed behavior of the functions and predicates
+*** Will require results from logic, so need relations between logic objects and algorithm objects
+*** e.g. function/pred applied to program object maps to function/pred applied to logic objects
+** Soundness:
+*** Inferred = resolve(c1, c2) -> ~falsifiable( sequent (c1,c2, inferred))
+** Completeness:
+*** Falsifiable(sequent) -> runsToCompletion(res,sequent) ^ proof = apply(res,sequent) 
+******** } ^ isProof(proof, sequent)

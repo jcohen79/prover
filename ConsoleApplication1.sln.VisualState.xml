@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VisualState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ShowCheckBoxes="false">
+  <TopNode>[0-1000]C:\Users\user\Downloads\ConsoleApplication1\ConsoleApplication1.sln</TopNode>
+  <SelectedNode>[0-1002]ConsoleApplication1.test.CorrespondenceExamples.ListToTree</SelectedNode>
+  <ExcludeCategories>false</ExcludeCategories>
+  <Nodes>
+    <Node UniqueName="[0-1000]C:\Users\user\Downloads\ConsoleApplication1\ConsoleApplication1.sln" Expanded="true" />
+    <Node UniqueName="[0-1019]C:\Users\user\Downloads\ConsoleApplication1\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe" Expanded="true" />
+    <Node UniqueName="[0-1020]ConsoleApplication1" Expanded="true" />
+    <Node UniqueName="[0-1021]ConsoleApplication1.test" Expanded="true" />
+    <Node UniqueName="[0-1001]ConsoleApplication1.test.CorrespondenceExamples" Expanded="true" />
+    <Node UniqueName="[0-1003]ConsoleApplication1.test.GraphMatcher" Expanded="true" />
+  </Nodes>
+</VisualState>

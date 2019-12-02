@@ -1,0 +1,35 @@
+#+STARTUP: showall
+* http://isabelle.in.tum.de/documentation.html
+
+* C:\Users\JonathanCohen\Isabelle\Isabelle2016-1
+
+* https://www.abebooks.com/servlet/SearchResults?sts=t&an=&tn=&kn=&isbn=3540433767
+
+* UW Library
+** http://alliance-primo.hosted.exlibrisgroup.com/UW:all:CP71127033420001451
+
+
+* Reference manual
+** http://isabelle.in.tum.de/doc/isar-ref.pdf
+
+
+* http://isabelle.in.tum.de/dist/Isabelle2016-1/doc/prog-prove.pdf
+
+
+* Book on learning
+** http://www.concrete-semantics.org/concrete-semantics.pdf
+** Other recommendations by author: https://proofcraft.org/blog/proof-engineer-reading.html
+
+
+* Automatic techniques with Isabelle/HOL
+** https://people.mpi-inf.mpg.de/~jblanche/frocos2011-dis-proof.pdf
+
+* Experiment:
+** Define a data structure like whiteboard
+*** Define commands
+** Prove: 
+
+* Working on
+** http://isabelle.in.tum.de/doc/tutorial.pdf
+
+** http://honest-food.net/root-beer-syrup-recipe/

@@ -1,0 +1,145 @@
+
+* GUI for building objects, especially proof outlines
+** purpose
+*** depict objects in graphical layout
+*** because objects are hard to describe verbally
+** UX structure
+******* point to arguments, then construct object or set reference
+******** constructed object is held in global list until a higher object points to it, or it is deleted
+******* how to layout the display of objects?
+******** vertical lines connect boxes, build bottom up, go up/down to left/right parents
+****** operations:
+******* create, set reference, delete
+******* object templates have tabs to connect
+******** can expose inner objects through tabs
+****** how to map to proof objects?
+******* server has objects, presents api for UI
+******* query defined graph, then have UI notify server of changes (set, create, delete)
+******* object definition has methods to call to create, update, delete
+******* start local, add server later
+******* later: server updates client
+** implementation structure
+*** defer server until later
+*** class structure
+*** computing positions
+**** attributes to use for height, width
+**** attributes for left/right, parent/child
+**** parameters for spacing
+**** algorithm to accumulate sizes
+**** containment
+**** existing libraries
+***** https://github.com/projectstorm/react-diagrams
+****** run: yarn run storybook
+****** js notes
+******* https://www.sitepoint.com/understanding-es6-modules/
+******* https://github.com/storybooks/storybook
+****** https://blog.sourcerer.io/build-interactive-diagrams-with-storm-react-diagrams-f172ae26af9d
+****** how to connect to app classes?
+******* options:
+******** have react-diagrams operation on them directly
+******** have operations on react model perform corresponding on app model
+********* this allows model to know how to download more info
+********* or communicate with server for interactive actions
+***** learn: node, npm, get example react-digrams
+****** see demo
+******* http://projectstorm.cloud/react-diagrams
+***** changes needed to diagram
+****** add arrowhead
+****** add toolbar for editing
+******* create, delete (node, link)
+****** display detailed data in node, on link
+****** expand selected (create nested diagram)
+******* compute new node positions, auto route link
+** interaction with server
+*** construct diagram from data
+**** allow user to navigate to desired view
+**** update diagram as program progresses
+***** tracing schedules updates to send to the client
+***** event loop sends messages for objects that are being viewed
+*** save constructed diagram (or just do in code and view?)
+**** view first, edit later
+* Proof structure
+****** Ex2Phase1() is the test that generates the outline from manual
+****** Ex2Built() is the test that runs the generated proof
+******* TfcBuiltEx2 is the generated code that constructs the outline
+****** PouEx2 has the hand-written proof outline
+******* levels:
+******** pair of axioms
+******** each level sets up an object that sets up to be notified of solutions
+******** proof outline gives what objects are important to render and trace
+****** TfcPhaseEx2 has the manually constructed phases
+******* extends TfcEx2Base
+******* it is generic, starts each phase
+****** TfcEx2Base is the manual proof steps
+******* has details of each phase
+****** TfcTop: creates the controller (Tfc) for each phase
+******* is notified when each phase is complete, sets tfcPhaseCurrent to next phase
+* what is relationship of psb and pob ?
+**** actions fr each step
+**** actions: Tib, Tob (adds this to Psb)
+**** step:  Tif, Tst refers to Tif
+**** Tsc - Trace scenario - has list of Tif
+***** has pouMakeManualOutline, which creates a Pou: the top level outline
+**** Tif - capture actions for a step
+**** Tib - Base class with info about each action that is performed within step
+***** Tih -  Record the setting of a Vhd place so value can be saved for use another step
+***** Tip - Built when WatchPair is called
+***** Tig - Built when WatchTarget is called
+***** Tis
+***** Tii
+***** Tiw
+***** Tiv
+***** Tia
+**** Pob - has id, base class for output steps and actions
+***** Psb - Base class for top level steps of proof outline
+****** comes from tif.psbBuildOutlineStep for each step in outline built from previous version of proof
+****** Tst -  Outline element for a step. Each step holds a sequence of actions (Tob)
+****** Rpo - Proof outline step that resolves two clauses
+***** Pst - Base class for actions in building proof outlines
+****** Tob -  Base class for actions in proof outline steps
+******* Top
+******* Tog
+******* Tos
+******* Toi
+******* Tow
+******* Tov
+******* Toa
+******* Toh
+***** PEtp - Process each child on an Etp
+***** PobApplyPti
+***** TfcPob
+
+
+* Next steps
+** server
+*** on startup, GUI will make request
+*** Echo will process commands
+**** parse text to JSON, convert JSON to (command) object
+**** invoke perform on command message
+**** commands to :
+***** lookup in dictionary the proof outline to perform
+*** render the outline
+**** want to eventually see the structure
+***** is just statements so far. how to get phases, then lower level?
+*** monitor proof
+**** each new object that registers to be notified of solution
+**** each object that is constructed has 
+***** parent id, 
+***** child num
+***** left term, right term
+***** list of children
+**** is nested inside the object that created it, vertically by sequence
+**** when it gets vbv, it notifies parent
+***** parent will notify next child or its parent
+**** each shows 
+***** left, right terms
+***** position in parent list
+***** status
+***** whether shared
+***** link between parent and shared child: this is in outline, but not in proof itself
+****** when desired result expected: result comes to shared object earlier, later, not shared (yet)
+*** respond to url of diagram: type and id of base
+** render diagram to JSON, send to client
+** basic UI to display messages from server
+** add diagram to basic UI
+* Current problem

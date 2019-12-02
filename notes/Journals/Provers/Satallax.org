@@ -1,0 +1,49 @@
+#+STARTUP: showall
+
+* http://www.ps.uni-saarland.de/~cebrown/satallax/
+
+* Satallax is an automated theorem prover for higher-order logic. The particular form of higher-order logic supported by Satallax is Church's simple type theory with extensionality and choice operators. The SAT solver MiniSat is responsible for much of the search for a proof. Satallax generates propositional clauses corresponding to rules of a complete tableau calculus and calls MiniSat periodically to test satisfiability of these clauses. Satallax is implemented in Objective Caml.
+
+
+* Satallax progressively generates higher-order formulas and corresponding propositional clauses. These formulas and propositional clauses correspond to a complete tableau calculus for higher-order logic with a choice operator. Satallax uses the SAT solver MiniSat as an engine to test the current set of propositional clauses for unsatisfiability. If the clauses are unsatisfiable, then the original set of higher-order formulas is unsatisfiable. If there are no quantifiers at function types, the generation of higher-order formulas and corresponding clauses may terminate. In such a case, if MiniSat reports the final set of clauses as satisfiable, then the original set of higher-order formulas is satisfiable.
+
+* From <http://www.ps.uni-saarland.de/~cebrown/satallax/> 
+
+
+
+
+
+
+
+
+
+* Reducing Higher-Order Theorem Proving to a Sequence of SAT Problems
+** art%3A10.1007%2Fs10817-013-9283-8.pdf
+
+
+
+* Previous stuff.
+
+* Backes, J., Brown, C.E.: Analytic tableaux for higher-order logic with choice. In: Jürgen Giesl,
+* R.H. (ed.) Proceedings of the 5th International Joint Conference Automated Reasoning, IJCAR
+* 2010, LNCS/LNAI, vol. 6173, pp. 76–90. Springer, Edinburgh, 16–19 July 2010
+
+
+* Brown, C.E., Smolka, G.: Analytic tableaux for simple type theory and its first-order fragment.
+* LMCS 6(2), 1-33 (2010)
+* 1004.1947.pdf
+
+
+* C:\Users\JonathanCohen\Downloads\satallax-3.1 
+* [[file:satallax_bib.png]]
+
+* Obtaining Coq proof scripts
+* ---------------------------
+
+* Satallax can create Coq versions of the problems and (sometimes) solutions.
+* Satallax currently supports Coq 8.4.
+* The interface with Coq is via a shallow encoding of simple type theory
+* (see itp/coq/stt.v) and tactics corresponding to the higher order tableau calculus
+* (see itp/coq/stttab.v).
+
+

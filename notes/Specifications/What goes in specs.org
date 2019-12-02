@@ -1,0 +1,114 @@
+#+STARTUP: showall
+* Characteristics of app that should be specified:
+** Basic commands
+** Part and other relationships between objects
+** Attribute values and special cases, relationships between values
+** Invariants within and between parts (between commands)
+** Command pre/post conditions
+** Button enabled status satisfies command pre-conditions
+** Gestures associated with commands, how gesture parameters are used
+
+* Create vocabulary that can be described by axioms
+* Look for contradictions that occur in states that can occur
+
+* How to more abstract descriptions, such as visual positioning, arise from specs?
+** They are implemented with transformations.
+** The layout building blocks create the visual relationships
+** Exists of parts of whole describe elements created in transformation
+
+* How to know what are the important axioms?
+** Add as needed to attain completeness
+
+* Specs for a command
+** Information about start, during, completion
+** Relationship of objects during phases
+*** What stays the same
+*** What changes
+
+* attributes
+** Appearance 
+** Position
+** Shape
+** Visual properties (e.g. shaded, translucent)
+*** Properties are stated as broad rules, then exceptions carved out
+
+* Axioms to describe behavior of entities
+** Position
+** size
+** Containment
+** Scrolling
+** Adjustment of size
+** w-order
+** Viewport
+** Partition of types
+** Which properties are required. What is needed for a complete specification
+
+* How to describe command or model at a level that occur in real specs?
+** How does this differ from assigning values to memory locations?
+*** Command results affect the results of future function calls and commands
+** Target is assigning a new property. Need to figure out what properties this invalidates. 
+** The set of properties that are affected by a change needs to be specified. 
+*** Target object is identified by some property value it had at the time
+** What are the possible conditions to consider when a property is changed?
+**** Relation
+***** Switches which object is related to
+***** Changes a property of the related object(s)
+**** Attribute
+***** Changes value (like a memory location)
+***** Causes some other change that results in the specified result attribute value.
+****** Need an inverse operation to determine value to set
+****** Need expression for find when to perform update
+****** Rule to perform the update
+** How to specify the response to a change to a property?
+*** Associate the property definition with the type of behavior it has
+*** How to handle ripple effects?
+**** Track dependent inferences and remove them
+*** Are there cycles of ripple effects? 
+**** Toggling back and forth
+**** A change wave that goes out and then comes back, to repeat? 
+***** There would need to be a way that one property can be derived from something that can be derived from the first. This possibility should be detected as an error.
+*** Sounds like attribute derivation
+**** Is forward or backward chaining used?
+*** Changing a derived property in a command: That means something it was derived from needs to change.
+**** Example: a position set by dragging or because of some other change in position or content.
+**** Possible resolutions:
+***** Specify that change to derived property is converted into change to other property that is derived from as needed.
+**** How to detect these? Property appears as both target of command and as conclusion of a rule.
+
+* Components of specs:
+** ERA declaration of object model
+*** For document, visible behavior, and intermediate layers
+** Production rules for deducing other attribute values and relationships
+*** Within levels, and from lower levels to higher levels
+*** Deriving lower level from higher level is ok, but needs to be consistent
+*** Layers do not need to be distinct or linear. They are just separate properties that are constrained by each other.
+** Commands (at each level)
+*** Pre-condition
+*** Operation: statement content (for code gen)
+*** Post-condition: assertions that affect future functions and commands
+**** Expressed as new facts about state
+**** the affected objects are identified by parameters from the command (e.g. location)
+** Invariants
+*** Relationships between properties on same or related objects
+** Rules for combining special cases (exceptions) to rules
+** Rules for mapping property changes into lower level commands
+*** These describe Xbi, but is also key to converting converting specs to programming
+*** Specs might not want to resolve that fully, it is a programming decision
+
+
+* How to transition from expressing a change to visible state to change to internal state
+** Want to keep separate, because internal model is more likely to change than actual desired behavior
+** Refer to initial rule, and assert that it is implemented by a lower level change. 
+*** The override is an assertion that the lower level command causes the upper level change.
+**** This assertion could be used as a test, or else just used in reasoning about the effect of the command, transformation, and/or visible behavior.
+**** The specs of the transformation from lower level model to upper level is not complete unless the claimed result can be deduced.
+*** Lower level command is implementation of upper level behavior.
+*** Eventually all changes to visible objects get mapped to lower level document. Some commands will get specified initially as updates to document (or some intermediate layer).
+
+
+* How to know when a rule can be taken as not having special cases? Can special cases propagate? 
+** If the rule conditions depend on a derived term, then it is the result of propagating.
+** Needs to be backward propagation to see if an special case is in effect
+
+* An expression that accesses a property of an object needs to describe the object being access, so it can be compared against commands that may have modified it.
+** This allows memory location ids to be used, since a relationship can be traversed to the get id to look up under.

@@ -1,0 +1,28 @@
+#+STARTUP: showall
+* What language to use to write conversion from axioms to test (generator)?
+
+* Dependent type languages integrate a prover to perform type checking. That likely makes it more natural to work with that prover to perform other operations.
+
+* Types are not essential to the writing of a problem, but they should speed up the debugging or maintenance phase. 
+
+* Goal is to avoid the difficulty of expression specs in types, as they are unfamiliar looking.
+
+* Curry-Haskell does not extend into axioms.
+
+
+
+
+* Agda	
+* Coq	
+* Idris	
+
+
+* Freer monads  http://okmij.org/ftp/Haskell/extensible/more.pdf
+** Monads seem like a way to describe how the state is modified.
+
+
+* Forum for asking questions about curry haskell: 
+** http://lambda-the-ultimate.org/
+** http://stackoverflow.com/questions/tagged/functional-programming
+
+

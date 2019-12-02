@@ -1,0 +1,7 @@
+#+STARTUP: showall
+* [[file:_main.org][_main]]
+* [[file:Whiteboards Model.org][Whiteboards Model]]
+* [[file:Model Based Testing.org][Model Based Testing]]
+* [[file:Intentional code generation.org][Intentional code generation]]
+* [[file:Conceptual Framework for App Specs.org][Conceptual Framework for App Specs]]
+* [[file:Old notes for specs for commands.org][Old notes for specs for commands]]

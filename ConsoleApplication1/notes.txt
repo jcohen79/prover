@@ -1,0 +1,475 @@
+More Improvements for visualization:
+
+set up git repos on godaddy to allow moving work between laptops
+
+
+
+write up genivu paper
+
+use IDW to build environment to run graph match
+  show graph in table
+  generate embedded graph later using A2HTML (or whiteboard)
+
+add buttons to expand on request
+     how to control compact vs full projection: BkGenerateRow has if valof at top level
+     - how to have state object with fields for objects?
+
+clean up tables 
+  replace ATable with AVert, but members have indentation
+  make table heading size smaller
+  make "thing" come from table
+    
+  how to auto refresb? (cntl-alt-shift-F5 for now)  
+  
+how to connect IDW to graph?
+  in process or via server?
+  learn to write client using CL1
+  how to build existing table that opens up?
+      look at example that has button to open/close
+      select which to transform child to
+  make service call, get back json objects
+  map to nodes: define a json domain  
+
+goal: make interactive CL1 client
+  show input graph, list of rules
+  run rules on request
+  sends message to server
+  use existing URLs for now, later using dynamic invocation like signalR
+
+develop client workbench
+  define domain of data coming from server
+  instance has field for server to connect to
+  buttons to access URLs on server  
+  how does client receive from server?
+    use a plain socket for now
+    [de]serialize objects to json
+       http://james.newtonking.com/json/help/index.html
+       
+  start with low level example:
+         Request: url
+         LogState: Request, LogRoot
+           project to table with button to refresh
+                top nested tree
+         defs for parts of display
+            hold results of request
+         JObject
+           main: list of Attributes
+         JAttribute has name and value
+     instance is state of display
+
+     refresh method (on display obj): start with C# function that just returns JObject
+          later call server
+            http://localhost:8081/test/log/all
+            http://localhost:8081/test/d/453
+            
+       convert JObject to nodes:
+
+        project those as nested tables
+          expand button: for now, set attr to mock object
+ work backwards, start with from dummy nodes and projection 
+    then: create test JObjects, map to nodes
+ create test objects like       
+ [{
+  "values": [
+    {
+      "name": "Name",
+      "value": "top"
+    },
+    {
+      "name": "content",
+      "array": [
+        {
+          "id": 208,
+          "class": "LogEntry",
+          "desc": "208: startOnGraph"
+        },
+        {
+          "id": 295,
+          "class": "LogEntry",
+          "desc": "295: corrMatch"
+        }, 
+
+
+data:        
+ {
+  "name": "corrMatch",
+  "time": 454,
+  "values": [
+    {
+      "name": "corr",
+      "id": 79,
+      "class": "Correspondence",
+      "desc": "79: BinaryOp",
+      "reftext": "BinaryOp"
+    },
+    {
+      "name": "match",
+      "id": 435,
+      "class": "GraphMatch",
+      "desc": "435: ",
+      "reftext": "numVertices=5 numEdges=4"
+    },
+    {
+      "name": "gData",
+      "id": 207,
+      "class": "Graph",
+      "desc": "207: ",
+      "reftext": "numVertices=15 numEdges=25 {Restrictor global }"
+    }
+  ]
+}       
+  later: projected tables have buttons to issue child requests
+     process sync response only for now
+       
+  define buttons:
+    get log for example
+    later: step
+  display response in jquery code for now
+  server makes call to init client output
+  then merge Default.html into Angular code
+  
+  server
+    add methods to be called from client
+      return value is json
+  client
+    replace calls to server
+  
+
+poll for updates:
+  create session if no id in request
+  pass sess id in response
+  client passes in, or not to create a new one
+  pass session in JsonLog
+    set latestEdgeSent
+    if update: skip to latestEdgeSent
+  client to add to existing diagram
+  test:  define operation to run one iteration
+  
+  how to gather updates to graph?
+  Graph: keep track of edge position
+  really pertains to a session
+  new edges, change in payload
+  session has dict of graph to EdgeLink, also for payload
+  how to track session:
+     .net websocket?
+     pass in session id if known, else create
+    
+  call fn that sends request and waits for response
+    error (timeout?): call again
+  handler repeats the call to server
+  testing: 
+    send reply using timer
+  data from server?
+    call function to continue iteration
+    
+more conversational?
+  match like solitaire
+  watch patterns be applied?
+    witn animation as match is applied?
+  apply a single correspondence, to all or specific object
+  server to send updates to client when match is made
+    edges, vertices added
+view progress
+    send on each addition, or wait for batch?
+    client side should handle either kind of update
+workbench UI
+  select data graph to be visualized
+    clear
+    perform operation to add to data graph
+    enable correspondences
+    
+improve visualization
+  what other attrs can be set?
+  rules for controlling visual attributes:size shape color etc
+  things to look for
+    which rule created object, which object in rule (vertex or edge)
+    history, sequence that leads to object
+
+    server exposes method to select visualizatiom scheme
+       set flags on JsonLog, use in MakeNodeForVertex, desc.SetNodeProperties
+    UI has controls to send parms to server
+
+  look for name of strategy to use
+  what are some other strategies?
+     look for particular edges, use those colors
+     define subclasses of EdgeDescriptor
+        or instances a color behavior objects and a color parameter
+  similarly for shape, size, center color
+     each edgeDesc contributes what it will
+     history can be determined by history edges added by the algorithm
+     
+other example to work on
+  associative and distributive rules    
+    
+add interpreter,
+  add target vertex to start interpretation from
+  pass in assignments for symbols, do instructions
+  
+   
+how to check pattern has specific vertex
+  refers to payload, so that vertex in pattern can be connected to other edges   
+  
+debugging language
+  goal: make assertions, have it report when preconditions are met but rule fails
+  is this a long term problem?
+  define assertion expression, everyTime(x,y)
+  define events, at that place, update the event status and eval the assert expr
+  short term: 
+    expr to refer to object in parse tree (define "base", navigate via edge names)
+       waitfor("base.rhs");
+    use that to register object to break on, to activate when 
+        if stmt, used to set flag to enable another if, where match starts
+    want to wait until:
+       a corr matches a specific object, then refer to an edge that is created
+       
+
+  
+still only one rule matched
+  was the graph constructed correctly?
+  are the iterators seeing the new edges?
+  look at the final graph to see if it should match
+
+want to see complete data graph, 
+  log all the corrs at start
+  
+
+  
+create URL to directly invoke a match at requested node:
+     rule id, eHighest, restrictor eStart
+     later: list of parents       
+     UI: add buttons 
+       pick eHighests, restrictor, pattern. set globals
+       run match, that sends back result
+         add result to list of log nodes
+    
+symbol reference after "/" should refer to the edge descriptor names on that vertex
+  why is vertex the input control - arg to ApplyGetEdge?
+   ctlPlace resolves to inputControl in dict
+  looks like first graph of PlaceSymbol matched something wrong
+  need a special control to indicate that place rules should apply
+   
+are registers shared in this example?
+  access attrs via control object
+  pass in source dest addr on control objects
+
+  input to ValueSymbol  and PlaceSymbol should have edges to registers from ctl
+  reversing direction of control to parsed will make that more clear
+     reverse:
+               var eControl = new Edge(edControl, vBase, vInputControl, inputContext);
+
+seems like ctl should refer to the parse element
+  caller starts with a ctl that says where to parse - it has that: vInputControl
+  that is the ctlStmt in Assignment
+  
+
+
+test invoke method via rest:  /r/id/method/args...
+    return index.html but with controllers.js returning result object?
+    use $routeProvider to index into current page? (allows tabs/panels)
+    initial path on url, default to log/all
+
+save state: build object with buttons settings for each object
+  save locally using html5, or save as file on server side?
+  send msg to server to save/recall state
+  click: each button saves state in object 
+  init: button checks object for state, 
+     use object instead of local value on scope (scope refers to object)
+  
+    
+want to see:
+   input graph, matches
+   all matches performed
+   a tree of matches made
+      series of small diagrams contained in box, arrows between
+         edges are matches found on base
+      explode match node in place
+
+
+			
+  mode to open panel for selected node/link: 
+      like PivotalTracker, can move it around
+
+   use more node properties (size/icon, tooltip, outline, more color)  how to have a legend
+		      include linkStrength of edges as property of links
+      how to make that easily configurable?
+      
+      options:  as of now vs. task time
+		 
+		 add support for viewing previous state
+         *       /q/id/time
+         *          get time from task
+			 replace use of GetSnapshotId with id
+            server side: find latest object of that id before time. assume later are more likely, so just linear going back
+          setters call markDirty() if cannot be readonly
+		  each task: walk list of dirty and snap those
+		 
+	     top level: list of references to events: type, id, status. button to open
+		 
+         *  traverse hierarchy of tasks
+         *         where to store tree of tasks?
+         *         select call to -  /log/type - pass in type of list
+         *    
+         *   build top level query: top level tasks, current tasks, sequential log events
+         *   main ui grabs one of those lists, according to dropdown
+         *   add buttons to UI where id is displayed, to fetch json and display it in place - crBase?
+         *   check that list of subtasks is defined in class for each task
+         *   when all child tasks are complete, mark parent task as complete, remove from active list
+         *         
+         * 
+         * details: lookup class text, get width to use to display
+         *    for now, widget is a list
+         * add expand collapse buttons/icons
+         * 
+         *    buttons to select what to view
+         *    allow view graph as d3 and/or text
+         * start with angular, start by mapping data to list
+         * 
+         * 
+         * create folder with server, place where log is written to
+         * modify logging code to indicate ancestors: objId - sequential and 
+         *      containerId: -> adds to contained: []
+         * build lists to display:
+         *   register handler for each log item type
+         *   load data array, for each item get handler based on type name
+         * handlers: 
+         * object id versus time: array of [time, value]
+         *   display value for the first higher sequence number
+         *     
+         *   json reader calls fn 
+         *     for each logged entity: store data in hash by id:[{sequence, value}], add to child list of parent
+         *     
+        
+         *   button at top to select traversal fn: sequential or by iterator
+         * present as table in http://localhost:8000/test/e2e/runner.html
+         *    uses jQuery, get css from that, but use angular to build page
+         *  top level repeat: call listFn1 on data, nested is next fn
+         *    have a header dv, then more
+         *    button to expand: sets flag that is used to expand
+         * 
+         * why no match at lower levels?
+         *    assignRhs doesn't have control on iterate, but does in final graph
+         *    showing wrong instance of vertext (from rule, not from input graph? or bad use of restriction?
+
+         * 
+         * how to organize generated json?
+         *    top level objects to build up by referencing:
+         *      combined temporal order
+         *      by iterator task
+         *      logical from where task came from
+         * when to generate entries:
+         *    each important place to investigate later
+         *       at start and completion of each task
+         *    what objects to display?
+         *      - each call to trace
+         * 
+
+ * 
+ * register
+ *   get dest/store register from control - create parent edges between controls
+ * address for symbol, needs to be referenced in load and store
+ *   how to assign address to symbols?
+ * stmt sequence: another layer of transform (help with reversibility?)
+ * reversibility: filter out controls
+ * 
+ * il to stmt xform: how will the control of the assignment be built? 
+ *     another layer of rules - add or remove controls from instructions
+ * 
+    sequence rule: input is a series of step parse vertices
+       create step il vertex, edges for first and rest
+ */
+         * 
+        // examples to test workflow: 
+            switch between for loop and while loop
+              generate new code from that pattern
+        // how to do higher level pattern - high level description of system
+        //    match high level parts from info from lower level patterns
+        // express rules in IDW:
+        //   show as input (concrete) syntax instead of abstract parse tree classes
+         * more concise syntax to organize without repeating lhs vertex
+
+        // another example: differentiate and integrate
+        theorem prover
+        natural language generation
+        parsing natural language
+        
+     *   convert assignment & expression tree to instruction sequence and back
+     *   rule to match tree;
+     *      vars are unordered in scope
+     *      assume fixed registers for now
+     *   test cases:
+     *      parse assignment
+     *         x = a + b;
+     *      reverse: parse intermediate language: create stmt objects in code
+     *         load r1,a
+     *         load r2,b
+     *         add r3,r1,r2
+     *         store r3,x
+     *         
+  write correspondences that match: assignment, operation, load, store
+     *    how to match for load: reference to vbl in value context
+     *    how to match for store: assignment -> create place context, is vbl name
+            how to avoid binding input to a single dest?
+              use a restriction for a single compilation
+
+         steps to implement
+              define rules
+              set up initial source and destination vertices, edges
+                 connect to graph from parsed
+
+         how to allocate registers? is payload, call function to get register
+         
+         sequence il - just set edge to predecessors
+         
+     *    what is value/place context? the lhs edge, or create a new edge?
+     *       how to check for that? match on incoming edge, edge match checks inheritance from place or value
+     *    corr adds one instruction to output list
+     *       how to build output sequence?
+     *       how is correct ordering done? would like DAG
+     *         match the edge from expression to il vertex that has edge to destination
+     *    on start, create compilation vertex, input edge to assignment, output edge to collector
+     *       
+     *    need edge vacancy check or rules will fire again and again (or keep track of place)
+     *    avoid this and speed up by only enabling correspondences at places
+     *       identify: input vertex, corr, vertex in corr the vertex will match
+     *                 can be multiple vertices and edges
+     *             enabling is part of correspondence
+     *               tag correspondences, can have multiple
+     *       enablement iterator: replaces all rules all places iterator
+     *           iterate over tagged correspondences
+     * 
+
+     * parse input string using rosalyn
+     * convert parse tree with semantic info (links to symbol and type info) into data graph
+     * read application DSL
+     *    library of patterns
+     *    does disambiguation: resolve conflicts, additional information to enable matching
+     * do matching
+     * perform substitution
+     * re-generate -> same as input
+     * select different correspondence
+     * generate with new
+     * compare to new expected output
+     */
+
+        /**
+         * read from isx file: correspondence and higher level representations
+         * write also
+         * mapping between Vertex/Edge and Node
+         *    parent, isa/ref: edge colors
+         *    trait: edge color
+         *    payload: value
+         * call correspondence as transformation
+         *    load list of transformations to search through
+         * project graph into @/~ format
+         * 
+         * load GTD source into 
+         * 
+         * define mechanism for connecting to external graph, esp. parse tree
+         *   create Node from EDM or Rosalyn?
+         *   connect to a part of the graph
+         *   how to translate large input sets? just use gigs of RAM?
+         * use vizgraph to display?
+         * write correspondence in IDW, create correspondence from Node
+         *   create input data
+         *   create Node from output graph
+         */

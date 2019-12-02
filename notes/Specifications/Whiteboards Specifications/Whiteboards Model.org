@@ -1,0 +1,154 @@
+#+STARTUP: showall
+* Develop simplified whiteboards model (is different from low level code)
+** Entities
+*** Generate spec language from Spec.cs
+*** Content
+** Properties
+*** Selection states
+*** Button states
+**** Normal, pressed, toggled, hover, dragged, drop target, disabled
+*** Color, shading, visibility
+*** Caret position
+*** Floatie, context menu, chrome, split state
+*** (other info represented in test generator model code)
+** Basic operations
+*** Add: WB item, row, column, ozone
+*** Delete
+*** Move
+*** Copy
+*** Cut
+*** Paste
+*** Draw
+*** Erase
+*** Floatie operations
+*** Split
+*** Select
+*** Undo
+*** Redo
+** Invariants
+*** Assertions about property values
+**** What types need/allow expression of value of each property, or other constraint on value
+*** Last object interacted with is selected
+*** Objects exist until deleted
+*** Properties don't change except through commands
+*** WB item handle visible if object inside is selected
+*** Other rules for handle state
+*** Appearance of floatie
+** For each basic operation, rough shape of specification
+*** Each command is a transformation of state description, then simplification.
+**** A meta-function axiom?
+*** Is the command an operation on a graph that describes state abstractly?
+**** The command parameters determine to which vertex the rule is applied to.
+*** Translate gesture parameters to find node to apply command to
+*** Intentional app registers locations that recognize gestures, but those just change the implementation of the gesture? 
+**** MBT bypasses this by referring to node ids directly.
+** Conditions
+*** Pre/Post-conditions are a before and after graph. 
+**** Corresponding vertices have same name.
+**** Edges can be added or removed: use syntax to show added or removed edges in output graph
+**** Or, logic equivalent (to allow embedded logic), where a predicate expresses an edge, which corresponds to a the value of a pointer on object
+**** Extra formulas about payloads.
+*** Special cases: Refer to base graph and express additional constraints
+*** Undo/redo: keep history of rules applied. Replace deleted edges with dummy vertex connecting the two other vertices with edge info.
+*** Vertices can link to a representation of disjunction of features that support that command. Or do this as variables and predicates and convert to/from graph representation after. Constants refer to the vertex or edge in graph.
+*** Want these to be reversible to allow backward search.
+*** Distinguish between asserting that an edge is present versus adding or removing it. Post-condition of delete edge is really negation of the edge. The command is to delete it. 
+**** Having both command and post-condition checks that there was not a side effect of command internally.
+*** Inheritance of commands: specialization? Or just break down commands using logic.
+
+
+* How to represent entities, properties, operations?
+** Entities are objects in a space that variables can refer to. Command to create does an \exists.
+** Want assertions that hasProperty(x,y). Then detect when a property is asserted where it should not be. Meta-analysis via query?
+** Like type checking the specs: determine constraints on variable where property value is set
+
+* Putting type and inheritance into resolution avoids needless unification.
+** Can the inheritance axioms be left out if they are in the logic only?
+
+* How to use this to handle high contrast constraints?
+** Problem statement
+*** Objects are in one of the states (not relevant to this small example, later is predicate between entity and state)
+*** Each state maps object kinds to theme color
+*** Some theme colors are the same, some are different. There are different themes.
+*** Want to see contrast between objects
+**** Under what conditions?
+***** Transition between states
+***** Which objects need to be distinguished
+*** Work backwards to which theme colors need to be different (or else what?)
+*** Or just list the conflicts for each theme
+** Approach to expressing formally
+*** Predicates to relate:  each is a list of constant assertions
+**** object state, part type, theme field id
+**** Theme id, Theme setting, color
+*** Find: conflicts: theme id, part type(a/b), state(a/b)
+**** If states are not equal, then colors for same object part are not the same.
+*** How to express that two colors are the same or should not be the same?
+
+
+
+
+* Logic equivalent of Specs.cs
+** Partitions the types of objects (so we know that object must be one of the below)
+*** Use specialized inference method to deduce facts, 
+*** use rule in resolution without polluting list of regular candidates (cancel out a negated term)
+**** Iterate through facts, apply where can, but don't add to list
+*** Systematically iterate through the rules coming from data structure
+
+* How to describe "when event X occurs"? - e.g. selection afterwards
+** Predicate: event(time, location,type)
+** Use /exists to wildcard what is not needed
+** Time is latest or n events ago
+** Rules about type inheritance
+** Second order rule is that any place where type is allowed, inheritance applies
+
+* How to describe state, so that commands can modify it?
+** Tree of nodes with attributes
+*** UI and Data nodes
+*** Not actual node instances, just the possibilities
+**** During a command there may be specific objects that have references to them
+
+
+* Take existing model based test generator code and convert to logic?
+*** Refactor it to be small chunks of code that can be presented differently
+**** Why each code snippet is there, what feature invariant is being maintained
+
+
+** 
+** Problem is that data model of tester is not the same as app data structure
+** This is because app data structure is implementation and changes, which would make test code invalid
+** Map specifications to implementation data structure
+*** Track using reverse engineering/attributes
+** Code generate model data from specifications
+
+* Specifications - add to Specs.cs - or split into different sections
+** Attributes/state
+** Commands
+*** Pre-conditions: when command is allowed.  Assumptions that can be made by command for valid operation
+**** Spec for button should indicate disabled if precondition not met (at least)
+*** Post-condition: 
+**** Condition that must be established by implementation (model or app)
+**** Expressed as statements of after state, using variables that are defined by command argument or before state of that entity.
+*** Relationships between commands - allow statements across groups of commands, contents of clipboard, selection, undo stack
+
+* Templates for generating model code
+** Describe framework api - the pre and post-conditions each call provides
+
+* Start by writing rules as statements, but conditioned not on a class but a description of the type of entity to which the rule applies.
+
+* Sequencing of rules (in response to a command)?
+
+* How to make writing behavior model easy?
+** High level description of behavior
+** Have terms using in description expand as needed, where needed
+
+* Use to detect inconsistency in model, not just code gen
+** Sequences of commands that lead to inconsistent rules for setting state
+
+* Go through each command and describe what has to happen
+** What notation to use?
+*** Define what properties an object can have
+*** List post-conditions expected after each function call, even before the function is identified - just conditions between steps
+**** Be able to query where function is used, pre/post conditions for each call
+
+* Handle not implemented in a central place
+** Assertions that if depended on prevent selection of that event

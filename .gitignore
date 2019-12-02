@@ -1,0 +1,11 @@
+*.suo
+.suo
+packages/
+bin/
+obj/
+Backup
+TestResult.xml
+*.html
+*.vip
+.vs
+

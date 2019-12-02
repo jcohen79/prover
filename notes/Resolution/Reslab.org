@@ -1,0 +1,83 @@
+#+STARTUP: showall
+* Add paramodulation
+
+* Write proof verifier
+** get final clause in proof
+** Work back through LC,RC
+*** Validate RC, LC: if in input or are valid
+*** Apply subst
+*** Do delete from LC, RC
+*** Compare to clause
+** Put assert in each test
+
+* Change tests to not have outer lists, that allows concating strings
+
+* Do larger subsets first
+** Purpose: generate hypers and rights separately
+** Then skip subsets of that?
+*** Will the smaller sets add anything? 
+**** Do they get unified to one expression?
+
+
+* Unskolemize output: each clause in resolution tree - number the steps
+
+* Allow some predicates and functions to be stored as arrays, etc.
+** Operations like unify know how to work with interface, access interface from Lsm for op
+
+* How to write tests to exercise all branches?
+** Code coverage utility
+
+* Improvements
+** Use term net
+** Robinson’s positive refinement
+**** https://en.wikipedia.org/wiki/Term_indexing
+
+* Properties of terms to use in resolution
+** Types
+** Commutative (certain positions only)
+
+* Meta information
+** Meta-predicate 
+*** Evaluates to true/false based on existence of clause with given form
+**** This can then be used in resolution 
+***** If meta-predicate term is true, it does not block application of rule
+** Meta-term
+*** Result of unification is done by computation or information about clauses
+** How to make meta-rules be acted on by other inference?
+*** Describe resolution algorithm with predicates and axioms
+*** Meta-rules then extend those axioms
+
+* How to put type model into the resolution algorithm?
+** Assertions about the type of each argument to functions and predicates
+** Assertion about type of function, based on types of inputs
+** Inference engine about type assertions
+*** Cache results
+** Skip resolutions that violate type rules
+
+* Convert to enumerators
+** Purpose: search/hyperResolve
+*** walk through space of clauses, like graph matcher
+** Replace checking class with call function isLpr
+** Replace call to function with constructing object that does calc later
+*** isX does the calculation
+*** e.g. power set: just store position in iteration
+*** Get cdr returns object that represents next set, updates iterator
+
+** Check all uses of atom vs. nil (because of Li)
+** Use foreach  - at lower levels
+
+** Have two queues: lefts, rights.
+*** Each clause has an iterator of what it has been matched with
+*** Give control to clause to have it advance in its queue
+
+** Keep track of how far each clause has been unified,
+*** Advance them based on some strategy
+*** Can strategy cause it to skip ahead?
+
+* Indexing the list of clauses
+** Want to find only those clauses that could be unified
+** At each level, have a list of the predicate/function symbols, and then below that the clauses that have that 
+** Inverted list: 
+*** Order each list of clauses
+*** Find the intersection that can match the clause being unified with
+

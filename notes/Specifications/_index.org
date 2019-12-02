@@ -1,0 +1,8 @@
+#+STARTUP: showall
+* [[file:_main.org][_main]]
+* [[file:What goes in specs.org][What goes in specs]]
+* [[file:What to Check in Specifications.org][What to Check in Specifications]]
+* [[file:Language of specifications.org][Language of specifications]]
+* [[file:Software to Process Specifications/_index.org][Software to Process Specifications/_index.org]]
+* [[file:Small example of specifications.org][Small example of specifications]]
+* [[file:Whiteboards Specifications/_index.org][Whiteboards Specifications]]

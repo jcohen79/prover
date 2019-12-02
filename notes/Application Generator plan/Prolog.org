@@ -1,0 +1,11 @@
+#+STARTUP: showall
+* http://www.swi-prolog.org/download/stable
+
+* Created C:\Program Files\swipl\specs\contrast.pl
+
+* Issues:
+** Cumbersome to maintain list of mutually exclusive states. Parts would be too if there were more.
+** Maybe could use API to access info from Specs.cs 
+** Does not discover incompletess
+** How to understand inconsistency? Manually debug?
+** That examples probably could be done in SQL. What value does a more complex data structure built using prolog provide? Could do completeness and consistency of info in a way that is separate from actual execution.

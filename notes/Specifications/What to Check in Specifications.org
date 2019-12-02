@@ -1,0 +1,36 @@
+#+STARTUP: showall
+
+
+** Incompleteness
+*** (Express as rules that should be run on the rules themselves)
+*** Terms that have no definition
+**** What is defined enough? Each lack will mean some operations are not possible. Sometimes symbolic evaluation is enough
+*** For each each property
+**** Check value is defined by a command or rule for all possible states.
+**** In intersection: value is the same (e.g. >= vs <=)
+**** How to check that union of conditions is all that is possible?
+***** Satisfaction: Re-write rules, paramodulation
+***** Prove that negation of meeting conditions and invariant is contradiction
+*** For each Command
+**** Check behavior is defined in all states that it is enabled for
+***** Ways to prove:
+****** Being member of support implies member of required
+****** Conditions for support imply conditions of required
+****** Contraction if element in required in not element (meets condition) of required
+*** Invariants between commands
+
+** Inconsistency
+*** Check all places where the rules set the same property. Check that two such rules cannot be run in the same state, or they result in the same value
+**** Makes rule execution to be deterministic in the sense that order doesn't matter. 
+*** Check that commands do not set a property that is also set by a rule, unless there is a rule to map that change back to where the property value is derived from.
+*** Properties
+**** Rule results satisfy invariants
+*** Commands
+**** Post conditions satisfy invariants
+**** Pre-conditions are satisfied by invariants
+*** Invariants
+**** Each command post condition satisfies global invariants
+
+
+
+

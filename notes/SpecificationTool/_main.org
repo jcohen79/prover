@@ -1,0 +1,44 @@
+#+STARTUP: showall
+* To https://bitbucket.org/genivu/prover.git
+
+* Applications:
+** - Spec verification: series of commands that put model where an attribute is in unspecified state
+** - Pattern driven Reverse engineering
+*** Inputs of patterns match parse tree
+*** Outputs of patterns are facts about application
+*** Need high level templates for application structure
+** - Code generation from requirements
+*** Outputs of Patterns are code templates
+*** Inputs of patterns are facts about application
+*** Conditions determine when patterns are enabled
+
+* TODO
+** - Remove two way
+** - Define output generator
+*** Eg. Mathjax, lisp, infix
+*** Server side generation of content
+**** Send command to replace innerHtml in dom
+** - Define different processors: e.g. matching, resolution
+
+* Ayana
+* 639 995556554
+* Dimple
+* +639 174 4668 48
+* corpindimple@gmail.com
+
+* Bank Commerce Philippines
+* 019-20-017945-8
+* Sarsosa
+* tracycorpin@mail.com
+
+* BPI account
+* 2299-2498-86
+
+
+
+* https://docs.google.com/spreadsheets/d/18BkDqqBvrz5pQauW0vuBvOVovGXQoDf_4-s3g1PciZo/edit?ts=5a473877#gid=0
+
+* mindy carr
+* http://wechslerbecker.com/about/
+
+

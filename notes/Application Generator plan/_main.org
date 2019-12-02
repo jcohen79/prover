@@ -1,0 +1,44 @@
+#+STARTUP: showall
+* Come up with example application to drive development
+* Develop templates
+* Specs for application
+* For now use local file, later use e.g. OneNote
+
+
+
+* Example specs
+** Entity, relationship, attributes
+*** Construct as vertices connected by edges
+**** Vertices for E,R,A
+**** Edges to add references to each other
+** Commands
+*** Relationships between groups, 
+**** relationships are vertices, edges to vertices they apply to
+**** Relationship vertex has cardinality info if needed
+*** Preconditions
+**** Expression graph, connected to command via precondition edge
+*** Post conditions
+
+* Other intermediate steps
+** Start with simple semantics
+** Generate app skeleton of fixed structure using classes, methods based on entities, commands
+** Selection from available templates based on matching specs
+*** Eventually require facts to be derived
+** Method bodies from post-conditions of commands
+
+
+* Application generator structure
+** Read templates
+** Read app specs
+** Run search for solution
+*** For each template
+**** Match template to graph
+***** Unify parameters with edges
+**** Solve sub-problems
+***** Parts of template: e.g condition, body
+**** Prove/refute post-conditions
+***** High level conditions that do not depend on details
+***** Details may result in failure
+****** Request for detailed conditions is what drives subproblems
+****** Prover should first try to refute parts that do not depend on subproblems
+** Output resulting code

@@ -1,0 +1,130 @@
+#+STARTUP: showall
+
+* On Demand paramodulation using Esb
+** Index pti by pairs of top symbols
+** Could start from right or left
+*** Should do the one with fewer choices?
+** Filter out by sub-symbols that conflict
+** Only do those where a path exists
+*** With sub-term conflicts removed
+
+
+
+
+* Issues
+** Can't use p1 with set of support?
+** How to match only the desired
+** Broke puzzle test
+*** Changed 
+
+
+
+** How to display substitutions for each side?
+*** Constants: ascIn.rglsmData
+*** Variables:  Tde tdeIn = aicIn.rgtdeData[nId];
+*** Show proof: call fn to gather more info using logger
+**** Pass pti in to set field on acs
+**** Logger gets tde, structure to hold info
+**** Aic has rgtdeData, Abt has pair of Aic
+***** Each tde has clause and value posn
+**** Cmb.fProcessAscb - call fn on res.irr with proof info
+***** Generate lsx or html
+***** Show:
+****** On each side
+******* For each vbl on that side, show value expanded
+******* Show into an ascb and then convert to lsx
+***** The show fully substituted Acs
+**** Call resolution/paramodulation when showing proof
+***** Provide api to call that will insert html
+***** First one clause, then the other
+
+* Change Bas/prioritization to be on literal or equality terms instead of Acs
+** Prioritize on
+*** Change in size:increase vs reduce
+*** Give points if symbol is removed, e.g. h(t) = … even if rhs is bigger. 
+**** Only has to come before x=f(e,x), where a symbol is added but none removed
+*** Reduce points if symbol is added while none are removed
+*** Reduce for size of terms in clause outside that literal
+** Steps
+
+
+* Output the paramodulations being done
+
+* Problem:
+** paramodulation working correctly?
+*** Need tests
+** Priority to Get rid h - remove symbols, or change in symbols, vs increase in symbols
+
+
+** Can do out of order. How to avoid repeat work? Just do it again?
+*** skip paramodulation for sole variables
+
+*** Won't work beyond single variable, because there can be intermediate conflicts that could be resolved by nested requests.
+
+
+*** Need to do tree based equate from earlier position, between the clause in conflict and the axiom to resolve.
+**** Start from root of the literal containing the conflict, step down tree to match 
+**** step forward to the child that contains the conflict
+**** Is it always the last child visited so far?
+**** Other way is to store offset to beginning of term to get parent
+
+
+
+
+
+
+* --------------------------------------
+
+** Why doesn't ex 9 get solved?
+*** Need better ranking, include 
+**** topo sort for removal of symbols
+**** Distance of similarity from opposite literal 
+***** needs to be less expensive that doing resolution (generates less trash)
+**** In general, similarity to patterns that people use to direct proofs
+** If the equality term that is unified (alpha prime) is a variable, then it will match every term in A (except the literal level). Leads to large number of resulting clauses
+*** Can they be eliminated?
+*** In resolution, this kind of substitution only happens to children of predicate. Problem with not using paramodulation is explosion of x=y -> f(x)=f(y). How to use which approach is best?
+
+*** Replace axioms of the form x=A, B with B[x/A] - wrong, clauses are OR not AND
+**** When adding Acs to list, check for vbl that is equated that does not appear in the other side, then remove that literal and do subst.
+**** Remove x=x
+**** How to handle when vbl does appear in other side?
+*** Type of variable wouldn't help much.
+*** Could enclose in a function, and then other axioms apply in occurrences of that function. But would that be everything anyway? Also need to have rules to break down the terms and apply function recursively (as needed)?
+
+
+* Symmetry
+** in fEquate
+** For each function and predicate that is marked as symmetric
+** Define a stack of permute 
+** Instead of returning, pop stack and try other order
+** Embed needs to add that stack to backtracking - merge the two loops, flag to skip for Unify
+*** Change fUnify to call for each match permutation
+* Anti-reflexive is opposite (neg v pos)
+* Treat partition in a similar way as paramodulation
+** Each term that mentions a predicate in a partition, iterate through what the axioms would be
+** Like symmetry, have a special predicate that represents/matches all but Pn
+
+* Reflexive:
+** This does not get cases where a unification can be done on the two sides, to generate assert that some conditions -> particular terms can be resolved out.
+*** e.g. P(A,B) -> Q( C) asks how to unify A,B. P(x,x)? Could result in list of terms that need to be equal, or other relations. See if those come from paramodulation.
+* Symmetric functions, predicates: allow unification in either order
+** Each way can generate a new assignment of variables, need to treat as iterator
+** Or, keep list of forked tasks in equate. 
+** Save state (incrementally) and later resume with the other choice. 
+*** Best if state is stack and can be reset with a pop.
+** Each way of doing unify could result in new resolution: have it call out to generate those
+
+* Paramodulation: http://aitopics.org/sites/default/files/classic/Machine%20Intelligence%204/MI4-Ch8-Robinson&Wos.pdf
+
+** Prevents explosion from x=y -> f(x) = f(y) causing all equals terms to grow 
+** Hyperparamodulation  From <http://link.springer.com/chapter/10.1007/3-540-10009-1_17> 
+
+
+* Problem:
+
+
+* imdSetOfSupport - is generating outputs that are not related to hypothesis
+** Not seeing any asc with multiple literals. Why not?
+
+

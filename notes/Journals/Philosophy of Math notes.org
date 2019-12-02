@@ -1,0 +1,226 @@
+#+STARTUP: showall
+
+
+* What is math?
+** Relationship to logic
+* History of Logic and Math
+** Reasons for doubting proofs that refer to non-existing objects
+** Concepts that have been doubted (and been given derogatory names)
+*** irrational numbers
+*** Negative numbers
+*** Imaginary numbers
+*** Zero
+*** Real numbers
+*** Infinity
+*** Excluded middle
+*** Numbers the a proven to exist but not shown to exist
+*** non-Euclidean geometry
+** Why do we use those concepts now?
+** Foundations of math
+*** Set theory, category theory, homotopy type theory
+
+
+
+* what is it that mathematicians are talking about?
+** Affects what we consider the foundation of math 
+** limits of understanding of math limits our understanding of the sciences
+** Led to the development of analytic philosophy
+** Is the basis for automated systems for assisting mathematicians and scientists
+
+
+
+* Why is logic so intuitive?
+** Modus ponens is related to cause and effect, or is it?
+
+* Kit Fine TED talk
+** What are numbers? | Kit Fine | TEDxNewYork
+
+** Mental: difference between content of mind and brain state
+** Number of number vs. time/space/existence
+*** Issues with nature of existence and time/space
+
+* Timothy Gowers: Does mathematics need a philosophy?
+** https://www.dpmms.cam.ac.uk/~wtg10/philosophy.html
+* Problems
+** Continuum hypothesis can be true or false, depending on the context.
+*** Set theoretic multi-verse: transition between regions where CH is true and where it is false
+** So the important thing is the structure, not the individual objects themselves.
+** Are we talking about what is intrinstic to math or what is important to mathematicians?
+
+* What is mathematics?
+*** There is no consensus of what it means today
+*** Aristostle defined it as the science of quantity, but starting in the 19th century it began to include other abstractions such as group theory and projective geometry, which abstracts away the concept of distance.
+*** "Mathematics is what mathematicians do."
+*** Three leading types of definition of mathematics are called logicist, intuitionist, and formalist, each reflecting a different philosophical school of thought.
+*** Is mathematics a science?  Popper thought no, but GIT convinced him it is
+**** It compares hypothesis formed from intution to formal results
+
+*** See more at
+*** From <https://en.wikipedia.org/wiki/Mathematics> 
+
+
+* wiki
+* The philosophy of mathematics is the branch of philosophy that studies
+**  the assumptions, foundations, and implications of mathematics, 
+** purports to provide a viewpoint of the nature and methodology of mathematics, and to 
+** understand the place of mathematics in people's lives. 
+*  the source of their "truthfulness" remains elusive. Investigations into this issue are known as the foundations of mathematics program.
+
+
+* Controversies in philosophy of math (https://philosophynow.org/issues/19/What_is_the_Philosophy_of_Mathematics)
+** What is a number
+*** Abstract object - 
+**** Not in space or time
+**** What is an object?
+**** Fits in with truth, but why?
+***** Not just happens to be true, there is a force of necessity
+***** Seems absolutely certain, was influential in history of phil.
+***** Does not depend on experience
+**** What is an abstraction?
+***** Relation between instances and the abstraction itself
+***** What is the content of our mind after engaging in an abstraction
+**** how do we know about numbers?
+***** Special faculty of knowing?
+**** Problem of universals: do properties exist, if so what are they?
+***** Ontological: what are they
+***** Epistemological how do we know about them? 
+*** Mental constructs, things in our mind
+*** Things in the world:  empiricist (John Stuart Mills)
+**** Physical in some way
+**** Just seems true based on experience
+**** Based on Direct experience
+**** How to get from two things to number two? 
+**** Without already having the concept of two first
+**** Set of two things, but set is already abstract concept
+**** Formalism is more sophisticated version of the empiricist view
+***** Rules for manipulation of symbols on paper
+*** Logicism: 
+**** We know numbers in the same that we know logic
+**** Math is nothing more than logic (a special form)
+**** Logic does not initially appear to assert the existence of objects
+**** That did not succeed
+***** Math is logic + set theory, but set theory asserts objects
+***** But higher order logic is also a potential foundation, and is close to but not the same as set theory
+***** https://www.marxists.org/reference/subject/philosophy/works/at/godel.htm
+*** Kant: math not simply concepts. Also intuition,
+**** Concepts & int. representation
+**** Intuition: Quasi-perception representation, not empirical
+***** Pure and apriori
+***** Has some features of perception
+**** Intuitional: like spacial representation, which is different from concept
+**** What is the nature of math knowledge
+
+** Is math discovered or invented?
+*** http://www.cs.virginia.edu/~robins/Why_Math_Works.pdf - argues it is both
+**  Paul Benacerraf
+*** 1) given that mathematical objects don’t have causes or effects, how can we refer to them? (Referential  access)
+*** 2) given that mathematical objects don’t have causes or effects, how do we have any knowledge of them? (Epistemic Access)
+*** Responses
+**** Mathematical Realism
+***** Frege: called linguistic or semantic realism, because of the prominence of language
+***** Kurt Gödel:  special faculty of intuition. This is Platonism proper (with a capital ‘p’) because, as with Plato’s theory of the forms, an abstract realm is postulated as well as a means of being acquainted with that realm.
+***** Hilary Putnam – one of America’s most influential philosophers today – has put forward an argument based on Quine’s arguments for epistemological holism. Quine contends that our knowledge is a unity, and that it is not possible to isolate one aspect of our knowledge from all others. Putnam’s argument runs like this – if we take our scientific theories seriously, we are committed to believing in the entities postulated by those theories, even when it isn’t possible to experimentally verify their existence. However, if our knowledge really is holistic, as Quine claims, then the theoretical entities aren’t the only objects to which we commit ourselves by accepting a theory: as mathematics is involved in expressing physical theory, we are also committed to accepting the existence of mathematical objects. This is the Indispensability Argument – so called because mathematics is indispensable in science.
+**** Anti-realist
+**** Structuralist
+
+** file:///Users/joncohen/math/Philosophy%20of%20Mathematics%20-%20New%20World%20Encyclopedia.html (is a rewrite of the wiki)
+** what is the topic?
+*** not mathematical phil, that is a technique of other kinds of philosophy
+*** there are phil questions about that approach that are related to phil of math, but are more specialized
+***  ideas concerning the nature of mathematics
+*** historical approaches to phil of math are alternative views of what mathematics is, and hence affect what mathematical entities are
+*** group
+**** in abstract reality
+**** in the mind
+**** on paper
+**** in society (subset of in the mind or on paper?)
+
+* Schools
+** Platonism
+** Empirical instead of rationalistic
+** logicism, formalism, and intuitionism
+** Predicativism
+** Structuralism is a theory in the philosophy of mathematics that holds that mathematical theories describe structures of mathematical objects. Mathematical objects are exhaustively defined by their place in such structures.
+
+
+
+
+* Platonism
+** "metaphysical view that there are abstract mathematical objects whose existence is independent of us"
+** The name Platonism is because the concepts were inspired by Plato's discussion of forms in Parmenides, but modern platonism has discarded many of the early claims of historical Platonists regarding epistemological access to forms, leaving mainly metaphysical arguments for the existence of abstract objects.
+** Frege (father of analytic philosophy) made an important argument in favor of Platonism, that mathematics depends on the existence of mathematical objects. He argues against formalists' idea that arithmetic is simply the manipulation of signs, like a game.
+** "For if they were viewed as having sense, the rules could not be arbitrarily stipulated"
+*** "it is applicability alone which elevates arithmetic from a game to the rank of a science"
+** (See Sereni, https://academic.oup.com/philmat/article/23/1/11/1431748)
+
+** Quine and Putnam are generally considered the original proponents of the indespensibility argument.
+** That would imply mathematical truths are discovered, not invented.
+* Logicism: 
+** Frege goal was to show that mathematics is based on logic, without appeal to intuition
+** Leibniz made attempts to axiomatize logic using diagrams and numbers
+** Details had to wait until math and logic were formalized -
+** Frege had much more success with his system than did Leibniz, but still had limits
+** Frege's Basic Law V led to Russell's paradox.
+*** It said that two sets are equal if the corresponding properties where the same
+** Solution was to define classes before they could be referred to
+** That led to a hierarchy of types of mathematical objects
+** Hume's principle says that numbers of things are equal if they can be put one to one.
+** "At present, philosophers of mathematics attempt to construct general theories of abstraction principles that explain which abstraction principles are acceptable and which are not, 
+* Intuitionism
+** Mathematics is a idealized process of construction
+** Fell out of the mainstream
+** Rejects the law of the excluded middle, because that does not give the answer. Intutionism rejects existence proofs as metaphysical.
+** Has been picked up in computer science because of its usefulness in Curry-Howard correspondence, which provides a correspondence between computer programs and mathematical proofs as well as type theory, which ties into the solution to the Russell paradox)
+* Formalism: mathematics is essential a game involving symbols and rules.
+
+* The historical motivation for the development of structuralism derives from a fundamental problem of ontology. Since Medievaltimes, philosophers have argued as to whether the ontology of mathematics contains abstract objects. In the philosophy of mathematics, an abstract object is traditionally defined as an entity that: (1) exists independent of the mind; (2) exists independent of the empirical world; and (3) has eternal, unchangeable properties. Traditional mathematical Platonism maintains that some set of mathematical elements–natural numbers, real numbers, functions, relations, systems–are such abstract objects. Contrarily, mathematical nominalism denies the existence of any such abstract objects in the ontology of mathematics.
+
+* The identification problem argues that there exists a fundamental problem in reducing natural numbers to pure sets. Since there exists an infinite number of ways of identifying the natural numbers with pure sets, no particular set-theoretic method can be determined as the "true" reduction. Benacerraf infers that any attempt to make such a choice of reduction immediately results in generating a meta-level, set-theoretic falsehood, namely in relation to other elementarily-equivalent set-theories not identical to the one chosen.[1] The identification problem argues that this creates a fundamental problem for Platonism, which maintains that mathematical objects have a real, abstract existence. Benacerraf's dilemma to Platonic set-theory is arguing that the Platonic attempt to identify the "true" reduction of natural numbers to pure sets, as revealing the intrinsic properties of these abstract mathematical objects, is impossible.[1]
+
+* From <https://en.wikipedia.org/wiki/Benacerraf%27s_identification_problem> 
+
+* Shapiro divides structuralism into three major schools of thought.[4] These schools are referred to as the ante rem, the in re, and the post res.
+* The Ante Rem ("before the thing"), or fully realist variation of structuralism, has a similar ontology to Platonism. Structures are held to have a real but abstract and immaterial existence. As such, it faces the standard epistemological problems, as noted by Benacerraf, of explaining the interaction between such abstract structures and flesh-and-blood mathematicians.[3]
+* The In Re ("in the thing"), or moderately realistic, structuralism is the equivalent of Aristotelean realism. Structures are held to exist inasmuch as some concrete system exemplifies them. This incurs the usual issues that some perfectly legitimate structures might accidentally happen not to exist, and that a finite physical world might not be "big" enough to accommodate some otherwise legitimate structures.
+* The Post Res ("after things"), or eliminative variant of structuralism, is anti-realist about structures in a way that parallels nominalism. Like nominalism, the post res approach denies the existence of abstract mathematical objects with properties other than their place in a relational structure. According to this view mathematical systems exist, and have structural features in common. If something is true of a structure, it will be true of all systems exemplifying the structure. However, it is merely instrumental to talk of structures being "held in common" between systems: they in fact have no independent existence.
+
+* From <https://en.wikipedia.org/wiki/Structuralism_(philosophy_of_mathematics)> 
+
+* In metaphysics, nominalism is a philosophical view which denies the existence of universals and abstract objects, but affirms the existence of general or abstract terms and predicates.[1] There are at least two main versions of nominalism. One version denies the existence of universals – things that can be instantiated or exemplified by many particular things (e.g., strength, humanity). The other version specifically denies the existence of abstract objects – objects that do not exist in space and time.
+
+* From <https://en.wikipedia.org/wiki/Nominalism> 
+
+
+* The classic starting point of nominalism has been the edict issued by Louis XI in 1474 commanding that realism alone (as contained in scholars such as Averroes, Albert the Great, Aquinas, Duns Scotus and Bonaventure) be taught at the University of Paris, and ordering that the books of various 'renovating scholars', including Ockham, Gregory of Rimini, Buridan and Peter of Ailly be removed. The edict used the word 'nominalist' to describe those students at Paris who 'are not afraid to imitate' the renovators. These students then made a reply to Louis XI, defending nominalism as a movement going back to Ockham, which had been persecuted repeatedly, but which in fact represents the truer philosophy. 
+
+* From <https://en.wikipedia.org/wiki/Nominalism> 
+
+
+
+* Godel
+** this means that the certainty of mathematics is to be secured not by proving certain properties by a projection onto material systems - namely, the manipulation of physical symbols but rather by cultivating (deepening) knowledge of the abstract concepts themselves which lead to the setting up of these mechanical systems, and further by seeking, according to the same procedures, to gain insights into the solvability, and the actual methods for the solution, of all meaningful mathematical problems.
+
+** From <https://www.marxists.org/reference/subject/philosophy/works/at/godel.htm> 
+
+** Phenonomenology versus Cartesian method
+*** Phenomomenogy is 
+*** systematic reflection on and study of the structures of consciousness and the phenomena that appear in acts of consciousness
+
+**** From <https://en.wikipedia.org/wiki/Phenomenology_(philosophy)> 
+**** Noesis is the understanding itself, is the content of the thought
+*** Cartesian method of analysis which sees the world as objects, sets of objects, and objects acting and reacting upon one another.
+
+* Why do the different approaches to the foundations of math come to the same result?
+** Has one of them come closer than the others? Is there a correct answer?
+** "What "truth" or objectivity can be ascribed to this theoretic construction of the world" Hermann Weyl. In other words, if mathematics is the epitome of truth, what is its truth about? 
+
+** From <https://en.wikipedia.org/wiki/Foundations_of_mathematics> 
+** "
+
+
+
+
+* Picture the relationships
+** social
+** formal
+** realist

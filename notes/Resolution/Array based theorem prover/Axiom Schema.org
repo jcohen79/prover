@@ -1,0 +1,58 @@
+#+STARTUP: showall
+* Purpose: avoid maintenance problem of scattered references to lists of predicates, values
+* Express axioms as forall over predicates
+** How to handle iterated OR (e.g. S1(x) v S2(x) v …)
+*** Needs to be moved in SKO
+*** Equate, match need to do intersect, etc.
+*** Build larger expression to express subtraction. 
+*** SKO: Replace expressions with actual value set, 
+**** Define symbol to hold actual value, refer to that in Asc
+** Implementation sequence
+*** Modify unify to call continuation for each match (later symmetry also)
+*** Define classes for set value
+**** Can contain any symbol or expr.
+*** Equate:
+**** Can backtrack to produce multiple substitutions
+*** Resolve: fTermMatches: need to split out as needed
+*** Test: Construct Lsm, Asc directly
+** Syntax (update grammar later)
+*** AND: \forall p \in set logic-expr
+*** OR: \exists p \in set logic-expr
+*** Set: {a ,b, c }, { x \in z : x \neq y }
+*** Name - from 'let name = expr[,…] in stmt'
+*** Later: 
+**** Let name(parms) = value[,…] in stmt
+**** name(args)
+**** All defs in same let can refer to each other
+**** If expr then expr else expr
+*** https://en.wikipedia.org/wiki/Set-builder_notation
+*** Allow matching (), []
+**** https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols
+**** http://www.metamath.org/
+** Lsm for variable can have set value
+*** Set
+*** Operators: union, difference. Use +, - to add/remove a singleton
+*** 
+** Sko equivalent of grammar: 
+
+* Identify all places in algorithm that match symbols
+** Cases (depends on where, in algorithm, some may be reversed)
+*** Matches exactly: result is same
+*** A subset match: result is subset
+*** Element match: that element
+*** For removal of K: create difference
+* Treat as more like a constant, so it has a symbol
+** Check type of each symbol, that's where the types come from anyway
+** Consider how types will be carried for variables. Nth child of fn/pred
+** Create declarations of sets
+*** Operations: all in S except C
+**** Later: union
+*** Unify needs: intersect
+*** Result of equate is a symbol
+**** refers to the intersection expression
+*** Later match with same symbol can cause narrowing of intersection
+**** When null intersect, equate fails
+* Use iterators in unify/show as needed
+
+*** SKO: Move foreach up to clause level, like quantifiers.
+**** Predicate/function variable refers to quantifier

@@ -1,0 +1,46 @@
+#+STARTUP: showall
+* https://1drv.ms/f/s!Arf-KV4LJ_AIZ1Qn-ejk0xhh55Q
+
+
+
+
+* From Categorical Logic to Facebook Engineering 
+** https://scontent.xx.fbcdn.net/t39.2365-6/11891341_869479023140275_1704740894_n/From_Categorical_Logic_to_Facebook_Engineering.pdf
+* http://fbinfer.com/docs/separation-logic-and-bi-abduction.html
+* https://www.semanticscholar.org/paper/Local-Reasoning-about-Programs-that-Alter-Data-O%27Hearn-Reynolds/219c95e028a1a8e2baebdecb8b998e12a03bc33b/pdf
+* https://en.wikipedia.org/wiki/Separation_logic
+
+
+
+* Viper: A Verification Infrastructure for Permission-Based Reasoning 
+** http://people.inf.ethz.ch/summersa/wiki/lib/exe/fetch.php?media=papers:viper.pdf
+** Seperation logic is instance of permission logic
+
+
+
+* First-Order Theorem Proving and VAMPIRE? 
+** http://www.vprover.org/cav2013.pdf
+
+** E-unification http://www.cs.bu.edu/~snyder/publications/UnifChapter.pdf
+
+* PSOA2TPTP: A Reference Translator for Interoperating PSOA RuleML with TPTP Reasoners
+** http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.674.1576&rep=rep1&type=pdf
+
+* Model checking vs theorem proving
+** https://www.cs.cornell.edu/home/halpern/papers/manifesto.pdf
+** https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-601.pdf
+*** Nice overview
+
+* https://en.wikipedia.org/wiki/Homotopy_type_theory
+
+* http://glat.info/pdf/formal-methods-amazon-2014-11.pdf
+
+
+* https://hott.github.io/book/nightly/hott-online-1075-g3c53219.pdf
+
+
+* http://imps.mcmaster.ca/doc/seven-virtues.pdf
+** Farmer, The Seven Virtues of Simple Type Theory
+
+* http://www.kenkubota.de/files/fom.pdf
+** Lots of links, design decisions in logic

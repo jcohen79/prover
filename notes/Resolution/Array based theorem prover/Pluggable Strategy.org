@@ -1,0 +1,95 @@
+#+STARTUP: showall
+* Base class for rank: Rnk
+** Subclasses for different kinds
+** fCompare: Fn to determine < or > for each pair
+** Bas to use Rnk instead of size
+** Res takes function that returns a Rnk for each clause
+** Test Rnk on example clauses
+* 
+* Ranks: Something easy to get started
+** Count number symbols, add to size
+** e.g. replace a function definition, e.g, even if size goes up
+*** How to determine that a symbol has been eliminated? Is one side of equality, and other side has no occurrence of it, transitively.
+** Distance from hypothesis
+
+* Depth first search across different strategies
+** Allow each to progress at equal rate
+** How to rank these without requiring a numeric formula?
+*** Assign the ranks as needed - as object
+*** Function to compare to rankings, linearly
+
+
+* Use interface, call hooks at key points in resolution
+** Pull in clauses from unfiltered selectively, based on they match something
+** Hooks
+*** Use axiom on clause
+**** e.g. only if result can be used somewhere
+**** the
+* Better selection of clauses to resolve
+** Change Bas to be based on priority
+*** Depth in proof (minimum) + size
+**** Replace left/right with depth?
+*** How to avoid complicated patterns of f/g that are not matched by another clause?
+**** They will unify with a variable and get bigger
+**** Number of references (opposite side) to same term
+** Map out proof
+*** Ideas
+**** Hash table on each Bas, count dups
+**** Put larger term in clause first
+**** Remove unneeded axioms
+**** 15 is not positive resolution - when to not use it? Any axiom?
+**** g (x) is inverse of x
+**** Where is 14 used? Substitute out h
+**** Start from hypothesis, Resolve out h
+**** Why doesn't set of support work well?
+**** Use semantic resolution?
+**** What does h mean? Skolem fn?
+**** See how Ex9 gets rid of h and g
+**** 73. f(f(f(f(xy)z)g(h(xy)))u)=f(f(f(f(xy)z)f(yf(xf(g(y)g(x)))))u), 72 and 91  -28/89
+**** 88. f(f(f(f(ab)b(a))b(h(ab)))g(b)) !=y y !=e, 87 and 83 -28/89
+**** 89. f(f(f(f(ab)g(a))f(bf(af(g(b)g(a))))g(b))!= e, 73 and 881 -27/97
+
+
+* Example of how to remove  g,h:
+* h(xy)=f(f(f(xy)g(x))g(y)) 
+* h(h(ab)b)!=e 
+
+* How to derive substitution from equality axioms?
+* Use generalized form to guide proof before paramodulation
+** Prefer the substitution axioms as needed to remove occurrences of h
+** u!=w,  f(ux) = f(wx)
+** Start from x=x and build up both sides, use transitivity to replace one side
+** x!=y, y!=z, x=z  
+
+* How replacement follows from equality axioms: (generalize to strategy for removing function even when not equality)
+** f(x) = A(x)
+** g(f(x)) = C(x)
+
+** Want: g(A(x)) = C(x)
+** x=y -> g(x) = g(y)
+** x->f(x), y->A(x)  =>  g(f(x)) = g(A(x))
+** x=y & y=z -> x=z
+** x-> g(f(x)), y-> g(A(x)) =>  g(A(x)) =z ->  g(f(x)) = z
+** x-> C(x), y->g(f(x)), z->g(A(x))  => C(x) = g(A(x))
+
+* Repeat this over all g and other arguments to replace f by its definition A
+** This removes a symbol, but others are added (A)
+** How to know that is progress? Can f be eliminated from clauses?
+** If this rule can be applied to all clauses where f appears, then f can be removed.
+
+* Find what axioms follow from paramodulation: show axiom schema being operated on
+** Need a starting clause to apply paramodulation to?
+** Axioms
+*** Reflexive
+**** Follows from symmetry and transitivity
+*** Symmetric
+**** Assume y=x, (does paramodulation imply symmetry?)
+*** Transitive
+**** Assume x=y, y=z, then susbt x for y to get x=z.
+*** Substitution
+**** Assume x=y, reflexivity: f(x)=f(x), use subst to show f(x)=f(y), etc.
+
+* Show that proof without paramodulation techniques can be converted to one with them that would be found by algorithm
+* Prove that subst axioms are not needed when paramodulation used?
+** Or when do they need to be run?
+

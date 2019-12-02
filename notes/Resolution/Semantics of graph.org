@@ -1,0 +1,61 @@
+#+STARTUP: showall
+
+* Execution on computer follows rules that relate the code to relationships between before and after state. Those relations are used to reason about programs. Programs are a way to achieve a state that has desired relationship to inputs. Commands are issued by user to select the mapping they desire to transform the previous state to the new state. Sequences of statements can be broken down into sequences of mappings.
+
+* Edge is a predicate that asserts that the possible values of the two vertex variables can only have values that correspond to points in a space that have that connection.
+
+* Three way predicate can be replaced by a star of vertices. 
+
+* A vertex can be a variable or constant.
+
+* Reslab can use graph as conjunction of edges.
+** How to represent a series of statements? i.e. Clausal terms.
+
+* One could take a collection of rules pattern->pattern and perform resolution on them to get new rules. What do those rules mean? More general relationships that must be true? 
+
+* A system of code generation work by generating a proof that the resulting program satisfies its requirements.
+
+* An invariant can be an assertion that some predicate (e.g. edge) is true or false. We should be able to mark an edge as a negation. The non-existence of an edge means an unknown.
+** Each edge assertion applies only to variable values that satisfy all the other edges on same vertices.
+** Asserting a edge when one is already negated is a contradiction
+** How to represent the negation of a n-way predicate (as a star)?
+*** Mark the center vertex as negated: means that such a vertex cannot be created.
+*** Each edge to center of star is a special edge related to which argument it represents
+*** Does it make sense to split the edges? If they are not created elsewhere, then graph operations (eg. Resolution) should not split them
+** The clauses used in resolution are in CNF, which means just terms: the vertices are either constant or referenced by quantification that is implicit in the conversion
+** How to know when negations can be added to the main graph? Certainly these are needed to know when a pattern can be applied.
+** What needs to happen for main graph to be considered in CNF?
+
+* Options for dealing with edge negation (open/closed)
+** Mark edge as negated
+** Absent edges are considered not there.
+*** Add edges to indicate more can come later
+** If an edge is added later, any deduction that depended on absence is revoked.
+*** This means that record is left of deduction
+** Edgedef is marked as locked for that vertex
+** How to represent negated edge in formula. CNF would put it on LHS, but what about in non-normalized form (to be more readable)?
+** Additional vertex, linked to other two vertices, refers to edge being described and with info about allowed conditions for that type of edge between those two vertices.
+
+* Definition of predicate has the edgedefs that correpond to its arguments. Those tell unification etc. where to descend to.
+
+* Using graphs
+** Convert logic formula to graph
+** Represent graph as logic formula
+** Adapt Reslab to work on graph
+*** Map reslab operations on atoms, lists to operations on graphs
+*** Want to use vertices embedded in larger graph, how to know what to traverse during resolution?
+*** Resolution is always searching for matching positive and negative terms
+
+* A pattern replacement is really an resolution where the left side (pattern) negated, from which the right side can be deduced (because rule says ¬A Ú B and we know A)
+** The LHS must be an isolated graph. Connected only by edge into it that says it is part of rule. Also for RHS, but that is what is applied.
+** Unification and other resolution operations should work on the graph connected by that.
+** Is there a case where disconnected is needed? Need multiple edges.
+** The entire LHS is negated because of the LHS edge to it from a clause.
+** Result of resolution is new clause.
+
+* Reslab:
+** Create a series of proof test cases, both true and false.
+** Identify functions that need to work with the graph form of expressions
+*** Others are lists of expressions
+** Change organization so it finds any direction, not just shortest.
+*** Is existing backtracking enough?

@@ -1,0 +1,101 @@
+#+STARTUP: showall
+** Structure of specs
+*** Use macros to hide representation details
+**** Type checking is performed during expansion
+**** Better error message would result from tracking back input to source where macro argument is provided.
+**** Macro parameter type is a form that expands to an expression of some type
+*** General pattern for for expressing formally
+**** Make each aspect of situation (object, time, type, property) a concrete object
+**** Define relations between those objects
+**** Assert the facts about relations that need to be true for desired behavior
+*** Time relations
+**** Important assertion is that no event occurs between t1 and t2 with property
+**** Transitive for >=, =, and >
+**** If two times are not equal, then one must be < than the other
+
+** What are overall specs for app?
+*** There is a sequence of gestures and commands that are executed in response to the gestures
+*** Commands have an execution time, order that is consistent with gestures
+*** The command and gestures are related according to rules of most specific response
+*** Command execution:
+**** Commands have subcommands
+**** Command type hierarchy
+**** Each command has a set of component steps
+***** Steps are specified incrementally: they exist and they can have sequence relations between them
+**** Spec is asserting that program state has observable state that follows given rules
+**** How to say the steps happen?
+***** Assert that if a step executes, with given input, that the post-condition holds. Each command condition refers to a predicate on that execution object to say if that predicate is true then the conditions of the command hold
+****** Is this assertion second order? Each command has its own predicate? Use a macro.
+***** It is the execution of the command that has the start/stop time.
+***** Assert the predicate on the execution that says it occurs
+
+**** How to describe change in state?
+***** Functional language relates input to output, but app is fundamentally imperative
+***** Describe relations between before and after state, based on the command part of the before state. 
+****** Use predicates and functions to refer to parts of state
+****** How to describe effect of user gesture with event? How to express a series of gestures?
+******* Could describe relationship between states before/after gesture
+**** How to express logic of which command step implemented is selected, and how that step definition is applied?
+***** (same concepts will apply to representing changes to state, etc.)
+***** Define entities used in representation of command structure
+****** Each type is a constant. Type info is assertions about subset, disjointness of type constants.
+*** Commands
+**** Type of action
+**** Assertion about what changes when the command is executed
+**** Assertion about what stays the same when the command is executed
+**** Combine rules for exceptions to rules:
+***** Represent responses to gestures as a compound command steps. A spec can assert that there is a more specific implementation of each step. Then assert that the way a command is processed is to find the most specific command that applies for each step. 
+****** Need to assert that there is no more specific version than those asserted to exist. There does not exist a more specific version. One at a time? 
+****** Define a relationship between more specific and more general specifications.
+****** Assert that the command to respond to an input gesture is to find the most specific version.
+****** What is the spec for actual behavior: series of gestures?
+****** How to evaluate the condition that is associated with a command specification?
+******* Specs refer to conditions via constant symbols, or functions of the associated 
+******* Write statements that assert that condition is satisfied (a predicate) iff some expression regarding property of entity that is identified by gesture
+
+*** Command execution
+**** Command type
+**** start and end time
+*** Entity
+**** Has a property whose value is the entity type,
+**** Has rule that if there is a command to set a property on entity that is not defined for the entity, then an error exists
+*** Entity type
+**** Inheritance
+**** has a defined set of properties
+*** Valid commands based on description of results of accessing properties
+**** Commands describes conditions when it can be applied
+**** That gets distributed over all the entities where it is possible to be applied
+*** Represent properties using property objects and set of commands 
+**** How it works
+***** Accessing a property value means there exists a value and a command that sets the property to that value, and there is no more recent event that sets the same property
+***** Setting a property value at time t means there is an event that sets the property to that value. Time of event is time of 
+***** Property - define a type. E.g. property list predicate uses that 
+***** Explicit property list to iterate over for assertions
+****** How to specify a list: 
+******* operations to add, remove, foreach
+******** } How to specify an operation?
+********* Assertions about what is true after
+******* Type of element: 
+******** } Depends on type of parent, other conditions
+******** } A Type object is the value of property of an object
+******** } Type objects have relationships between them: subset, instance, disjoint
+******** } Similar to rules at the meta-level for controlling inference, but can be more specific about the allowed values. This is because the meta-level is just used to speed up inferences, and doing type checking on source. Types that describe run-time specify the allowed values that occur at run-time. Inconsistencies there are an error in the system being described, not the description itself.
+***** Set property means store on list of values
+***** Environment has property list
+****** When to split out predicates into separate "tables" vs one big one? E.g. property list per each object, or single property list for entire environment. One predicate can be defined in terms of others, so they are equivalent
+****** E.g. P1(x,y) ^ P2(y,z) <=> P3(x,y,z)
+***** Command to set single property asserts that no other property changes during that command
+****** What about concurrent commands? One must have come after (relative to observer)
+**** Purpose: express how parts of state remain the same while other parts are changed
+***** Specifically, how to specify that different aliases for same object are also affected by command.
+**** Positives
+***** First order way to describe what properties need to be specified
+***** Allows being explicit about what changes or stays the same
+***** How to avoid being just programming?
+****** No specific sequence, unless part of spec
+
+**** Negatives
+***** What flexibility is there in implementation/abstractness
+***** An implementation is good at specifying what stays the same. How does this avoid the complexity of an implementation, while still capturing the specs?
+****** Keep ability to specify partial behavior
+****** List the changes that are specified to happen when an event occurs in a particular state

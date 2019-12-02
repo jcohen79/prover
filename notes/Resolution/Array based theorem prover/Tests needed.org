@@ -1,0 +1,15 @@
+#+STARTUP: showall
+
+* Test for ascFilter:
+* Test full version of equate (with fUnify)
+* Test cases:
+** Change Lsm default to be constant: Or set parm on parser.
+*** Define a fn to mark objects as constant.
+** equate
+*** Check recovery from push
+*** Mismatch in different argument positions, 
+*** Singleton cases for L and S: 
+**** Pred, fn, vbls, consts
+*** Occurs across multiple vars, back and forth
+** Compare run time for large test cases
+*** Larger proofs, using equality

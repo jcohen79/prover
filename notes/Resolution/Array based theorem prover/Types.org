@@ -1,0 +1,15 @@
+#+STARTUP: showall
+* Purpose: performance - prevent unifying variable with an expression of wrong type
+* Type on variable, constant/function/pred args/results
+** Don't equate var with subterm of different type (could be another var)
+** Issue: type is like a predicate. Single object can have different roles
+** nIdentifier: assign unique ids to the clauses at start of resolve/filter? Avoid need for long
+*** Where are the places where identifiers are compared?
+** Check type in equate, paramodulation
+** More complex rules prevent growth in clauses. Can do type checking at end of equate to let other matching catch conflicts.
+** nIdentity: include other info in id to quickly identify type. Use array lookup to find lsm for const/pred/fn. Vbl ids have prefix byte to indicate type id. Use long for id, allow 2 bytes for type.
+** Keep a level number on type, walk up until find match (or build matrix)
+** Multiple inheritance of types
+* Types: filter the terms that can be unified: only those of compatible types
+** Define arg and result types of each fn, predicate
+** Quantification: define type of var

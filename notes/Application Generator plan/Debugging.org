@@ -1,0 +1,8 @@
+#+STARTUP: showall
+* Perform queries on whole graph or specific objects - see Query Language
+* Organize entities for convenient lookup
+* Allow vertices/edge sets to be expanded
+
+* Debugging nested subsitution, when intermediate results are discarded
+** Show a list of all the possible candidates for matching
+** User selects a matching to perform it and show logging

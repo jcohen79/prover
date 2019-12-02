@@ -1,0 +1,17 @@
+#+STARTUP: showall
+* Language and tools
+** The tools seem focused on checking the correctness of algorithms that have already been written. They use different types of back end provers.
+** Use of the language as a specification language seems more applicable to writing app specs.
+
+* http://research.microsoft.com/en-us/um/people/lamport/tla/tla.html
+
+* http://tla.msr-inria.inria.fr/tlaps/content/Home.html
+** TLA+ Proof System home page
+
+* http://www.msr-inria.fr/projects/tools-for-proofs/
+** List of papers
+
+* TLA+ Proofs
+* https://hal.inria.fr/hal-00726631
+** Good overview of relationship of TLA+ prover and TLA+
+

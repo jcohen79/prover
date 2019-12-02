@@ -1,0 +1,100 @@
+#+STARTUP: showall
+* Come up with overall structure, then figure out structure of axioms
+** UI transformation: map app and document states into UI state
+** Primitives
+*** purpose
+**** Allow collection of facts about app
+**** Use rules to infer new facts from given ones
+**** Detect missing and conflicting facts
+**** Allow expressing applicability and inheritance of rules
+*** Representation
+**** Define Function part and use them in quantification separately, so functions can be reused in different contexts
+*** types
+**** Objects
+**** Properties
+***** Relation: entity, property, value, rule. Rule has condition, used to resolve conflicts.
+**** Values
+**** Events
+**** Commands
+***** How to express the effect a command has on state?
+***** Refer to rule to indicate when it applies
+***** Bind variables to entities and values in preceding state
+***** Describe changes that yield modified state
+***** Relate to variable that refers to the event time, to be used when looking up value at a time
+**** Rules
+***** Inheritance
+***** Conditions
+****** Overrides: the rule with the more specific condition has precedence in that case
+****** How to refer to a condition in a rule definition?
+******* Equate a name to a lambda function. Then apply condition to data.
+******* How to express lambda fn in logic? Like functional programming, a series of equations between arg values and a value.
+******** } valueOf(C, arg) = fn(arg)
+***** Effect: what is true in the condition, e.g. associate event with command, or result of command
+*** Meta-rules
+**** Each entity has a set of properties, depending on values.
+**** Each defined property has a value
+**** No property can have more than one value assigned to it
+**** How to evaluate a condition in a specific context? Eval?
+**** Inference: how to track the source of derived facts? Meta-info from proof is ok, if there is no need within the model.
+** Structure
+*** UI
+*** App
+*** Document
+** State
+*** Ui
+*** App
+*** document
+** Event enabling:
+*** e.g. a menu item cannot be picked if menu is not open
+** Command:
+*** Relate the state after command to what it was before
+** Command table: map event stream into command stream
+*** Is a set of axioms containing terms with info from app command table
+** Event sequence: valid event sequence
+** Event Generation
+
+** Operations: primitive elements that commands are made up of
+*** Relate state before operation to that after
+** Test model structure
+*** Stmt generation axioms have an equality term that paramodulates to insert the code
+**** Different types of statements are available as different axioms (waiting to bind)
+*** Statements
+**** If stmt
+**** Assignment
+**** call
+*** Families of methods for doing
+**** Preconditions
+**** event to app interface
+**** Invoke command
+** Overall:
+*** Prove existence of code that performs test generation
+
+* How to attach code to the axioms
+** Axiom is associated with a vbl, type is that of axiom
+** Evaluating the fn associated with from means accessing the vbl, so bind axiom value in eval environment
+
+* How does axiom type relate to code?
+** Need function scheme corresponding to paramodulation rule
+
+
+* For demo
+** Avoid foreach, put structure directly in axioms
+** Structure axiom has a literal to match each events/commands that needs a method
+*** More general is an axiom that handles one link in a list, exposes literal for next to bind
+
+
+
+* Commands
+** Add
+** Delete
+** Move/set
+
+* Preconditions
+** Type of entity at event location
+** Type of object(s) in current selection
+** State of splitter or other buttons
+
+* Invariants (what remains true during or after command)
+** Positioning of objects in list
+** Size of containing object
+

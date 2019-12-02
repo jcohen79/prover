@@ -1,0 +1,53 @@
+#+STARTUP: showall
+* A simple intentional application
+
+* Demonstrate that the concept works and can produce useful information
+
+** Gather entities, properties, commands
+** Define base predicates for framework
+*** Time
+*** Command, execution
+*** Property, get/set property
+*** Create/delete object
+** Write example commands, gestures
+
+
+* Minimal app
+** One parent, has children, one property on each.
+** Add/remove child
+** Set prop on parent and child
+
+* How to check correctness of framework?
+** What assertions about it?
+*** Liveness
+*** Show sequence of commands
+**** How?
+***** Make assertions to specify a give state of the app
+***** Use deduction to find what are
+******  the valid commands
+****** The steps that will have for the command
+
+
+
+* HelloD?
+
+
+* Represent
+** Simple set of classes, attributes, relationships
+** Primitive commands on document
+** Features
+** Commands
+*** Pre/post-conditions
+** Invariants that hold between commands
+*** Automatic actions that need to happen: e.g. closing a menu or floatie
+
+* Goal:
+** Simple test of each spec language feature and related software
+** Create combined specs where feature overlap and create exceptions
+** Find inconsistencies
+** Incompleteness
+*** Terms that have no definition
+*** Legal states that cannot be attained by the available commands
+** Generate model code
+** Generate app code
+

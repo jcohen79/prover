@@ -1,0 +1,46 @@
+#+STARTUP: showall
+* What are the constraints on the curry howard function that corresponds to an axiom?
+
+* Issues:
+** Negation
+** Disjunction
+** Type for an atom
+*** Is a predicate a subtype of the tuple of args to the predicate
+*** Term seems like function
+*** What is the variable? Has type.
+** Equality
+*** http://stackoverflow.com/questions/10212660/curry-howard-isomorphism
+**** Haskell can't do this; you need dependent types to do things like this.
+**** Coq is a total language, so it can act as a proof system
+
+
+* The Curry-Howard correspondence between proofs and programs relates call/cc to Peirce's law, which extends intuitionistic logic to non-constructive, classical logic: ((α → β) → α) → α. Here, ((α → β) → α) is the type of the function f, which can either return a value of type α directly or apply an argument to the continuation of type (α → β). Since the existing context is deleted when the continuation is applied, the type β is never used and may be taken to be ⊥.
+** From <https://en.wikipedia.org/wiki/Call-with-current-continuation> 
+
+* Predicate: function that maps tuple to true/false
+
+* Not A is A \to \bot
+
+** A \lor (A \to \bot) true 
+
+*** Is not a constructive axiom because it is not true for all A, it contradicts
+*** G¨odel’s incompleteness theorem.
+
+* Negation corresponds to first-class continuations. 
+** https://www.cs.cmu.edu/~rwh/courses/typesys/hws/hw5/continuations-logic.pdf
+
+* Universal quantification over propositional (not individual) variables
+* corresponds to parametric polymorphism. So for example, the polymorphic
+* function id really has the type forall a. a \to a
+
+* Existential quantification over propositional variables corresponds to a
+* handful of things that have to do with data or implementation hiding: abstract
+* data types, module systems and dynamic dispatch. GHC's existential types are
+* related to this.
+
+* Universal and existential quantification over individual variables leads
+* to dependent type systems.
+
+
+
+

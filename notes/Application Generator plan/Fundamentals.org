@@ -1,0 +1,227 @@
+#+STARTUP: showall
+
+
+
+* What is an implementation?
+** Formal system with axioms that reflect actual execution
+** Discoveries in one system can be mapped to other
+* A mapping between two formal systems
+* Fundamental components: events, state
+** Can those be reduced?
+*** Event has a before and after
+*** State persists until change
+** Events, state are parts of a mathematical system that can be mapped to implementation
+** Entity identity means that when something happens to one it also happens to the other, then those two objects are the same entity.
+** That is because implementation (object) has that behavior
+* There are various conceptual models to choose from to represent desired system
+** Each system has behavior 
+*** User needs to consider system behavior
+*** Problems to be solved, 
+*** Likely sequences
+*** Mental model of user
+*** UI issues
+**** Ability to see and interact with rendered information
+* Which properties are binary versus other possibilities
+* Describe basic axioms of desired system
+* Map into candidate implementations (may be high level)
+** Are the implied relationships acceptable
+
+* Mental model
+** Evolves as a series of axioms
+** This may give rise to conflicts
+** Also undetermined properties under certain conditions
+
+* Formal system
+** Predicates - include functions
+** Axioms relating predicates
+** Composition of functions - 
+*** Represented as predicate: there exist object that is value of function,
+**** That value object can be passed in through other position of predicate
+
+* Examples to consider:
+** When something is deleted, it is no longer a member of a live list
+** A floatie can only refer to a live selected object
+*** Change to another selected object
+*** Change to object that is selected
+** Objects that have been deleted are no longer live
+** Objects are live until something makes them non live
+** Properties do not change unless they are changed
+** Express why non-deleted objects correspond well to live objects
+** undo
+
+* How to represent system state, operations
+** Basic problem with representation is that expressions are not the entities
+** Different expressions can refer to same entity
+*** Need to determine which entities are affected by an operation
+
+
+* How does axiomatic system resolve the problem of multiple expressions referring to same entity?
+* Break rules down into simpler parts to avoid not being able to match on patterns
+* Understandable system needs to be built using repeating patterns
+** So matching between design and implementation elements needs to follow pattern
+
+* Elements of formal system
+** Variables - hold value from associated spec
+** Values (from spec)
+** Predicates
+** Axioms - clause
+** Sequent
+
+* Note: change 'model' to 'spec'
+
+* Logic variables are used to represent
+** Locations in memory
+** Objects
+*** Objects can be compound
+*** Entire Program state - use predicates to refer to parts
+** Spec of app and the execution of app are both temporal
+*** But expressions are not 
+** Define the state as a mapping of (memory x time) => values
+** Then assert relations across time
+*** Val(x,before) = Val(x,after) | op(x,y)   
+**** but need to have separate mapping of entities to locations for aliasing
+*** Op(x,before,y) -> Val(x,after) = y
+
+* Want validation rules to describe requirements for valid state
+* Post-condition of every operation is that the after state is valid
+* For both spec and implementation
+* Then definition of spec operations can check for validity even before validation
+** Generate reports on missing parts of spec
+** Unspecified of conflicting behavior
+
+* What is the formal definition of the relationship between spec and implementation
+** Predicates between states and operations, like a homomorphism
+** Specifically between the Cmd functions and the spec commands
+** fAllowed ?
+*** Purpose in test:
+**** When the precondition for command is satisfied
+**** Provides dummy values
+**** Not implemented yet
+*** Relationship to spec:
+**** Need spec for picking dummy values
+**** Evaluate the precondition
+**** Check for implemented flags 
+
+* For each command in model
+** To determine if it is complete and correct
+** Complete when we can show that state afterwards satisfies global invariant
+** First Get basic idea of the command (e.g. delete, copy, paste, add, move, modify)
+** That will result in various potential cases that can have potential violations
+*** Prompt user for what to happen in each case
+
+* Global assertions
+** For each type of feature
+*** For each defined command
+**** There exist valid inputs (fAllowed)
+****** for the command so it is valid or cannot be performed
+** That is a meta assertion, it generates the first order assertions
+** What is the command?
+*** Predication between before and after state
+**** Input parameters are the coordinates of the object to modify
+** When is 
+*** context menu open
+*** floatie open
+*** Screen is split, rewind mode
+*** Object is selected
+
+* Operations
+** Create
+*** How to spec that there is a new object and what its properties are?
+**** There exists an E that is not an element of the set of existing entities
+***** (matches what new does)
+***** And that E has the default properties
+** For each Modify property setting command
+*** For every entity in state
+**** For each gesture
+***** (if?) there exists set of parameters for that gesture and entity
+***** The value of the property after is as specified in command
+
+* Aliasing
+** Problem: need to know whether a given entity has been modified by a command when there is no explicit reference to that entity. Need assertions that say if entity is different then some coordinate is different. Then use that coordinate to show that a given entity is not the same as the modified one.
+
+* How to:
+** Express invariant
+** Find where invariant is potentially violated
+*** Resolution should eventually find all conflicts, but not return if there are none
+
+* Minimal Demo
+** Objective: 
+*** show report of missing special cases
+*** General example test model code
+** Choose operation that has a special case
+*** examples
+**** Where floatie appears
+**** Where selection handles appear
+**** What can be created inside a canvas: wb, note, cell
+***** Say what kind of object can be parent
+****** relation between parent and child
+****** Menu has list of add menu items
+****** Should report error when adding note to non-wb
+******* Fix by special case add note to wb
+***** Invariant: what objects are in each type of container
+****** How to say no note in non-wb? Predicate on lhs of clause
+***** Cmd: 
+****** Each cmd goes into disjunction of all post conditions
+******* Says that e.g. new object exists
+****** Open menu on object
+****** Menu items for each type of object: add to parent at locn menu
+***** Show conflict:
+****** Will get null clause that traces back to no note on lhs, cmd has in on right
+*** What was a tricky case for developers?
+
+* How to set up example is reslab
+** Invariant of 
+*** parent/child
+*** Command
+** Write as forall, exists, then skolemize
+
+
+* Disjunction of of all commands is shortcut for disjunction of all cmd selections and terms of the form (cmd=x) -> (pre-condition-x -> post-cndition-x)
+
+* Code generation: each cmd is {pre-C}X{post-c}
+** Want to solve for X using primitives of similar form
+**** - std statements and framework primitives
+*** Assert negation of post-c and then find proof it is false using stmts to establish that
+
+* Time needs to subdivided into increments for each statement.
+
+* Consider examples that will occur in specifications
+** Recursive commands, invariants
+*** Eg. Deleting an entity means all nested entities are no longer live (cut are live but no longer selectable). 
+**** How to say an object x is same as or a descendant of y? 
+***** AncestorDescendant (y,x,t) =  
+****** x ¹ null Ú ( y=x Ú $z : ParentChild(z,x,t) Ù AncestorDescendant(y,z,t) )
+**** How does this get translated to implementation?
+***** Some predicates get mapped to functions. What about the $? It is not a new object (like fAllowed is). ParentChild would already have been mapped. This is defining a new function that becomes the skolemization function.
+****** ParentChild(z,x,t) has the property that z is null or unique for each x.
+***** How are function calls expressed in Hoare triples? As a separate statement to a local variable.
+****** { x ¹ null } var y = getParent(x) { ParentChild(y,x) }
+***** This is a recursive equation, so need to suppose that the function exists on lower level arguments. - if a test is made to ground state - a series of operations is performed that will terminate. So we want to generate the code for getAncestor in:
+****** { x ¹ null } var f = fAncestor(y,x) { f = AncestorDescendant(y,x,t) }
+****** { x ¹ null } def fAncestor(y,x) = C
+******** { x ¹ null Ú ( y=x Ú $z : ParentChild(z,x,t) Ù AncestorDescendant(y,z,t) ) }
+****** Since ParentChild is unique in z, there is only on z that can satisfy that part. The AncestorDescendant needs to assumed to be valid for parent of x.
+****** { x ¹ null } def fAncestor(y,x) = (x == y) || { var z = getParent(x); fAncestor(y,z) }
+******** { x ¹ null Ú ( y=x Ú $z : ParentChild(z,x,t) Ù AncestorDescendant(y,z,t) ) }
+***** How to handle the replacement of $ with a function call?
+****** One can assert that there is a function that returns the bound variable using the variables currently visible. 
+****** What other constraints can be placed on the value of that function. It may need to be equal to an existing function. If there is assertion of uniqueness. That axiom replaces this function definition with the use of another.
+***** Need to provide axioms (patterns) than make each step work as a substitution.
+****** Do this as graph matching or as resolution?
+******* Resolution can be used to validate post-condition by negating it. How to know when to terminate invalid cases? Do in parallel.
+******* Graph matching is used to generate the hypotheses. The resolution is used to discard the ones that don't work. 
+** Assignment:
+*** Hoare approach, {P[E/x]} doesn't work.
+*** Each variable assignment can be described as a function of preceding program state that returns the value of that variable
+*** Aliasing: provide a post-condition that describes state as a check if entity = x and if so value is E, otherwise value is from before. That matches the spec for variables don't change unless modified. A reference to a variable x is an abbreviation for accessing the x part of state S.
+**** More concisely, description of state is a set of pairs: (location, value)
+**** Post-condition of a compound statement may be an update to many locations
+*** New value may be an object about which things are known, know they are know about new variable location also.
+*** A new object is a new constant function whose value is different from other functions created by NEW
+**** O1.cls != o2.cls -> o1 != o2.
+**** How to describe sameness of objects?
+***** Assign a stepId, and new(stepId) is the object created?
+
+* What is the range of quantifiers? Just the objects created up to that point? Could also be data yet to be retrieved externally.
+** Leave range open and add an AND condition to narrow it
+
